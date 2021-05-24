@@ -21,23 +21,23 @@ const listIcon = ({ size }) => {
       <path
         d="M5 16H27"
         stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M5 8H27"
         stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M5 24H27"
         stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
