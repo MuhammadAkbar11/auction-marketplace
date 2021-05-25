@@ -1,15 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { LinkContainer } from "react-router-bootstrap";
 import {
-  Badge,
   Col,
   Container,
-  Nav,
   Row,
   Dropdown,
   ListGroup,
-  Button,
   Form,
 } from "react-bootstrap";
 import { ListIcon } from "../../UI/Icons/Index";

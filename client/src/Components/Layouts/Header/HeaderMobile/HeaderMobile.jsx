@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { LinkContainer } from "react-router-bootstrap";
+
 import { Badge, Col, Container, Row } from "react-bootstrap";
 import { ListIcon, WishListIcon } from "../../../UI/Icons/Index";
 
-const HeaderMobile = () => {
+const HeaderMobile = ({ toggle }) => {
   return (
     <Container fluid className=" px-3 px-sm-5 ">
       <Row className=" align-items-center flex-nowrap ">
@@ -40,7 +40,7 @@ const HeaderMobile = () => {
               </Link>
             </div>
             <div className="headerMiddleActionItem">
-              <a href="javascript:void(0)" to="/favorit">
+              <a href="/#" onClick={toggle}>
                 <ListIcon size="32" />
               </a>
             </div>
