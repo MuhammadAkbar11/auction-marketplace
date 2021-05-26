@@ -1,0 +1,76 @@
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: (
+    $spacer * 0.25,
+  ),
+  2: (
+    $spacer * 0.5,
+  ),
+  3: $spacer,
+  4: (
+    $spacer * 1.5,
+  ),
+  5: (
+    $spacer * 3,
+  ),
+  6: $spacer * 3.25,
+  7: $spacer * 3.5,
+  8: $spacer * 4,
+  9: $spacer * 4.25,
+  10: $spacer * 4.5,
+);
+
+$sizes: (
+  25: 25%,
+  30: 30%,
+  50: 50%,
+  75: 75%,
+  90: 90%,
+  100: 100%,
+  auto: auto,
+  "100vh": 100vh,
+);
+
+@for $i from 1 through 40 {
+  .mb#{$i} {
+    margin-bottom: #{$i}px;
+  }
+  .mt#{$i} {
+    margin-top: #{$i}px;
+  }
+
+  .mx#{$i} {
+    margin: {
+      left: #{$i}px;
+      right: #{$i}px;
+    }
+  }
+
+  .my#{$i} {
+    margin: {
+      left: #{$i}px;
+      right: #{$i}px;
+    }
+  }
+  .pb#{$i} {
+    margin-bottom: #{$i}px;
+  }
+  .pt#{$i} {
+    margin-top: #{$i}px;
+  }
+
+  .px#{$i} {
+    margin: {
+      left: #{$i}px;
+      right: #{$i}px;
+    }
+  }
+
+  .py#{$i} {
+    margin: {
+      left: #{$i}px;
+      right: #{$i}px;
+    }
+  }
+}
