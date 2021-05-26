@@ -27,7 +27,7 @@ const BannerSlider = () => {
             <Col sm={6} md={6} lg={6}>
               <div className="heroSliderContent ">
                 <h4 className="font-dec">New Arrivals</h4>
-                <h1 className="font-dec">
+                <h1 className="font-dec text-capitalize">
                   Leather Simple <br />
                   Backpacks
                 </h1>
@@ -52,7 +52,7 @@ const BannerSlider = () => {
             <Col sm={6} md={6} lg={6}>
               <div className="heroSliderContent ">
                 <h4 className="font-dec">New Arrivals</h4>
-                <h1 className="font-dec">
+                <h1 className="font-dec text-capitalize">
                   Leather Simple <br />
                   Backpacks
                 </h1>

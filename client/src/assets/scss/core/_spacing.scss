@@ -32,10 +32,11 @@ $sizes: (
   "100vh": 100vh,
 );
 
-@for $i from 1 through 40 {
+@for $i from 1 through 50 {
   .mb#{$i} {
     margin-bottom: #{$i}px;
   }
+
   .mt#{$i} {
     margin-top: #{$i}px;
   }
@@ -53,22 +54,24 @@ $sizes: (
       right: #{$i}px;
     }
   }
+
   .pb#{$i} {
-    margin-bottom: #{$i}px;
+    padding-bottom: #{$i}px;
   }
+
   .pt#{$i} {
-    margin-top: #{$i}px;
+    padding-top: #{$i}px;
   }
 
   .px#{$i} {
-    margin: {
+    padding: {
       left: #{$i}px;
       right: #{$i}px;
     }
   }
 
   .py#{$i} {
-    margin: {
+    padding: {
       left: #{$i}px;
       right: #{$i}px;
     }

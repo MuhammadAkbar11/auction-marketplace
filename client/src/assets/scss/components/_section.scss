@@ -1,0 +1,45 @@
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  &.sectionBorderBottom {
+    border-bottom: 1px solid $gray-500 !important;
+  }
+
+  .sectionTitleText {
+    h2 {
+      font-size: 24px;
+      text-transform: uppercase;
+      margin: 0;
+      line-height: 1;
+      letter-spacing: 0.25px;
+      @include media-breakpoint-only(xs) {
+        font-size: 17px;
+      }
+      i {
+        position: relative;
+        top: 2px;
+        margin-right: 14px;
+      }
+    }
+  }
+
+  .sectionTitleAction {
+    a {
+      font-size: 14px;
+      display: inline-block;
+      text-transform: uppercase;
+      border-bottom: 1px solid #666666;
+      padding: 0 0 2px;
+      color: $black;
+      line-height: 1;
+      &:hover {
+        text-decoration: none;
+        color: $primary;
+        border-bottom: 1px solid $primary;
+      }
+    }
+  }
+}

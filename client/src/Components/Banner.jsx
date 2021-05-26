@@ -84,7 +84,7 @@ const Banner = () => {
           </Col>
           <Col lg={4}>
             <Row className=" h-100  ">
-              <Col lg={12} md={6} className="mb-4 mb-md-0 mb-lg-4 ">
+              <Col sm={6} lg={12} md={6} className="mb-4 mb-sm-0 mb-lg-4 ">
                 <motion.div whileHover="hover" className="bannerWrap mb30">
                   <div className="bannerImg">
                     <Link to="/detail">
@@ -116,7 +116,7 @@ const Banner = () => {
                   </div>
                 </motion.div>
               </Col>
-              <Col lg={12} md={6}>
+              <Col sm={6} lg={12} md={6}>
                 <motion.div whileHover="hover" className="bannerWrap mb30 ">
                   <div className="bannerImg">
                     <Link to="/product">
@@ -128,8 +128,10 @@ const Banner = () => {
                     </Link>
                   </div>
                   <div className="bannerContent2">
-                    <Badge variant="cyan">ZHnio</Badge>
-                    <h2>
+                    <Badge variant="cyan" className="bannerContent2Badge ">
+                      ZHnio
+                    </Badge>
+                    <h2 className="text-capitalize font-weight-lighter ">
                       head <br />
                       phone
                     </h2>
