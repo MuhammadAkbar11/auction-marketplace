@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const SectionTitle = ({ title, actionText }) => {
+const SectionTitle = ({ rootClassName, title, actionText }) => {
   return (
-    <div className="sectionTitle sectionBorderBottom mb50 pb20 ">
+    <div
+      className={`sectionTitle sectionBorderBottom mb50 pb20 ${rootClassName} `}
+    >
       <div className="sectionTitleText">
         <h2 className=" text-gray-800">{title}</h2>
       </div>
