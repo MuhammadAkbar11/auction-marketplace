@@ -1,6 +1,6 @@
 import React from "react";
 
-const times = ({ size }) => {
+const caretLeft = ({ size }) => {
   return (
     <svg
       width={`${size}`}
@@ -10,16 +10,9 @@ const times = ({ size }) => {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M25 7L7 25"
+        d="M20 26L10 16L20 6"
         stroke="currentColor"
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M25 25L7 7"
-        stroke="currentColor"
-        strokeWidth={2}
+        strokeWidth={1}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -27,6 +20,7 @@ const times = ({ size }) => {
   );
 };
 
-times.defaultProps = { size: 32 };
-
-export default times;
+caretLeft.defaultProps = {
+  size: 32,
+};
+export default caretLeft;

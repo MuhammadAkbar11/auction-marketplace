@@ -1,13 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
-
-const defaultProps = {
-  size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-};
-
-const proptypes = {
-  size: 32,
-};
 
 const magnifyingGlass = ({ size }) => {
   return (
@@ -36,8 +27,6 @@ const magnifyingGlass = ({ size }) => {
   );
 };
 
-magnifyingGlass.defaultProps = defaultProps;
-
-magnifyingGlass.propTypes = proptypes;
+magnifyingGlass.defaultProps = { size: 32 };
 
 export default magnifyingGlass;

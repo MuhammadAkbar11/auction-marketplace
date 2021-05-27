@@ -1,15 +1,6 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-const defaultProps = {
-  size: PropTypes.string,
-};
-
-const proptypes = {
-  size: "32",
-};
-
-const Wishlist = ({ size }) => {
+const wishlist = ({ size }) => {
   return (
     <svg
       width={size}
@@ -29,8 +20,6 @@ const Wishlist = ({ size }) => {
   );
 };
 
-Wishlist.defaultProps = defaultProps;
+wishlist.defaultProps = { size: 32 };
 
-Wishlist.propTypes = proptypes;
-
-export default Wishlist;
+export default wishlist;

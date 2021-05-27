@@ -1,13 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
-
-const defaultProps = {
-  size: PropTypes.string,
-};
-
-const proptypes = {
-  size: "32",
-};
 
 const listIcon = ({ size }) => {
   return (
@@ -43,8 +34,6 @@ const listIcon = ({ size }) => {
   );
 };
 
-listIcon.defaultProps = defaultProps;
-
-listIcon.propTypes = proptypes;
+listIcon.defaultProps = { size: 32 };
 
 export default listIcon;
