@@ -81,7 +81,7 @@
         &:last-child {
           margin-right: 0;
         }
-        h3 {
+        * > h3 {
           font-size: 30px;
           color: $teal;
           line-height: 23px;
@@ -101,13 +101,19 @@
     left: 30px;
     top: 50%;
     transform: translateY(-50%);
-    @include media-breakpoint-down(sm) {
-      left: 10px;
+    @include media-breakpoint-only(xs) {
+      left: 20px;
     }
-
-    h2 {
+    .bannerContent2Badge {
+      text-transform: uppercase;
+      line-height: 1;
+      margin: {
+        bottom: 1rem;
+      }
+    }
+    * > h2 {
       font-size: 30px;
-      color: #010101;
+      color: $dark;
       line-height: 24px;
       margin: 19px 0 47px;
       @include media-breakpoint-only(lg) {
@@ -176,7 +182,7 @@
 
       h4 {
         font-size: 20px;
-        font-weight: 600;
+        font-weight: 700;
         margin: 0 0 0;
         &.font-dec {
           font-size: 16px;

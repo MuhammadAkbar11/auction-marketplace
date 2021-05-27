@@ -68,3 +68,25 @@ $theme-colors: map-merge(
   ),
   $colors
 );
+
+// text Colors ---------------
+$white: #ffffff;
+$black: #000000;
+$bg-black: #000000;
+$bg-white: #ffffff;
+$grey: #fafafa;
+
+// Theme Color
+$theme-color-red: $red;
+$theme-color-green: $teal;
+$theme-color-green-2: $success;
+$theme-color-purple: $purple;
+$theme-color-blue: $info;
+
+// Responsive Variables
+$xx-layout: "only screen and (min-width: 1366px) and (max-width: 1600px)";
+$xl-layout: "only screen and (min-width: 1200px) and (max-width: 1365px)";
+$lg-layout: "only screen and (min-width: 992px) and (max-width: 1199px)";
+$md-layout: "only screen and (min-width: 768px) and (max-width: 991px)";
+$xs-layout: "only screen and (max-width: 767px)";
+$sm-layout: "only screen and (min-width: 576px) and (max-width: 767px)";

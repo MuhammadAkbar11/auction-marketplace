@@ -19,8 +19,6 @@ const BannerSlider = () => {
         pagination={true}
         className="heroSlider  "
         slidesPerView={1}
-        onSlideChange={() => console.log("slide change")}
-        onSwiper={swiper => console.log(swiper)}
       >
         <SwiperSlide className="singleHeroSlider">
           <Row className="h-100">
@@ -42,7 +40,7 @@ const BannerSlider = () => {
             </Col>
             <Col sm={6} md={6} lg={6}>
               <div className="heroSliderImg">
-                <img src={imgSlider} alt="slider image" />
+                <img src={imgSlider} alt="slider" />
               </div>
             </Col>
           </Row>
@@ -67,7 +65,7 @@ const BannerSlider = () => {
             </Col>
             <Col sm={6} md={6} lg={6}>
               <div className="heroSliderImg">
-                <img src={imgSlider} alt="slider image" />
+                <img src={imgSlider} alt="slider" />
               </div>
             </Col>
           </Row>

@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Badge, Col, Container, Row } from "react-bootstrap";
 import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
 import bannerImg14 from "../assets/images/banner/banner-14.jpg";
 import bannerImg15 from "../assets/images/banner/banner-15.jpg";
 import BannerSlider from "./BannerSlider";
@@ -17,64 +16,7 @@ const bannerImgVariants = {
   },
 };
 
-const variants = {
-  initial: {
-    opacity: 0,
-    y: 30,
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: 0.3,
-      duration: 0.5,
-    },
-  },
-  exit: {
-    opacity: 0,
-    y: 30,
-  },
-};
-const variants2 = {
-  initial: {
-    opacity: 0,
-    y: 30,
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: 0.5,
-      duration: 0.5,
-    },
-  },
-  exit: {
-    opacity: 0,
-    y: 30,
-  },
-};
-
 const Banner = () => {
-  const [mount, setMount] = React.useState(false);
-  const [refRow, inView] = useInView({
-    threshold: 0.2,
-  });
-
-  const [colWrap1, colInView1] = useInView({
-    threshold: 0.3,
-  });
-  const [colWrap2, colInView2] = useInView({
-    threshold: 0.3,
-  });
-
-  React.useEffect(() => {
-    setMount(true);
-
-    return () => {
-      setMount(false);
-    };
-  }, []);
-
   return (
     <div className=" sliderBannerArea">
       <Container fluid className="px-md-8 py-3">
