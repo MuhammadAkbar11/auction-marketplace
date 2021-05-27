@@ -1,0 +1,94 @@
+.serviceArea {
+  padding-bottom: 115px;
+}
+
+.serviceWrap {
+  background-color: none;
+  position: relative;
+  z-index: 1;
+  padding: 32px 0 3px;
+  @include media-breakpoint-only(xs) {
+    padding: 32px 20px 3px;
+  }
+
+  .serviceColBorder {
+    position: relative;
+    &:before {
+      position: absolute;
+      content: "";
+      right: 0;
+      top: 1%;
+      width: 1px;
+      height: 63px;
+      background-color: $gray-400;
+    }
+
+    @include media-breakpoint-down(md) {
+      &.serviceColBorderNoneMd {
+        &:before {
+          display: none;
+        }
+      }
+    }
+
+    @include media-breakpoint-only(xs) {
+      &:before {
+        display: none;
+      }
+      &.service-border-1-none-xs {
+        &:before {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .singleServiceWrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    @include media-breakpoint-only(lg) {
+      height: 100%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      .serviceIcon {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 6px;
+      }
+
+      .serviceContent {
+        text-align: center;
+        h3 {
+          margin: 0;
+        }
+      }
+    }
+    @include media-breakpoint-only(xs) {
+      justify-content: flex-start;
+    }
+
+    .serviceIcon {
+      margin-right: 25px;
+    }
+
+    .serviceContent {
+      h3 {
+        font-size: 18px;
+        font-weight: 600;
+        text-transform: capitalize;
+        letter-spacing: 0px !important;
+        margin: 0 0 5px;
+      }
+      p {
+        color: $gray-600;
+        margin: 0;
+        letter-spacing: 0.25px;
+      }
+    }
+  }
+}
