@@ -54,7 +54,7 @@ const ProductCategories = ({ categories }) => {
               nextEl: navigationNextRef.current,
             }}
             slidesPerView={6}
-            className="productCategoriesSlider nav-style-3"
+            className="productCategoriesSlider"
             onSwiper={swiper => {
               setTimeout(() => {
                 swiper.params.navigation.prevEl = navigationPrevRef.current;
@@ -69,7 +69,7 @@ const ProductCategories = ({ categories }) => {
               return (
                 <SwiperSlide key={item.id} className="product-plr-1">
                   <div className="single-product-wrap">
-                    <div className="product-img rounded-circle  mb20">
+                    <div className="product-img product-img-categories mx-auto rounded-circle  mb20">
                       <Link to={item.url}>
                         <img
                           src={

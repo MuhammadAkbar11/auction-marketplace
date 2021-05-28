@@ -1,0 +1,23 @@
+.bottom-banner-area {
+  margin-bottom: 120px;
+  width: 100%;
+
+  position: relative;
+  @include media-breakpoint-up(md) {
+    height: 329px;
+  }
+
+  .bg-image {
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+}

@@ -11,10 +11,11 @@
   .sectionTitleText {
     h2 {
       font-size: 24px;
-      text-transform: uppercase;
+      text-transform: capitalize;
       margin: 0;
       line-height: 1;
       letter-spacing: 0.25px;
+      color: $black;
       @include media-breakpoint-only(xs) {
         font-size: 17px;
       }

@@ -7,7 +7,7 @@ const SectionTitle = ({ rootClassName, title, actionText }) => {
       className={`sectionTitle sectionBorderBottom mb50 pb20 ${rootClassName} `}
     >
       <div className="sectionTitleText">
-        <h2 className=" text-gray-800">{title}</h2>
+        <h2>{title}</h2>
       </div>
       <div className="sectionTitleAction">
         <Link to="/shop">{actionText}</Link>
