@@ -1,4 +1,5 @@
 import { Route, Switch } from "react-router";
+import Footer from "./Components/Layouts/Footer/Footer";
 import Header from "./Components/Layouts/Header/Header";
 import Layout from "./Components/Layouts/Layout";
 
@@ -11,6 +12,7 @@ function App() {
       <Switch>
         <Route component={Home} />
       </Switch>
+      <Footer />
     </Layout>
   );
 }
