@@ -4,7 +4,7 @@ import SwiperCore, { Navigation } from "swiper/core";
 import { Link } from "react-router-dom";
 import { Button, Container } from "react-bootstrap";
 import { motion } from "framer-motion";
-import { CaretLeft, CaretRight, WishListIcon } from "./UI/Icons/Index";
+import { CaretLeftIcon, CaretRightIcon, WishListIcon } from "./UI/Icons/Index";
 import SectionTitle from "./SectionTitle";
 import productsData from "../data/product";
 
@@ -187,13 +187,13 @@ const LatestAuction = () => {
           ref={navigationPrevRef}
           className=" sliderNavigation navigationPrev"
         >
-          <CaretLeft size="100%" />
+          <CaretLeftIcon size="100%" />
         </div>
         <div
           ref={navigationNextRef}
           className=" sliderNavigation navigatioNext"
         >
-          <CaretRight size="100%" />
+          <CaretRightIcon size="100%" />
         </div>
       </div>
     </>

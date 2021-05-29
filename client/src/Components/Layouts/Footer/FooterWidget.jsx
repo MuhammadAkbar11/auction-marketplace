@@ -1,5 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import {
+  EnvolopeOpenIcon,
+  FacebookIcon,
+  PaperPlaneTiltIcon,
+  PhoneIcon,
+  TwitterIcon,
+} from "../../UI/Icons/Index";
 const FooterWidget = ({ title, categories, contact, links }) => {
   return (
     <div className="footer-widget mb40">
@@ -21,7 +28,7 @@ const FooterWidget = ({ title, categories, contact, links }) => {
           <div className="contact-info-2">
             <div className="single-contact-info-2">
               <div className="contact-info-2-icon">
-                <small className="my-auto">icon</small>
+                <PhoneIcon size={24} />
               </div>
               <div className="contact-info-2-content">
                 <p>Got a question? Call us 24/7</p>
@@ -30,7 +37,7 @@ const FooterWidget = ({ title, categories, contact, links }) => {
             </div>
             <div className="single-contact-info-2">
               <div className="contact-info-2-icon">
-                <small className="my-auto">icon</small>
+                <PaperPlaneTiltIcon size={24} />
               </div>
               <div className="contact-info-2-content">
                 <p>268 Orchard St, Mahattan, 12005, CA, United State</p>
@@ -38,7 +45,7 @@ const FooterWidget = ({ title, categories, contact, links }) => {
             </div>
             <div className="single-contact-info-2">
               <div className="contact-info-2-icon">
-                <small className="my-auto">icon</small>
+                <EnvolopeOpenIcon size={24} />
               </div>
               <div className="contact-info-2-content">
                 <p>contact@norda.com</p>
@@ -47,19 +54,10 @@ const FooterWidget = ({ title, categories, contact, links }) => {
           </div>
           <div className="d-flex footer-social py-5 ">
             <Link to="#">
-              <small className="my-auto">icon</small>
+              <FacebookIcon size={24} />
             </Link>
             <Link to="#">
-              <small className="my-auto">icon</small>
-            </Link>
-            <Link to="#">
-              <small className="my-auto">icon</small>
-            </Link>
-            <Link to="#">
-              <small className="my-auto">icon</small>
-            </Link>
-            <Link to="#">
-              <small className="my-auto">icon</small>
+              <TwitterIcon size={24} />
             </Link>
           </div>
         </>

@@ -1,6 +1,5 @@
 import React from "react";
 import { Col, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { allCategories } from "../../../data/categories";
 import FooterBottom from "./FooterBottom";
 import FooterWidget from "./FooterWidget";

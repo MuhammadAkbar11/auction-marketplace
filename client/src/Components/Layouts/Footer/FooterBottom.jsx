@@ -17,7 +17,11 @@ const FooterBottom = () => {
             <div className="copyright copyright-center">
               <p>
                 Copyright © 2020 BaeBid |{" "}
-                <a target="_blank" href="https://github.com/MuhammadAkbar11">
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://github.com/MuhammadAkbar11"
+                >
                   Built by Muhammad Akbar Let-let
                 </a>
                 .

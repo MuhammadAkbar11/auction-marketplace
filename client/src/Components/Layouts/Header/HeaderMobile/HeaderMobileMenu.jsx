@@ -2,7 +2,7 @@ import React from "react";
 
 import { Button, Form, Nav } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { MagnifyingGlass, TimesIcon } from "../../../UI/Icons/Index";
+import { MagnifyingGlassIcon, TimesIcon } from "../../../UI/Icons/Index";
 
 import MobileMenuCategori from "./MobileMenuCategori";
 
@@ -59,7 +59,7 @@ const HeaderMobileMenu = ({ show, toggle }) => {
                 className="h-auto my-0"
               />
               <Button variant="gray-200  border-left border-gray-400">
-                <MagnifyingGlass size={25} />
+                <MagnifyingGlassIcon size={25} />
               </Button>
             </Form>
           </div>

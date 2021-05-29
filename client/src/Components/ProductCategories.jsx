@@ -6,7 +6,7 @@ import SwiperCore, { Navigation } from "swiper/core";
 
 import { Link } from "react-router-dom";
 
-import { CaretLeft, CaretRight } from "./UI/Icons/Index";
+import { CaretLeftIcon, CaretRightIcon } from "./UI/Icons/Index";
 import { Container } from "react-bootstrap";
 import SectionTitle from "./SectionTitle";
 
@@ -97,13 +97,13 @@ const ProductCategories = ({ categories }) => {
           ref={navigationPrevRef}
           className=" sliderNavigation  navigationPrev"
         >
-          <CaretLeft size="100%" />
+          <CaretLeftIcon size="100%" />
         </div>
         <div
           ref={navigationNextRef}
           className=" sliderNavigation  navigatioNext"
         >
-          <CaretRight size="100%" />
+          <CaretRightIcon size="100%" />
         </div>
       </div>
     </div>

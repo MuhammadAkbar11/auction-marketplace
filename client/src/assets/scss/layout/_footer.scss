@@ -59,10 +59,7 @@
       display: flex;
       margin: 0 0 12px;
       .contact-info-2-icon {
-        i {
-          font-size: 16px;
-          color: $black;
-        }
+        color: $black;
       }
       .contact-info-2-content {
         margin-left: 13px;
@@ -108,7 +105,7 @@
 
     a {
       color: $black;
-      margin-right: 0.8rem;
+      margin-right: 1rem;
 
       &:hover {
         text-decoration: none;
