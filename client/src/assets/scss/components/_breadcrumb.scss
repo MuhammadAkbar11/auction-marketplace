@@ -1,0 +1,39 @@
+/*------ 17. Breadcrumb style  --------*/
+
+.breadcrumb-area {
+  padding: 45px 0;
+}
+.breadcrumb-content {
+  ul {
+    li {
+      display: inline-block;
+      font-size: 16px;
+      font-weight: 400;
+      color: rgba($primary, 0.6);
+      margin-right: 18px;
+      text-transform: capitalize;
+      position: relative;
+      &::before {
+        position: absolute;
+        width: 18px;
+        height: 1px;
+        background-color: #5b5858;
+        content: "";
+        right: -18px;
+        top: 12px;
+        z-index: 9;
+        transform: rotate(115deg);
+      }
+      &:last-child::before {
+        display: none;
+      }
+      a {
+        color: $gray-800;
+        font-weight: 600;
+        &:hover {
+          color: $primary;
+        }
+      }
+    }
+  }
+}
