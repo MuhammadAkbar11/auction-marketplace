@@ -32,7 +32,7 @@ const FooterWidget = ({ title, categories, contact, links }) => {
               </div>
               <div className="contact-info-2-content">
                 <p>Got a question? Call us 24/7</p>
-                <h3 className="text-primary">(365) 8635 56-24-02 </h3>
+                <h3 className="text-primary mb-1">(365) 8635 56-24-02 </h3>
               </div>
             </div>
             <div className="single-contact-info-2">
@@ -43,8 +43,8 @@ const FooterWidget = ({ title, categories, contact, links }) => {
                 <p>268 Orchard St, Mahattan, 12005, CA, United State</p>
               </div>
             </div>
-            <div className="single-contact-info-2">
-              <div className="contact-info-2-icon">
+            <div className="single-contact-info-2 mt-1">
+              <div className="contact-info-2-icon mt-0">
                 <EnvolopeOpenIcon size={24} />
               </div>
               <div className="contact-info-2-content">

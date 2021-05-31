@@ -17,13 +17,13 @@ const HeaderMiddle = () => {
           <Col xl={6} lg={6}>
             <Nav className="headerMiddleNav py-4 justify-content-center flex-nowrap">
               <LinkContainer
-                to="/cart"
+                to="/"
                 className="headerMiddleNavLink  text-uppercase"
               >
                 <Nav.Link> Home</Nav.Link>
               </LinkContainer>
               <LinkContainer
-                to="/cart"
+                to="/lelang"
                 className="headerMiddleNavLink  text-uppercase"
               >
                 <Nav.Link> Daftar Lelang</Nav.Link>

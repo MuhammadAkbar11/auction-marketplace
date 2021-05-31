@@ -1,0 +1,48 @@
+.shop-area {
+  padding: {
+    top: 120px;
+    bottom: 120px;
+  }
+}
+.shop-topbar-wrapper {
+  border: 1px solid #e9e9e9;
+  font-size: 14px;
+  margin-bottom: 30px;
+  padding: 15px 24px;
+  @media #{$xs-layout} {
+    display: block;
+    padding: 15px 15px;
+    justify-content: inherit;
+  }
+  .shop-topbar-left {
+    display: flex;
+    align-items: center;
+    .view-mode {
+      margin-right: 20px;
+      line-height: 1;
+      @media #{$lg-layout} {
+        margin-right: 10px;
+      }
+      @media #{$md-layout} {
+        margin-right: 10px;
+      }
+      @media #{$xs-layout} {
+        margin-right: 7px;
+      }
+      a {
+        color: $dark;
+        font-size: 20px;
+        display: inline-block;
+        margin: 0 10px 0 0;
+        &.active {
+          color: $primary;
+        }
+      }
+    }
+    p {
+      display: inline-block;
+      margin: 0px 0 0;
+      color: $dark;
+    }
+  }
+}

@@ -14,7 +14,7 @@ const BannerSlider = () => {
       <Swiper
         autoplay={{
           delay: 5000,
-          disableOnInteraction: false,
+          disableOnInteraction: true,
         }}
         pagination={true}
         className="heroSlider  "
