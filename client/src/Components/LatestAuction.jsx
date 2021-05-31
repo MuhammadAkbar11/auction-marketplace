@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { CaretLeftIcon, CaretRightIcon, WishListIcon } from "./UI/Icons/Index";
 import SectionTitle from "./SectionTitle";
 import productsData from "../data/product";
+import ProductCard from "./ProductCard";
 
 SwiperCore.use([Navigation]);
 const singleProductWrapVariants = {
@@ -123,10 +124,7 @@ const LatestAuction = () => {
                       <Link to="product-details.html">
                         <motion.img
                           variants={productImgVariants}
-                          src={
-                            process.env.PUBLIC_URL +
-                            "/images/products/product-41.jpg"
-                          }
+                          src={item.image}
                           alt="test"
                         />
                       </Link>
@@ -167,12 +165,38 @@ const LatestAuction = () => {
                           {item.categori}
                         </a>
                       </div>
-                      <h3 className="my-1">
-                        <Link to="product-details.html">{item.title}</Link>
+                      <h3>
+                        <a className="purple" href="product-details.html">
+                          {item.title}
+                        </a>
                       </h3>
-                      <small className="mb-2">{item.endsOn}</small>
-                      <div className="product-price-4 text-dark">
-                        <span>{item.price}</span>
+
+                      <div className="product-price-4 py-2">
+                        <small className="text-dark">Bid saat ini </small>
+                        <br />
+                        <span className="text-primary">{item.price}</span>
+                      </div>
+                    </div>
+                    <div className="product-content-wrap-3 product-content-position-2">
+                      <div className="product-content-categories">
+                        <a className="purple" href="shop.html">
+                          {item.categori}
+                        </a>
+                      </div>
+                      <h3>
+                        <a className="purple" href="product-details.html">
+                          {item.title}
+                        </a>
+                      </h3>
+
+                      <div className="product-price-4 py-2">
+                        <small className="text-dark">Bid saat ini </small>
+                        <br />
+                        <span className="text-primary">{item.price}</span>
+                      </div>
+                      <div className="d-flex flex-column ">
+                        <small className="">Berakhir pada</small>
+                        <small className="">{item.endsOn}</small>
                       </div>
                     </div>
                   </motion.div>

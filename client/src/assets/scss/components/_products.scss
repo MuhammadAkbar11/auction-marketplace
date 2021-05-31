@@ -142,6 +142,7 @@
     position: relative;
     overflow: hidden;
     width: 100%;
+
     &.product-img-categories {
       @include media-breakpoint-up(md) {
         height: 161px;
@@ -388,6 +389,20 @@
   }
   .product-content-wrap-2 {
     transition: all 0.3s ease 0s;
+
+    .product-content-categories {
+      a {
+        color: currentColor;
+        font-size: 12px;
+        text-transform: uppercase;
+        &:hover {
+          text-decoration: none;
+
+          color: $primary;
+        }
+      }
+    }
+
     .product-rating-wrap {
       display: flex;
       justify-content: center;
@@ -405,11 +420,14 @@
       }
     }
     h3 {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: bold;
       margin: 2px 0 8px;
+
+      text-transform: uppercase;
+      letter-spacing: 1.3px;
       a {
-        color: $dark;
+        color: $black;
         &:hover {
           color: $theme-color-red;
         }
@@ -418,7 +436,6 @@
     .product-price-2 {
       span {
         font-size: 18px;
-        color: $dark;
 
         display: inline-block;
         margin: 0 4px;
@@ -631,7 +648,7 @@
       a {
         color: #999999;
         &:hover {
-          color: $theme-color-red;
+          color: $primary;
         }
       }
     }
@@ -650,66 +667,7 @@
       padding: 10px 0px 5px;
     }
   }
-  .tooltip-style {
-    button {
-      span {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        top: -45px;
-        color: $white;
-        background-color: $dark;
-        white-space: pre;
-        font-size: 13px;
-        display: block;
-        line-height: 1;
-        padding: 4px 12px 6px;
-        opacity: 0;
-        visibility: hidden;
-        &:before {
-          position: absolute;
-          content: "";
-          bottom: -11px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 0;
-          height: 0;
-          border-left: 3px solid transparent;
-          border-right: 3px solid transparent;
-          border-top: 12px solid #000;
-        }
-      }
-      &:first-child {
-        span {
-          left: -14px;
-          transform: none;
-          &:before {
-            left: 19px;
-            transform: none;
-          }
-        }
-      }
-      &:last-child {
-        span {
-          right: 0px;
-          top: -41px;
-          transform: none;
-          left: auto;
-          &:before {
-            right: 7px;
-            left: auto;
-            transform: none;
-          }
-        }
-      }
-      &:hover {
-        span {
-          opacity: 1;
-          visibility: visible;
-        }
-      }
-    }
-  }
+
   .product-content-2 {
     h3 {
       margin: 0;
