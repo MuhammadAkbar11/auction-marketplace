@@ -1,11 +1,10 @@
 import React from "react";
 import { Col, Container, Row, Form, Nav } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
 import BreadcrumbsContainer from "../Components/Layouts/BreadcrumbsContainer";
 import ListAuctionSidebar from "../Components/ListAuctionSidebar";
 import ProductCard from "../Components/ProductCard";
 
-import { ListIcon } from "../Components/UI/Icons/Index";
+import { ListIcon, SquaresFourIcon } from "../Components/UI/Icons/Index";
 import productsData from "../data/product";
 
 const ListAuction = () => {
@@ -15,8 +14,7 @@ const ListAuction = () => {
       <BreadcrumbsContainer
         items={[
           { title: "Home", url: "/" },
-          { title: "Daftar Lelang", url: "/lelang" },
-          { title: "Daftar Lelang 2", active: true },
+          { title: "Daftar Lelang", url: "/lelang", active: true },
         ]}
       />
       <section className="shop-area">
@@ -28,7 +26,7 @@ const ListAuction = () => {
                   <div className="shop-topbar-left">
                     <div className="view-mode d-flex">
                       <a className="active">
-                        <ListIcon />
+                        <SquaresFourIcon />
                       </a>
                       <a href="#shop-2">
                         <ListIcon />

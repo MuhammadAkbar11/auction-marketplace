@@ -63,8 +63,8 @@ const ProductCard = ({ product }) => {
       whileHover="hover"
       className="single-product-wrap mb35"
     >
-      <div className="product-img product-img-zoom mb15">
-        <Link to="product-details.html">
+      <div className="product-img product-img-zoom mb15 bg-light">
+        <Link to={`/detail/${product.id}`}>
           <motion.img
             variants={productImgVariants}
             src={product.image}
@@ -87,10 +87,10 @@ const ProductCard = ({ product }) => {
       </div>
       <div className="product-content-wrap-2 text-center">
         <div className="product-content-categories">
-          <a href="shop.html">{product.categori}</a>
+          <Link to={`/kategori/${product.categori}`}>{product.categori}</Link>
         </div>
         <h3>
-          <a href="product-details.html">{product.title}</a>
+          <Link to={`/detail/${product.id}`}>{product.title}</Link>
         </h3>
         <div className="product-price-2 text-primary py-2">
           <small className="text-dark mb-0 ">Bid saat ini</small>
