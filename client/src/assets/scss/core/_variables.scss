@@ -23,9 +23,13 @@ $cyan: #17a2b8;
 
 $font-family-sans-serif: "Poppins", sans-serif;
 
+$poppins: "Poppins", sans-serif;
+$heebo: "Heebo", sans-serif;
+
 $colors: ();
 $colors: map-merge(
   (
+    "black": $black,
     "blue": $blue,
     "indigo": $indigo,
     "purple": $purple,

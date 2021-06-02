@@ -5,6 +5,7 @@ import Layout from "./Components/Layouts/Layout";
 
 import Home from "./Pages/Home";
 import ListAuction from "./Pages/ListAuction";
+import ProductDetail from "./Pages/ProductDetail";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/lelang" component={ListAuction} />
+        <Route path="/detail/:prodId" component={ProductDetail} />
       </Switch>
       <Footer />
     </Layout>
