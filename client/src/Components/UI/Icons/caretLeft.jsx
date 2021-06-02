@@ -12,7 +12,7 @@ const caretLeft = ({ size }) => {
       <path
         d="M20 26L10 16L20 6"
         stroke="currentColor"
-        strokeWidth={1}
+        strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"
       />

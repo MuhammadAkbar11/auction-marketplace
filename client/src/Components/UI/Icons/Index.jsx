@@ -10,3 +10,4 @@ export { default as TwitterIcon } from "./twitter";
 export { default as PhoneIcon } from "./phone";
 export { default as PaperPlaneTiltIcon } from "./paperPlaneTilt";
 export { default as EnvolopeOpenIcon } from "./envelopeOpen";
+export { default as SquaresFourIcon } from "./squaresFour";
