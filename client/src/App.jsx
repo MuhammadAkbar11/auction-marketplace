@@ -5,7 +5,9 @@ import Layout from "./Components/Layouts/Layout";
 
 import Home from "./Pages/Home";
 import ListAuction from "./Pages/ListAuction";
+import LoginPage from "./Pages/LoginPage";
 import ProductDetail from "./Pages/ProductDetail";
+import RegisterPage from "./Pages/RegisterPage";
 
 function App() {
   return (
@@ -13,8 +15,10 @@ function App() {
       <Header />
       <Switch>
         <Route exact path="/" component={Home} />
+        <Route path="/masuk" component={LoginPage} />
+        <Route path="/daftar" component={RegisterPage} />
         <Route path="/lelang" component={ListAuction} />
-        <Route path="/detail/:prodId" component={ProductDetail} />
+        <Route path="/produk/:prodId" component={ProductDetail} />
       </Switch>
       <Footer />
     </Layout>

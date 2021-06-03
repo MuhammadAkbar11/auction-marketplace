@@ -29,7 +29,7 @@ const Banner = () => {
               <Col sm={6} lg={12} md={6} className="mb-4 mb-sm-0 mb-lg-4 ">
                 <motion.div whileHover="hover" className="bannerWrap mb30">
                   <div className="bannerImg">
-                    <Link to="/detail">
+                    <Link to="/deal">
                       <motion.img
                         variants={bannerImgVariants}
                         src={bannerImg14}

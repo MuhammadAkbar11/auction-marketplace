@@ -40,6 +40,12 @@ $sizes: (
   .mt#{$i} {
     margin-top: #{$i}px;
   }
+  .ml#{$i} {
+    margin-left: #{$i}px;
+  }
+  .mr#{$i} {
+    margin-right: #{$i}px;
+  }
 
   .mx#{$i} {
     margin: {
@@ -61,6 +67,14 @@ $sizes: (
 
   .pt#{$i} {
     padding-top: #{$i}px;
+  }
+
+  .pl#{$i} {
+    padding-left: #{$i}px;
+  }
+
+  .pr#{$i} {
+    padding-right: #{$i}px;
   }
 
   .px#{$i} {
