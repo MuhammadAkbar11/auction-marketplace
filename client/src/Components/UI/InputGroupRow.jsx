@@ -23,30 +23,32 @@ const defaultProps = {
 const proptypes = {
   rootClass: PropTypes.string,
   input1: PropTypes.shape({
-    controlId: PropTypes.string.isRequired,
+    controlid: PropTypes.string.isRequired,
     label: PropTypes.string,
     type: PropTypes.string,
     onChange: PropTypes.func,
     value: PropTypes.string,
     placeholder: PropTypes.string,
     isInvalid: PropTypes.bool,
+    errormessage: PropTypes.string,
   }),
   input2: PropTypes.shape({
-    controlId: PropTypes.string.isRequired,
+    controlid: PropTypes.string.isRequired,
     label: PropTypes.string,
     type: PropTypes.string,
     onChange: PropTypes.func,
     value: PropTypes.string,
     placeholder: PropTypes.string,
     isInvalid: PropTypes.bool,
+    errormessage: PropTypes.string,
   }),
 };
 
 const InputGroupRow = ({ rootClass, input1, input2 }) => {
   return (
     <Row className={`${rootClass}`}>
-      <Col md={6}>
-        <Form.Group controlId={input1.controlId}>
+      <Col sm={6} md={6}>
+        <Form.Group controlId={input1.controlid}>
           <Form.Label className="text-capitalize">{input1.label}</Form.Label>
           <Form.Control
             type={input1.type}
@@ -59,13 +61,13 @@ const InputGroupRow = ({ rootClass, input1, input2 }) => {
           />{" "}
           {input1.isInvalid ? (
             <Form.Control.Feedback type="invalid">
-              {input1.errorMessage}
+              {input1.errormessage}
             </Form.Control.Feedback>
           ) : null}
         </Form.Group>
       </Col>
-      <Col md={6}>
-        <Form.Group controlId={input2.controlId}>
+      <Col sm={6} md={6}>
+        <Form.Group controlId={input2.controlid}>
           <Form.Label className="text-capitalize">{input2.label}</Form.Label>
           <Form.Control
             type={input2.type}
@@ -78,7 +80,7 @@ const InputGroupRow = ({ rootClass, input1, input2 }) => {
           />{" "}
           {input2.isInvalid ? (
             <Form.Control.Feedback type="invalid">
-              {input2.errorMessage}
+              {input2.errormessage}
             </Form.Control.Feedback>
           ) : null}
         </Form.Group>
