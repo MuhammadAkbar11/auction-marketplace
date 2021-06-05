@@ -17,9 +17,9 @@ const registerSchema = Yup.object().shape({
   email: Yup.string()
     .required("Alamat E-mail belum terisi")
     .email("Alamat E-mail tidak valid"),
-  noTelp: Yup.number("Yang diisi harus angka").required(
-    "Nomor telepon belum terisi"
-  ),
+  noTelp: Yup.number()
+    .typeError("Yang diisi harus angka")
+    .required("Nomor telepon belum terisi"),
   password: Yup.string().required("Password belum tersisi"),
   password2: Yup.string()
     .required("Ulangi password anda")
