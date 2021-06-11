@@ -78,10 +78,18 @@
     }
     a {
       text-decoration: none;
-      color: $dark;
+      color: $dark !important;
       &:hover {
         color: $primary;
         text-decoration: none;
+      }
+    }
+
+    &.userDropdownToggle {
+      cursor: pointer;
+      color: $dark !important;
+      &::after {
+        display: none;
       }
     }
 

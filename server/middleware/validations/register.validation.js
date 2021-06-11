@@ -42,8 +42,20 @@ const registerValidation = checkSchema({
     isEmail: {
       errorMessage: "Alamat E-mail tidak valid",
     },
+    custom: {
+      options: async (value, { req, location, path }) => {
+        const isExist = await ModelMember.findOne({
+          where: { email: value },
+        });
+
+        if (isExist) {
+          throw new Error("E-mail sudah terdaftar!");
+        }
+        return true;
+      },
+    },
   },
-  noTelp: {
+  noHp: {
     trim: true,
     notEmpty: {
       errorMessage: "Nomor telepon belum terisi",

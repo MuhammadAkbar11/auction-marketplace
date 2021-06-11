@@ -7,6 +7,8 @@ import {
   AUTH_REGISTER_FAIL,
   AUTH_SET_USER,
   AUTH_REMOVE_USER,
+  AUTH_LOGIN_REST_FAIL,
+  AUTH_REGISTER_REST_FAIL,
 } from "../constants/auth.constants";
 
 export const authLoginReducer = (state = { loading: false }, action) => {
@@ -17,7 +19,9 @@ export const authLoginReducer = (state = { loading: false }, action) => {
       return { ...state, loading: false };
     case AUTH_LOGIN_FAIL:
       return { loading: false, error: action.payload };
-
+    case AUTH_LOGIN_REST_FAIL: {
+      return { loading: false };
+    }
     default:
       return state;
   }
@@ -35,6 +39,9 @@ export const authRegisterReducer = (state = registerInitState, action) => {
       return { ...state, loading: false };
     case AUTH_REGISTER_FAIL:
       return { loading: false, error: action.payload };
+    case AUTH_REGISTER_REST_FAIL: {
+      return { loading: false };
+    }
     default:
       return state;
   }

@@ -2,12 +2,24 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useSelector, useDispatch } from "react-redux";
-import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Form,
+  Button,
+  Alert,
+} from "react-bootstrap";
+import { WarningCircle } from "phosphor-react";
 import { Link } from "react-router-dom";
 import BreadcrumbContainer from "../Components/Layouts/BreadcrumbsContainer";
 import InputGroupRow from "../Components/UI/InputGroupRow";
 import Loader from "../Components/UI/Loader";
-import { authRegisterAction } from "../actions/auth.actions";
+import {
+  authRegisterAction,
+  authResetErrorAction,
+} from "../actions/auth.actions";
 
 const registerSchema = Yup.object().shape({
   nama: Yup.string().required("Nama belum terisi"),
@@ -17,7 +29,7 @@ const registerSchema = Yup.object().shape({
   email: Yup.string()
     .required("Alamat E-mail belum terisi")
     .email("Alamat E-mail tidak valid"),
-  noTelp: Yup.number()
+  noHp: Yup.number()
     .typeError("Yang diisi harus angka")
     .required("Nomor telepon belum terisi"),
   password: Yup.string().required("Password belum tersisi"),
@@ -32,22 +44,22 @@ const RegisterPage = () => {
   const [agreeTermCond, setAgreeTermCond] = React.useState(false);
 
   const dispatch = useDispatch();
-  const { userInfo } = useSelector(state => state.authUser);
-  const { loading } = useSelector(state => state.authRegister);
+
+  const { loading, error } = useSelector(state => state.authRegister);
 
   const registerFormik = useFormik({
     validationSchema: registerSchema,
     initialValues: {
       nama: "",
       username: "",
-      email: "",
-      noTelp: "",
+      email: "@gmail.com",
+      noHp: "",
       password: "",
       password2: "",
     },
     onSubmit: values => {
       dispatch(authRegisterAction(values));
-      console.log(values);
+
       // history.push('/payment');
     },
   });
@@ -63,6 +75,24 @@ const RegisterPage = () => {
     disableButton = true;
   }
 
+  const spesificIsInvalid = {
+    username: {
+      isInvalid: registerFormik.errors.username
+        ? true
+        : false || error?.validation?.username,
+      message:
+        registerFormik.errors.username ||
+        error?.validation?.username?.message[0],
+    },
+    email: {
+      isInvalid: registerFormik.errors.email
+        ? true
+        : false || error?.validation?.email,
+      message:
+        registerFormik.errors.email || error?.validation?.email?.message[0],
+    },
+  };
+
   return (
     <>
       <BreadcrumbContainer
@@ -76,20 +106,31 @@ const RegisterPage = () => {
           <Row>
             <Col xs={12}>
               <div className="login-register-tab-list nav">
-                <Link to="/masuk">
+                <Link to="/akun/masuk">
                   <h4>Masuk</h4>
                 </Link>
-                <Link className="active" to="/daftar">
+                <Link className="active" to="/akun/daftar">
                   <h4>Daftar</h4>
                 </Link>
               </div>
             </Col>
             <Col sm={11} md={10} lg={7} className="mx-auto">
+              {error && !error.validation && (
+                <Alert
+                  variant="danger"
+                  onClose={() => dispatch(authResetErrorAction("login"))}
+                  dismissible
+                >
+                  {" "}
+                  <WarningCircle size={28} className="ml-3" /> {error.message}
+                </Alert>
+              )}
               <Card body className="px-md-4 py-3">
                 <h5 className="text-black-50 font-weight-light text-center ">
                   registrasi pengguna
                 </h5>
                 <br />
+
                 <Form onSubmit={registerFormik.handleSubmit}>
                   <InputGroupRow
                     input1={{
@@ -106,8 +147,8 @@ const RegisterPage = () => {
                       placeholder: "(min 6 karakter)",
                       value: registerFormik.values.username,
                       onChange: registerFormik.handleChange,
-                      isInvalid: registerFormik.errors.username ? true : false,
-                      errormessage: registerFormik.errors.username,
+                      isInvalid: spesificIsInvalid.username?.isInvalid,
+                      errormessage: spesificIsInvalid.username?.message,
                       label: "Username*",
                     }}
                   />
@@ -117,16 +158,16 @@ const RegisterPage = () => {
                       type: "email",
                       value: registerFormik.values.email,
                       onChange: registerFormik.handleChange,
-                      isInvalid: registerFormik.errors.email ? true : false,
-                      errormessage: registerFormik.errors.email,
+                      isInvalid: spesificIsInvalid.email.isInvalid,
+                      errormessage: spesificIsInvalid.email.message,
                       label: "Email*",
                     }}
                     input2={{
-                      controlid: "noTelp",
-                      value: registerFormik.values.noTelp,
+                      controlid: "noHp",
+                      value: registerFormik.values.noHp,
                       onChange: registerFormik.handleChange,
-                      isInvalid: registerFormik.errors.noTelp ? true : false,
-                      errormessage: registerFormik.errors.noTelp,
+                      isInvalid: registerFormik.errors.noHp ? true : false,
+                      errormessage: registerFormik.errors.noHp,
                       placeholder: "(Hanya angka)",
                       label: "No Hp*",
                     }}
@@ -184,7 +225,7 @@ const RegisterPage = () => {
                     </Button>
                   </Form.Group>
                   <div className=" pt-2 text-spacing-0 font-weight-light text-capitalize ">
-                    Sudah menjadi member? <Link to="/masuk">Masuk</Link>
+                    Sudah menjadi member? <Link to="/akun/masuk">Masuk</Link>
                   </div>
                 </Form>
               </Card>

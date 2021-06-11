@@ -46,7 +46,7 @@ const HeaderBottom = () => {
                 <Form action="#" className="h-100  h-auto">
                   <Form.Control
                     type="text"
-                    placeholder="search"
+                    placeholder="Search"
                     className="my-auto"
                   />
                 </Form>

@@ -2,11 +2,20 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useSelector, useDispatch } from "react-redux";
-import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Form,
+  Button,
+  Alert,
+} from "react-bootstrap";
+import { WarningCircle } from "phosphor-react";
 import { Link } from "react-router-dom";
 import BreadcrumbContainer from "../Components/Layouts/BreadcrumbsContainer";
 import Loader from "../Components/UI/Loader";
-import { authLoginAction } from "../actions/auth.actions";
+import { authLoginAction, authResetErrorAction } from "../actions/auth.actions";
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
@@ -17,8 +26,9 @@ const loginSchema = Yup.object().shape({
 
 const LoginPage = () => {
   const dispatch = useDispatch();
+
   const { userInfo } = useSelector(state => state.authUser);
-  const { loading } = useSelector(state => state.authLogin);
+  const { loading, error } = useSelector(state => state.authLogin);
 
   const loginFormik = useFormik({
     validationSchema: loginSchema,
@@ -32,10 +42,6 @@ const LoginPage = () => {
     },
   });
 
-  React.useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
-
   return (
     <>
       <BreadcrumbContainer
@@ -44,24 +50,36 @@ const LoginPage = () => {
           { title: "Masuk", active: true },
         ]}
       />
+
       <section className="login-register-area pt-115 pb-120">
         <Container fluid className="px-md-8">
           <Row>
             <Col xs={12}>
               <div className="login-register-tab-list nav">
-                <Link className="active" to="/masuk">
+                <Link className="active" to="/akun/masuk">
                   <h4>Masuk</h4>
                 </Link>
-                <Link to="/daftar">
+                <Link to="/akun/daftar">
                   <h4>Daftar</h4>
                 </Link>
               </div>
             </Col>
             <Col sm={8} md={6} lg={6} className="mx-auto">
+              {error && !error.validation && (
+                <Alert
+                  variant="danger"
+                  onClose={() => dispatch(authResetErrorAction("login"))}
+                  dismissible
+                >
+                  {" "}
+                  <WarningCircle size={28} className="ml-3" /> {error.message}
+                </Alert>
+              )}
               <Card body className="px-md-4 py-3">
                 <h5 className="text-black-50 font-weight-light text-center ">
                   login pengguna
                 </h5>
+                <br />
 
                 <Form onSubmit={loginFormik.handleSubmit} className="mt-1">
                   <Form.Group controlId="email">
@@ -113,7 +131,7 @@ const LoginPage = () => {
                   </Form.Group>
                   <div className=" pt-2 text-spacing-0 font-weight-light text-capitalize ">
                     Belum menjadi member?{" "}
-                    <Link to="/daftar">Daftar sekarang</Link>
+                    <Link to="/akun/daftar">Daftar sekarang</Link>
                   </div>
                 </Form>
               </Card>

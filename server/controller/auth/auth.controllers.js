@@ -8,7 +8,7 @@ import daysJs from "dayjs";
 import generateToken from "../../utils/generateToken.js";
 
 export const authRegister = asyncHandler(async (req, res) => {
-  const { username, nama, email, noTelp, password } = req.body;
+  const { username, nama, email, noHp, password } = req.body;
 
   const errors = validationResult(req);
   const errorMsg = errMessageValidation(errors.array());
@@ -23,14 +23,25 @@ export const authRegister = asyncHandler(async (req, res) => {
       username,
       nama,
       email,
-      no_hp: noTelp,
+      no_hp: noHp,
       password: hashPassword,
       id_role: 2,
     };
-    await ModelMember.create(newMember);
+    const result = await ModelMember.create(newMember);
+    const role = await result.getModelRole();
     res.status(201).json({
       message: "success",
-      member: newMember,
+      user: {
+        username: result.username,
+        id_member: result.id_member,
+        nama: result.nama,
+        email: result.email,
+        no_hp: result.no_hp,
+        role: role,
+        token: generateToken(result.id_member),
+        tgl_dibuat: daysJs(result.tgl_dibuat).format("DD MMM, YYYY - HH.mm"),
+        tgl_diubah: daysJs(result.tgl_diubah).format("DD MMM, YYYY - HH.mm"),
+      },
     });
   } catch (error) {
     res.status(400);
@@ -63,7 +74,7 @@ export const authLogin = asyncHandler(async (req, res) => {
 
         res.status(200).json({
           message: "Login berhasil",
-          member: {
+          user: {
             username: member.username,
             id_member: member.id_member,
             nama: member.nama,

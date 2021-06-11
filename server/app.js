@@ -37,7 +37,7 @@ app.use(express.json());
 const staticFile = express.static(path.join(__dirname, "..", "uploads"));
 app.use("/files/uploads", staticFile);
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.send("API is Running dude!! ");
 });
 app.use("/api/auth", authRoutes);
