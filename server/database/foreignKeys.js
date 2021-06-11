@@ -2,7 +2,7 @@ import Sequelize from "sequelize";
 
 const DataTypes = Sequelize.DataTypes;
 
-const ForeignKeysData = {
+const foreignKeysData = {
   idMember: {
     name: "id_member",
     type: DataTypes.UUID,
@@ -29,4 +29,4 @@ const ForeignKeysData = {
   },
 };
 
-export default ForeignKeysData;
+export default foreignKeysData;
