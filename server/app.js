@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import colors from "colors";
 import express from "express";
 import sequelize from "./configs/database.js";
-import Sequelize from "sequelize";
+
 import ModelMember from "./models/m_member.js";
 import ModelPenjual from "./models/m_penjual.js";
 import foreignKeysData from "./database/foreignKeys.js";
@@ -13,6 +13,8 @@ import ModelKategori from "./models/m_kategori.js";
 import ModelPenawaran from "./models/m_penawaran.js";
 import ModelPesanDiskusi from "./models/m_pesan_diskusi.js";
 import ModelRuangDiskusi from "./models/m_ruang_diskusi.js";
+import { errorHandler, notFound } from "./middleware/error.middleware.js";
+import authRoutes from "./routes/auth.routes.js";
 
 const __dirname = path.resolve();
 
@@ -38,6 +40,9 @@ app.use("/files/uploads", staticFile);
 app.get("/", (req, res) => {
   res.send("API is Running dude!! ");
 });
+app.use("/api/auth", authRoutes);
+app.use(notFound);
+app.use(errorHandler);
 
 ModelRole.hasMany(ModelMember);
 ModelMember.belongsTo(ModelRole, {
