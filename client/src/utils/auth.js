@@ -17,3 +17,7 @@ export const isLogin = () => {
 
   return false;
 };
+
+export const userInfoFromStorage = localStorage.getItem("baebid_userInfo")
+  ? JSON.parse(localStorage.getItem("baebid_userInfo"))
+  : null;

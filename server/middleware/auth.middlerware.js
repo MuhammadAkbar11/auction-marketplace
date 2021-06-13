@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import daysJs from "dayjs";
 import asyncHandler from "express-async-handler";
 import ModelMember from "../models/m_member.js";
 
@@ -9,11 +10,11 @@ const protect = asyncHandler(async (req, res, next) => {
 
   if (authorization && authorization.startsWith("Bearer")) {
     try {
-      const token = authorization.split(" ")[1];
+      token = authorization.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       const user = await ModelMember.findByPk(decoded.id);
-
+      const role = await user.getModelRole();
       const reqUser = {
         username: user.username,
         id_member: user.id_member,
@@ -21,8 +22,6 @@ const protect = asyncHandler(async (req, res, next) => {
         email: user.email,
         no_hp: user.no_hp,
         role: role,
-
-        token: generateToken(user.id_member),
         tgl_dibuat: daysJs(user.tgl_dibuat).format("DD MMM, YYYY - HH.mm"),
         tgl_diubah: daysJs(user.tgl_diubah).format("DD MMM, YYYY - HH.mm"),
       };

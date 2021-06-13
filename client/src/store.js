@@ -7,16 +7,21 @@ import {
   authRegisterReducer,
   authUserReducer,
 } from "./reducers/auth.reducer";
-
-const userInfoFromStorage = localStorage.getItem("baebid_userInfo")
-  ? JSON.parse(localStorage.getItem("baebid_userInfo"))
-  : null;
+import { userInfoFromStorage } from "./utils/auth";
+import { menuReducer } from "./reducers/menu.reducer";
+import {
+  userDetailsReducer,
+  userUpdateProfileReducer,
+} from "./reducers/user.reducer";
 
 const reducer = combineReducers({
   productList: productListReducer,
   authLogin: authLoginReducer,
   authRegister: authRegisterReducer,
   authUser: authUserReducer,
+  userDetails: userDetailsReducer,
+  userUpdateProfile: userUpdateProfileReducer,
+  menu: menuReducer,
 });
 
 const initialState = {

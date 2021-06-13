@@ -44,12 +44,14 @@ const proptypes = {
   }),
 };
 
-const InputGroupRow = ({ rootClass, input1, input2 }) => {
+const InputGroupRow = ({ rootClass, labelClass, input1, input2 }) => {
   return (
     <Row className={`${rootClass}`}>
       <Col sm={6} md={6}>
         <Form.Group controlId={input1.controlid}>
-          <Form.Label className="text-capitalize">{input1.label}</Form.Label>
+          <Form.Label className={`text-capitalize ${labelClass}`}>
+            {input1.label}
+          </Form.Label>
           <Form.Control
             type={input1.type}
             placeholder={input1.placeholder}
@@ -57,6 +59,7 @@ const InputGroupRow = ({ rootClass, input1, input2 }) => {
             value={input1.value}
             onChange={input1.onChange}
             isInvalid={input1.isInvalid}
+            readOnly={input1.readOnly}
             {...input1}
           />{" "}
           {input1.isInvalid ? (
@@ -68,7 +71,9 @@ const InputGroupRow = ({ rootClass, input1, input2 }) => {
       </Col>
       <Col sm={6} md={6}>
         <Form.Group controlId={input2.controlid}>
-          <Form.Label className="text-capitalize">{input2.label}</Form.Label>
+          <Form.Label className={`text-capitalize ${labelClass}`}>
+            {input2.label}
+          </Form.Label>
           <Form.Control
             type={input2.type}
             placeholder={input2.placeholder}
@@ -76,6 +81,7 @@ const InputGroupRow = ({ rootClass, input1, input2 }) => {
             value={input2.value}
             onChange={input2.onChange}
             isInvalid={input2.isInvalid}
+            readOnly={input2.readOnly}
             {...input2}
           />{" "}
           {input2.isInvalid ? (

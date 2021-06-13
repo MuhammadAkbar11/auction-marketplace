@@ -1,0 +1,29 @@
+.toast-container {
+  position: fixed;
+  width: max-content;
+  background-color: $gray-100;
+  z-index: 1065;
+
+  &.bottom-center {
+    bottom: 1.2rem;
+    left: 50%;
+    right: 50%;
+  }
+
+  & .toast {
+    min-width: 300px;
+  }
+
+  @include media-breakpoint-down(sm) {
+    width: 100%;
+    &.bottom-center {
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+    & .toast {
+      min-width: 100%;
+      width: 100%;
+    }
+  }
+}

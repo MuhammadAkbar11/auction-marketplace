@@ -34,6 +34,24 @@ const ModelMember = sequelize.define(
     no_hp: {
       type: DataTypes.STRING(15),
     },
+    no_ktp: {
+      type: DataTypes.STRING(16),
+    },
+    id_provinsi: {
+      type: DataTypes.STRING(15),
+    },
+    id_kota: {
+      type: DataTypes.STRING(15),
+    },
+    id_kecamatan: {
+      type: DataTypes.STRING(15),
+    },
+    id_kelurahan: {
+      type: DataTypes.STRING(20),
+    },
+    tgl_lahir: {
+      type: DataTypes.DATEONLY,
+    },
     foto: {
       type: DataTypes.STRING,
     },

@@ -5,7 +5,6 @@ import express from "express";
 import sequelize from "./configs/database.js";
 
 import ModelMember from "./models/m_member.js";
-import ModelPenjual from "./models/m_penjual.js";
 import foreignKeysData from "./database/foreignKeys.js";
 import ModelRole from "./models/m_roles.js";
 import ModelLelang from "./models/m_lelang.js";
@@ -15,6 +14,7 @@ import ModelPesanDiskusi from "./models/m_pesan_diskusi.js";
 import ModelRuangDiskusi from "./models/m_ruang_diskusi.js";
 import { errorHandler, notFound } from "./middleware/error.middleware.js";
 import authRoutes from "./routes/auth.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 const __dirname = path.resolve();
 
@@ -41,6 +41,7 @@ app.get("/api", (req, res) => {
   res.send("API is Running dude!! ");
 });
 app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
@@ -50,13 +51,8 @@ ModelMember.belongsTo(ModelRole, {
   foreignKey: foreignKeysData.idRole,
 });
 
-// relasi antara Penjual dan Member
-ModelMember.hasOne(ModelPenjual);
-ModelPenjual.belongsTo(ModelMember, {
-  foreignKey: foreignKeysData.idMember,
-});
-ModelPenjual.hasMany(ModelLelang);
-ModelLelang.belongsTo(ModelPenjual, { foreignKey: foreignKeysData.idPenjual });
+ModelMember.hasMany(ModelLelang);
+ModelLelang.belongsTo(ModelMember, { foreignKey: foreignKeysData.idMember });
 
 // relasi tabel lelang & kategori
 ModelLelang.belongsTo(ModelKategori, {
@@ -88,6 +84,7 @@ ModelRuangDiskusi.belongsTo(ModelLelang, {
 
 (async () => {
   await sequelize.sync();
+  // await sequelize.sync({ force: true });
   app.listen(PORT, () => {
     console.log(
       `\nServer running in ${MODE} mode on port ${PORT.underline} `.yellow.bold
