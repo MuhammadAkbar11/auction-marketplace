@@ -1,2 +1,8 @@
 @import "./core/variables";
 @import "./core/spacing";
+
+.toggle-caret-0 {
+  &::after {
+    display: none !important;
+  }
+}

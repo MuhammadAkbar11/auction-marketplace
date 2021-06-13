@@ -53,6 +53,7 @@ const Profile = ({ history }) => {
   const userDetailsState = useSelector(state => state.userDetails);
   const userDetails = userDetailsState.details;
   const userDetailsError = userDetailsState.error;
+  const userDetailsLoading = userDetailsState.loading;
   const { loading, error, success } = useSelector(
     state => state.userUpdateProfile
   );
@@ -175,6 +176,283 @@ const Profile = ({ history }) => {
     loadKelurahan(e.target.value, true);
   };
 
+  // Contents
+
+  let profileContent;
+
+  if (userDetailsError && !userDetailsLoading) {
+    profileContent = (
+      <div className=" py-2 d-flex flex-column align-items-center justify-content-center ">
+        <WarningCircle size={50} className="text-danger " />{" "}
+        <h5 className="text-center text-capitalize text-spacing-0 mt-1 text-danger ">
+          Opps!
+        </h5>
+        <p className="text-center mt-1">
+          Sepertinya ada kesalahan server, silahkan refresh halaman atau logout,
+          kemudian login lagi
+        </p>
+      </div>
+    );
+  } else {
+    profileContent = (
+      <>
+        {error && !error.validation && (
+          <div className="mb-2">
+            <Alert variant="danger" className="px-1">
+              {" "}
+              <WarningCircle size={28} className="ml-3" /> {error.message}
+            </Alert>
+          </div>
+        )}
+        {success && (
+          <div className="mb-2">
+            <Alert
+              variant="success"
+              className="px-1"
+              // onClose={() => dispatch(authResetErrorAction("login"))}
+              // dismissible
+            >
+              {" "}
+              <CheckCircle size={28} className="ml-3" /> {success.message}
+            </Alert>
+          </div>
+        )}
+        <Form onSubmit={updateProfileFormik.handleSubmit}>
+          <InputGroupRow
+            labelClass="text-dark font-weight-bold "
+            input1={{
+              controlid: "nama",
+              placeholder: "Nama...",
+              value: updateProfileFormik.values.nama,
+              onChange: updateProfileFormik.handleChange,
+              isInvalid: updateProfileFormik.errors.nama ? true : false,
+              errormessage: updateProfileFormik.errors.nama,
+              label: "Nama",
+            }}
+            input2={{
+              controlid: "username",
+              placeholder: "Username..",
+              value: updateProfileFormik.values.username,
+              onChange: updateProfileFormik.handleChange,
+              isInvalid: spesificIsInvalid.username?.isInvalid,
+              errormessage: spesificIsInvalid.username?.message,
+              label: "Username",
+            }}
+          />
+
+          <InputGroupRow
+            labelClass="text-dark font-weight-bold "
+            input1={{
+              controlid: "email",
+              placeholder: "Alamat email...",
+              value: userDetails?.email || "",
+              readOnly: true,
+              label: "email",
+            }}
+            input2={{
+              controlid: "noHp",
+              placeholder: "Nomor telepon...",
+              value: updateProfileFormik.values.noHp,
+              onChange: updateProfileFormik.handleChange,
+              isInvalid: spesificIsInvalid.noHp?.isInvalid ? true : false,
+              errormessage: spesificIsInvalid.noHp?.message,
+              label: "No Telpon",
+            }}
+          />
+
+          <InputGroupRow
+            labelClass="text-dark font-weight-bold "
+            input1={{
+              controlid: "noKtp",
+              placeholder: "Nomor Ktp...",
+              value: updateProfileFormik.values.noKtp,
+              onChange: updateProfileFormik.handleChange,
+              isInvalid: updateProfileFormik.errors.noKtp ? true : false,
+              errormessage: updateProfileFormik.errors.noKtp,
+              label: "no ktp",
+            }}
+            input2={{
+              controlid: "tglLahir",
+              placeholder: "",
+              value: updateProfileFormik.values.tglLahir,
+              onChange: updateProfileFormik.handleChange,
+              isInvalid: updateProfileFormik.errors.tglLahir ? true : false,
+              errormessage: updateProfileFormik.errors.tglLahir,
+              type: "date",
+              label: "Tanggal Lahir",
+            }}
+          />
+          <Row>
+            <Col xs={12}>
+              <Form.Group controlId="alamat">
+                <Form.Label>Alamat</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  className=" bg-transparent border "
+                  onChange={updateProfileFormik.handleChange}
+                  rows={3}
+                  value={updateProfileFormik.values.alamat}
+                  isInvalid={updateProfileFormik.errors.alamat ? true : false}
+                />
+                {updateProfileFormik.errors.alamat ? (
+                  <Form.Control.Feedback type="invalid">
+                    {updateProfileFormik.errors.alamat}
+                  </Form.Control.Feedback>
+                ) : null}
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={6}>
+              <Form.Group controlId="idProvinsi">
+                <Form.Label>Provinsi</Form.Label>
+                <Form.Control
+                  className="bg-transparent border"
+                  as="select"
+                  onChange={handleChangeProvinsi}
+                  onBlur={updateProfileFormik.handleBlur}
+                  value={updateProfileFormik.values.idProvinsi}
+                  isInvalid={
+                    updateProfileFormik.errors.idProvinsi ? true : false
+                  }
+                >
+                  {listProvinsi.map(prov => {
+                    return (
+                      <option key={prov.id} value={prov.id}>
+                        {prov.nama}
+                      </option>
+                    );
+                  })}
+                </Form.Control>
+                {updateProfileFormik.errors.idProvinsi ? (
+                  <Form.Control.Feedback type="invalid">
+                    {updateProfileFormik.errors.idProvinsi}
+                  </Form.Control.Feedback>
+                ) : null}
+              </Form.Group>
+            </Col>
+            <Col sm={6}>
+              <Form.Group controlId="idKota">
+                <Form.Label>Kota</Form.Label>
+                <Form.Control
+                  className="bg-transparent border"
+                  as="select"
+                  onChange={handleChangeKota}
+                  value={updateProfileFormik.values.idKota}
+                  isInvalid={updateProfileFormik.errors.idKota ? true : false}
+                >
+                  {listKota.map(kota => {
+                    return (
+                      <option key={kota.id} value={kota.id}>
+                        {kota.nama}
+                      </option>
+                    );
+                  })}
+                </Form.Control>
+                {updateProfileFormik.errors.idKota ? (
+                  <Form.Control.Feedback type="invalid">
+                    {updateProfileFormik.errors.idKota}
+                  </Form.Control.Feedback>
+                ) : null}
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={6}>
+              <Form.Group controlId="idKec">
+                <Form.Label>Kecamatan</Form.Label>
+                <Form.Control
+                  className="bg-transparent border"
+                  as="select"
+                  onChange={handleChangeKecamatan}
+                  value={updateProfileFormik.values.idKec}
+                  isInvalid={updateProfileFormik.errors.idKec ? true : false}
+                >
+                  {listKecamatan.map(kec => {
+                    return (
+                      <option key={kec.id} value={kec.id}>
+                        {kec.nama}
+                      </option>
+                    );
+                  })}
+                </Form.Control>
+                {updateProfileFormik.errors.idKec ? (
+                  <Form.Control.Feedback type="invalid">
+                    {updateProfileFormik.errors.idKec}
+                  </Form.Control.Feedback>
+                ) : null}
+              </Form.Group>
+            </Col>
+            <Col sm={6}>
+              <Form.Group controlId="idKelu">
+                <Form.Label>Kelurahan</Form.Label>
+                <Form.Control
+                  className="bg-transparent border"
+                  as="select"
+                  onChange={updateProfileFormik.handleChange}
+                  value={updateProfileFormik.values.idKelu}
+                  isInvalid={updateProfileFormik.errors.idKelu ? true : false}
+                >
+                  {listKelurahan.map(kelurahan => {
+                    return kelurahan.id ===
+                      updateProfileFormik.values.idKelu ? (
+                      <option selected key={kelurahan.id} value={kelurahan.id}>
+                        {kelurahan.nama}
+                      </option>
+                    ) : (
+                      <option key={kelurahan.id} value={kelurahan.id}>
+                        {kelurahan.nama}
+                      </option>
+                    );
+                  })}
+                </Form.Control>
+                {updateProfileFormik.errors.idKelu ? (
+                  <Form.Control.Feedback type="invalid">
+                    {updateProfileFormik.errors.idKelu}
+                  </Form.Control.Feedback>
+                ) : null}
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={6}>
+              <Form.Group controlId="kodePos">
+                <Form.Label>Kode Pos</Form.Label>
+                <Form.Control
+                  className=" bg-transparent border "
+                  onChange={updateProfileFormik.handleChange}
+                  value={updateProfileFormik.values.kodePos}
+                  isInvalid={updateProfileFormik.errors.kodePos ? true : false}
+                />
+                {updateProfileFormik.errors.kodePos ? (
+                  <Form.Control.Feedback type="invalid">
+                    {updateProfileFormik.errors.kodePos}
+                  </Form.Control.Feedback>
+                ) : null}
+              </Form.Group>
+            </Col>
+          </Row>
+          <Form.Group>
+            <Button
+              type="submit"
+              variant="primary"
+              className=" d-flex align-items-center "
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <Loader size={11} /> <span className="ml-2">Sending...</span>
+                </>
+              ) : (
+                "Simpan"
+              )}
+            </Button>
+          </Form.Group>
+        </Form>{" "}
+      </>
+    );
+  }
+
   return (
     <>
       <BreadcrumbsContainer
@@ -193,315 +471,7 @@ const Profile = ({ history }) => {
               <Card.Header className="bg-transparent text-dark text-uppercase font-weight-bold">
                 Informasi Akun
               </Card.Header>
-              <Card.Body>
-                {userDetailsError ? (
-                  <div className=" py-2 d-flex flex-column align-items-center justify-content-center ">
-                    <WarningCircle size={50} className="text-danger " />{" "}
-                    <h5 className="text-center text-capitalize text-spacing-0 mt-1 text-danger ">
-                      Opps!
-                    </h5>
-                    <p className="text-center mt-1">
-                      Sepertinya ada kesalahan server, silahkan refresh halaman
-                      atau logout, kemudian login lagi
-                    </p>
-                  </div>
-                ) : (
-                  <>
-                    <div className="py-5"></div>
-                    {error && !error.validation && (
-                      <div className="mb-2">
-                        <Alert
-                          variant="danger"
-                          className="px-1"
-                          // onClose={() => dispatch(authResetErrorAction("login"))}
-                          // dismissible
-                        >
-                          {" "}
-                          <WarningCircle size={28} className="ml-3" />{" "}
-                          {error.message}
-                        </Alert>
-                      </div>
-                    )}
-                    {success && (
-                      <div className="mb-2">
-                        <Alert
-                          variant="success"
-                          className="px-1"
-                          // onClose={() => dispatch(authResetErrorAction("login"))}
-                          // dismissible
-                        >
-                          {" "}
-                          <CheckCircle size={28} className="ml-3" />{" "}
-                          {success.message}
-                        </Alert>
-                      </div>
-                    )}
-
-                    <Form onSubmit={updateProfileFormik.handleSubmit}>
-                      <InputGroupRow
-                        labelClass="text-dark font-weight-bold "
-                        input1={{
-                          controlid: "nama",
-                          placeholder: "Nama...",
-                          value: updateProfileFormik.values.nama,
-                          onChange: updateProfileFormik.handleChange,
-                          isInvalid: updateProfileFormik.errors.nama
-                            ? true
-                            : false,
-                          errormessage: updateProfileFormik.errors.nama,
-                          label: "Nama",
-                        }}
-                        input2={{
-                          controlid: "username",
-                          placeholder: "Username..",
-                          value: updateProfileFormik.values.username,
-                          onChange: updateProfileFormik.handleChange,
-                          isInvalid: spesificIsInvalid.username?.isInvalid,
-                          errormessage: spesificIsInvalid.username?.message,
-                          label: "Username",
-                        }}
-                      />
-
-                      <InputGroupRow
-                        labelClass="text-dark font-weight-bold "
-                        input1={{
-                          controlid: "email",
-                          placeholder: "Alamat email...",
-                          value: userDetails?.email || "",
-                          readOnly: true,
-                          label: "email",
-                        }}
-                        input2={{
-                          controlid: "noHp",
-                          placeholder: "Nomor telepon...",
-                          value: updateProfileFormik.values.noHp,
-                          onChange: updateProfileFormik.handleChange,
-                          isInvalid: spesificIsInvalid.noHp?.isInvalid
-                            ? true
-                            : false,
-                          errormessage: spesificIsInvalid.noHp?.message,
-                          label: "No Telpon",
-                        }}
-                      />
-
-                      <InputGroupRow
-                        labelClass="text-dark font-weight-bold "
-                        input1={{
-                          controlid: "noKtp",
-                          placeholder: "Nomor Ktp...",
-                          value: updateProfileFormik.values.noKtp,
-                          onChange: updateProfileFormik.handleChange,
-                          isInvalid: updateProfileFormik.errors.noKtp
-                            ? true
-                            : false,
-                          errormessage: updateProfileFormik.errors.noKtp,
-                          label: "no ktp",
-                        }}
-                        input2={{
-                          controlid: "tglLahir",
-                          placeholder: "",
-                          value: updateProfileFormik.values.tglLahir,
-                          onChange: updateProfileFormik.handleChange,
-                          isInvalid: updateProfileFormik.errors.tglLahir
-                            ? true
-                            : false,
-                          errormessage: updateProfileFormik.errors.tglLahir,
-                          type: "date",
-                          label: "Tanggal Lahir",
-                        }}
-                      />
-                      <Row>
-                        <Col xs={12}>
-                          <Form.Group controlId="alamat">
-                            <Form.Label>Alamat</Form.Label>
-                            <Form.Control
-                              as="textarea"
-                              className=" bg-transparent border "
-                              onChange={updateProfileFormik.handleChange}
-                              rows={3}
-                              value={updateProfileFormik.values.alamat}
-                              isInvalid={
-                                updateProfileFormik.errors.alamat ? true : false
-                              }
-                            />
-                            {updateProfileFormik.errors.alamat ? (
-                              <Form.Control.Feedback type="invalid">
-                                {updateProfileFormik.errors.alamat}
-                              </Form.Control.Feedback>
-                            ) : null}
-                          </Form.Group>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col sm={6}>
-                          <Form.Group controlId="idProvinsi">
-                            <Form.Label>Provinsi</Form.Label>
-                            <Form.Control
-                              className="bg-transparent border"
-                              as="select"
-                              onChange={handleChangeProvinsi}
-                              onBlur={updateProfileFormik.handleBlur}
-                              value={updateProfileFormik.values.idProvinsi}
-                              isInvalid={
-                                updateProfileFormik.errors.idProvinsi
-                                  ? true
-                                  : false
-                              }
-                            >
-                              {listProvinsi.map(prov => {
-                                return (
-                                  <option key={prov.id} value={prov.id}>
-                                    {prov.nama}
-                                  </option>
-                                );
-                              })}
-                            </Form.Control>
-                            {updateProfileFormik.errors.idProvinsi ? (
-                              <Form.Control.Feedback type="invalid">
-                                {updateProfileFormik.errors.idProvinsi}
-                              </Form.Control.Feedback>
-                            ) : null}
-                          </Form.Group>
-                        </Col>
-                        <Col sm={6}>
-                          <Form.Group controlId="idKota">
-                            <Form.Label>Kota</Form.Label>
-                            <Form.Control
-                              className="bg-transparent border"
-                              as="select"
-                              onChange={handleChangeKota}
-                              value={updateProfileFormik.values.idKota}
-                              isInvalid={
-                                updateProfileFormik.errors.idKota ? true : false
-                              }
-                            >
-                              {listKota.map(kota => {
-                                return (
-                                  <option key={kota.id} value={kota.id}>
-                                    {kota.nama}
-                                  </option>
-                                );
-                              })}
-                            </Form.Control>
-                            {updateProfileFormik.errors.idKota ? (
-                              <Form.Control.Feedback type="invalid">
-                                {updateProfileFormik.errors.idKota}
-                              </Form.Control.Feedback>
-                            ) : null}
-                          </Form.Group>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col sm={6}>
-                          <Form.Group controlId="idKec">
-                            <Form.Label>Kecamatan</Form.Label>
-                            <Form.Control
-                              className="bg-transparent border"
-                              as="select"
-                              onChange={handleChangeKecamatan}
-                              value={updateProfileFormik.values.idKec}
-                              isInvalid={
-                                updateProfileFormik.errors.idKec ? true : false
-                              }
-                            >
-                              {listKecamatan.map(kec => {
-                                return (
-                                  <option key={kec.id} value={kec.id}>
-                                    {kec.nama}
-                                  </option>
-                                );
-                              })}
-                            </Form.Control>
-                            {updateProfileFormik.errors.idKec ? (
-                              <Form.Control.Feedback type="invalid">
-                                {updateProfileFormik.errors.idKec}
-                              </Form.Control.Feedback>
-                            ) : null}
-                          </Form.Group>
-                        </Col>
-                        <Col sm={6}>
-                          <Form.Group controlId="idKelu">
-                            <Form.Label>Kelurahan</Form.Label>
-                            <Form.Control
-                              className="bg-transparent border"
-                              as="select"
-                              onChange={updateProfileFormik.handleChange}
-                              value={updateProfileFormik.values.idKelu}
-                              isInvalid={
-                                updateProfileFormik.errors.idKelu ? true : false
-                              }
-                            >
-                              {listKelurahan.map(kelurahan => {
-                                return kelurahan.id ===
-                                  updateProfileFormik.values.idKelu ? (
-                                  <option
-                                    selected
-                                    key={kelurahan.id}
-                                    value={kelurahan.id}
-                                  >
-                                    {kelurahan.nama}
-                                  </option>
-                                ) : (
-                                  <option
-                                    key={kelurahan.id}
-                                    value={kelurahan.id}
-                                  >
-                                    {kelurahan.nama}
-                                  </option>
-                                );
-                              })}
-                            </Form.Control>
-                            {updateProfileFormik.errors.idKelu ? (
-                              <Form.Control.Feedback type="invalid">
-                                {updateProfileFormik.errors.idKelu}
-                              </Form.Control.Feedback>
-                            ) : null}
-                          </Form.Group>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col sm={6}>
-                          <Form.Group controlId="kodePos">
-                            <Form.Label>Kode Pos</Form.Label>
-                            <Form.Control
-                              className=" bg-transparent border "
-                              onChange={updateProfileFormik.handleChange}
-                              value={updateProfileFormik.values.kodePos}
-                              isInvalid={
-                                updateProfileFormik.errors.kodePos
-                                  ? true
-                                  : false
-                              }
-                            />
-                            {updateProfileFormik.errors.kodePos ? (
-                              <Form.Control.Feedback type="invalid">
-                                {updateProfileFormik.errors.kodePos}
-                              </Form.Control.Feedback>
-                            ) : null}
-                          </Form.Group>
-                        </Col>
-                      </Row>
-                      <Form.Group>
-                        <Button
-                          type="submit"
-                          variant="primary"
-                          className=" d-flex align-items-center "
-                          disabled={loading}
-                        >
-                          {loading ? (
-                            <>
-                              <Loader size={11} />{" "}
-                              <span className="ml-2">Sending...</span>
-                            </>
-                          ) : (
-                            "Simpan"
-                          )}
-                        </Button>
-                      </Form.Group>
-                    </Form>
-                  </>
-                )}
-              </Card.Body>
+              <Card.Body>{profileContent}</Card.Body>
             </Card>
           </Col>
         </Row>
