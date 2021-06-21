@@ -14,14 +14,13 @@ const protect = asyncHandler(async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       const user = await ModelMember.findByPk(decoded.id);
-      const role = await user.getModelRole();
+
       const reqUser = {
         username: user.username,
         id_member: user.id_member,
         nama: user.nama,
         email: user.email,
         no_hp: user.no_hp,
-        role: role,
         tgl_dibuat: daysJs(user.tgl_dibuat).format("DD MMM, YYYY - HH.mm"),
         tgl_diubah: daysJs(user.tgl_diubah).format("DD MMM, YYYY - HH.mm"),
       };

@@ -5,15 +5,7 @@ const DataTypes = Sequelize.DataTypes;
 const foreignKeysData = {
   idMember: {
     name: "id_member",
-    type: DataTypes.UUID,
-  },
-  idRole: {
-    name: "id_role",
-    type: DataTypes.INTEGER,
-  },
-  idPenjual: {
-    name: "id_penjual",
-    type: DataTypes.UUID,
+    type: DataTypes.STRING(20),
   },
   idKategori: {
     name: "id_kategori",
@@ -21,7 +13,15 @@ const foreignKeysData = {
   },
   idLelang: {
     name: "id_lelang",
-    type: DataTypes.UUID,
+    type: DataTypes.INTEGER,
+  },
+  idTawaran: {
+    name: "id_tawaran",
+    type: DataTypes.INTEGER,
+  },
+  idTransaksi: {
+    name: "id_transaksi",
+    type: DataTypes.INTEGER,
   },
   idRuangDiskusi: {
     name: "id_ruang",

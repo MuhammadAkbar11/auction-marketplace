@@ -10,9 +10,13 @@ import {
 import { userInfoFromStorage } from "./utils/auth";
 import { menuReducer } from "./reducers/menu.reducer";
 import {
+  userAuctionReducer,
+  userCreateNewAuction,
   userDetailsReducer,
   userUpdateProfileReducer,
+  userPostStartAuctionReducer,
 } from "./reducers/user.reducer";
+import { categoriesReducer } from "./reducers/categories.reducer";
 
 const reducer = combineReducers({
   productList: productListReducer,
@@ -21,7 +25,11 @@ const reducer = combineReducers({
   authUser: authUserReducer,
   userDetails: userDetailsReducer,
   userUpdateProfile: userUpdateProfileReducer,
+  userAuction: userAuctionReducer,
+  userCreateAuction: userCreateNewAuction,
+  // userSetStartAuction: userPostStartAuctionReducer,
   menu: menuReducer,
+  categories: categoriesReducer,
 });
 
 const initialState = {

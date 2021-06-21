@@ -1,0 +1,22 @@
+.user-auction-topnav {
+  .nav-link {
+    text-transform: uppercase;
+    color: $dark;
+    &.active {
+      position: relative;
+      color: $primary;
+      font-weight: 500;
+
+      &::before {
+        content: "";
+        background-color: $primary;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -3px;
+        height: 1px;
+        width: 100%;
+      }
+    }
+  }
+}

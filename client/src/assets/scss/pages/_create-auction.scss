@@ -1,0 +1,90 @@
+.create-auction-step {
+  padding: {
+    top: 3rem;
+    bottom: 4rem;
+  }
+
+  justify-content: flex-end;
+}
+
+.create-auction-step-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  margin-left: 0;
+  margin-right: 0;
+  flex: 1;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: 0.2s all;
+  white-space: nowrap;
+
+  .badge {
+    border-radius: 50%;
+    background-color: $gray-400;
+    color: $light;
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: normal;
+
+    @include media-breakpoint-down(sm) {
+      font-size: 12px;
+    }
+  }
+
+  & > a {
+    color: $light;
+    font-size: 14px;
+    @include media-breakpoint-down(sm) {
+      font-size: 12px;
+    }
+  }
+
+  .nav-link.disabled {
+    color: $gray-500;
+  }
+
+  &.prev-step {
+    & > a {
+      cursor: pointer;
+      color: lighten($primary, $amount: 15);
+    }
+    .badge {
+      border-radius: 50%;
+      background-color: $primary;
+      color: $light;
+      font-size: 22px;
+      font-weight: normal;
+    }
+    &:hover > * {
+      color: $primary;
+    }
+  }
+
+  &.step-active {
+    .badge {
+      background-color: transparent;
+      border-radius: 50%;
+      background-color: $primary;
+      color: $light;
+    }
+
+    .nav-link.disabled {
+      color: $primary;
+    }
+    & > a {
+      color: $primary;
+    }
+    &:hover {
+      & > a {
+        color: $primary;
+      }
+    }
+  }
+}

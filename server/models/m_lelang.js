@@ -7,21 +7,24 @@ const ModelLelang = sequelize.define(
   "ModelLelang",
   {
     id_lelang: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
+      autoIncrement: true,
     },
-    nama_brg: {
+    judul: {
       type: DataTypes.STRING,
     },
-    status_barang: {
-      type: DataTypes.STRING,
+    status_brg: {
+      type: DataTypes.STRING(50),
     },
     hrg_awal: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(128),
     },
-    hrg_akhir: {
-      type: DataTypes.STRING,
+    kelipatan_hrg: {
+      type: DataTypes.STRING(20), // 20.000
+    },
+    batas_tawaran: {
+      type: DataTypes.INTEGER,
     },
     deskripsi: {
       type: DataTypes.TEXT,
@@ -34,6 +37,7 @@ const ModelLelang = sequelize.define(
     },
     status_lelang: {
       type: DataTypes.INTEGER,
+      defaultValue: 0,
     },
   },
   {

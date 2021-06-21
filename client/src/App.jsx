@@ -10,9 +10,10 @@ import ListAuction from "./Pages/ListAuction";
 import LoginPage from "./Pages/LoginPage";
 import ProductDetail from "./Pages/ProductDetail";
 import RegisterPage from "./Pages/RegisterPage";
-import Profile from "./Pages/Profile";
-import UserDashboard from "./Pages/UserDashboard";
-import UserAuctionList from "./Pages/UserAuctionList";
+import UserDashboard from "./Pages/User/UserDashboard";
+import UserAuction from "./Pages/User/UserAuction";
+import Profile from "./Pages/User/Profile";
+import CreateAuction from "./Pages/User/CreateAuction";
 
 function App() {
   return (
@@ -31,7 +32,8 @@ function App() {
           component={RegisterPage}
         />
         <PrivateRoute path="/akun/dashboard" component={UserDashboard} />
-        <PrivateRoute path="/akun/lelang" component={UserAuctionList} />
+        <PrivateRoute path="/akun/lelang" component={UserAuction} />
+        <PrivateRoute path="/akun/buat-lelang" component={CreateAuction} />
         <PrivateRoute path="/akun/info" component={Profile} />
         <Route path="/lelang" component={ListAuction} />
         <Route path="/produk/:prodId" component={ProductDetail} />

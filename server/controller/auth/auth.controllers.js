@@ -28,7 +28,6 @@ export const authRegister = asyncHandler(async (req, res) => {
       id_role: 2,
     };
     const result = await ModelMember.create(newMember);
-    const role = await result.getModelRole();
     res.status(201).json({
       message: "success",
       user: {
@@ -37,7 +36,6 @@ export const authRegister = asyncHandler(async (req, res) => {
         nama: result.nama,
         email: result.email,
         no_hp: result.no_hp,
-        role: role,
         token: generateToken(result.id_member),
         tgl_dibuat: daysJs(result.tgl_dibuat).format("DD MMM, YYYY - HH.mm"),
         tgl_diubah: daysJs(result.tgl_diubah).format("DD MMM, YYYY - HH.mm"),
@@ -70,8 +68,6 @@ export const authLogin = asyncHandler(async (req, res) => {
       const doMatchPw = await bcrypt.compare(password, member.password);
 
       if (doMatchPw) {
-        const role = await member.getModelRole();
-
         res.status(200).json({
           message: "Login berhasil",
           user: {
@@ -80,8 +76,6 @@ export const authLogin = asyncHandler(async (req, res) => {
             nama: member.nama,
             email: member.email,
             no_hp: member.no_hp,
-            role: role,
-
             token: generateToken(member.id_member),
             tgl_dibuat: daysJs(member.tgl_dibuat).format(
               "DD MMM, YYYY - HH.mm"

@@ -7,18 +7,20 @@ const defaultProps = {
   className: "",
   size: 100,
   width: 100,
+  variant: "primary",
 };
 
 const proptypes = {
   className: PropTypes.string,
   size: PropTypes.any,
+  variant: PropTypes.string,
 };
 
-const Loader = ({ size, className }) => {
+const Loader = ({ size, className, variant }) => {
   return (
     <Spinner
       className={`${className}`}
-      variant="primary-light"
+      variant={variant}
       animation="border"
       role="status"
       style={{

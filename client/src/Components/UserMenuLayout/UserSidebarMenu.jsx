@@ -20,7 +20,7 @@ const UserSidebarMenu = () => {
         })}
       </ListGroup>
       <div className="d-md-none d-flex justify-content-end mb-3">
-        <Dropdown menuAlign="right">
+        <Dropdown menualign="right">
           <Dropdown.Toggle
             variant="link"
             className="ml-auto toggle-caret-0"

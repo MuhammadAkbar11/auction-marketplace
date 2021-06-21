@@ -120,7 +120,7 @@ const LoginPage = () => {
                     >
                       {loading ? (
                         <>
-                          <Loader size={11} />{" "}
+                          <Loader variant="light" size={11} />{" "}
                           <span className="ml-2"> Login</span>
                         </>
                       ) : (

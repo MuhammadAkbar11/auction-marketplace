@@ -7,9 +7,9 @@ const ModelPenawaran = sequelize.define(
   "ModelPenawaran",
   {
     id_tawaran: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
+      autoIncrement: true,
     },
     status_tawaran: {
       type: DataTypes.INTEGER,

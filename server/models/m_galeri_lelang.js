@@ -16,7 +16,7 @@ const ModelGaleri = sequelize.define(
     },
   },
   {
-    tableName: "tbl_roles",
+    tableName: "tbl_galeri_lelang",
     timestamps: false,
   }
 );

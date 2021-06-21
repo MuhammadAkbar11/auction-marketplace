@@ -9,8 +9,10 @@
   "scripts": {
     "start": "node server/app.js",
     "server": "nodemon server/app.js --dev",
+    "debug": "nodemon server/app.js --dev-debug",
     "client": "yarn --cwd ./client/ start",
-    "dev": "concurrently \"yarn run server\" \"yarn run client\""
+    "dev": "concurrently \"yarn run server\" \"yarn run client\"",
+    "dev:debug": "concurrently \"yarn run debug\" \"yarn run client\""
   },
   "devDependencies": {
     "concurrently": "^6.2.0",
@@ -18,6 +20,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
     "colors": "^1.4.0",
     "dayjs": "^1.10.5",
     "dotenv": "^10.0.0",

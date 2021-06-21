@@ -1,5 +1,6 @@
 import Sequelize from "sequelize";
 import sequelize from "../configs/database.js";
+import getAutoNumber from "../utils/getAutoNumber.js";
 
 const DataTypes = Sequelize.DataTypes;
 
@@ -8,8 +9,8 @@ const ModelKategori = sequelize.define(
   {
     id_kategori: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
       autoIncrement: true,
+      primaryKey: true,
     },
     kategori: {
       type: DataTypes.STRING,
