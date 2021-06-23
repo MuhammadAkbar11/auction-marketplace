@@ -7,6 +7,8 @@ import {
   PhoneIcon,
   TwitterIcon,
 } from "../../UI/Icons/Index";
+import { useDispatch, useSelector } from "react-redux";
+
 const FooterWidget = ({ title, categories, contact, links }) => {
   return (
     <div className="footer-widget mb40">
