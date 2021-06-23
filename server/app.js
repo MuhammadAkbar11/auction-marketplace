@@ -26,7 +26,6 @@ import ModelDetailTransaksi from "./models/m_detail_transaksi.js";
 import ModelPengiriman from "./models/m_pengiriman.js";
 
 const __dirname = path.resolve();
-
 let envFile = ".env";
 if (process.argv[2] === "--dev") {
   envFile = ".env.dev";
@@ -46,8 +45,9 @@ const MODE = process.env.NODE_ENV;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const staticFile = express.static(path.join(__dirname, "..", "uploads"));
-app.use("/files/uploads", staticFile);
+const staticFile = express.static(path.join(__dirname, "uploads"));
+console.log(staticFile, "==================");
+app.use("/uploads", staticFile);
 
 // app.use(uploadFilesMiddleware);
 

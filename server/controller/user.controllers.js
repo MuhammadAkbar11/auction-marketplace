@@ -4,6 +4,7 @@ import ResponseError from "../utils/responseError.js";
 import ModelMember from "../models/m_member.js";
 import ModelLelang from "../models/m_lelang.js";
 import ModelGaleri from "../models/m_galeri_lelang.js";
+import { deleteFile } from "../utils/file.js";
 
 export const getUserProfile = asyncHandler(async (req, res) => {
   try {
@@ -143,6 +144,75 @@ export const postUserCreateAuction = asyncHandler(async (req, res, next) => {
   }
 });
 
+export const putUserUpdateAuction = asyncHandler(async (req, res, next) => {
+  try {
+    const images = req.fileimg?.data;
+    const auctionId = req.body.id_lelang;
+    const postData = {
+      id_member: req.user.id_member,
+      judul: req.body.judul,
+      status_brg: req.body.status_brg,
+      hrg_awal: req.body.hrg_awal,
+      kelipatan_hrg: req.body.kelipatan_hrg,
+      batas_tawaran: +req.body.batas_tawaran,
+      deskripsi: req.body.deskripsi,
+      id_kategori: req.body.id_kategori,
+      tgl_selesai: req.body.tgl_selesai,
+    };
+
+    if (req.body.status_lelang === 0) {
+      postData.tgl_mulai = req.body.tgl_mulai;
+    }
+
+    const existAuction = await ModelLelang.findByPk(auctionId);
+    // const result = await ModelLelang.create({
+    //   ...postData,
+    // });
+    // console.log(existAuction);
+    if (!existAuction) {
+      throw new ResponseError(400, "Gagal mengubah data");
+    }
+
+    let oldGaleri = await ModelGaleri.findAll({
+      where: { id_lelang: auctionId },
+      attributes: {
+        exclude: ["ModelLelangIdLelang"],
+      },
+    });
+
+    let auctionGaleri = [];
+
+    if (images.length !== 0) {
+      auctionGaleri = images.map(img => {
+        return {
+          url: "/" + img.path,
+          id_lelang: auctionId,
+        };
+      });
+      await ModelGaleri.bulkCreate(auctionGaleri);
+      oldGaleri.map(async og => {
+        await ModelGaleri.destroy({
+          where: {
+            id_galeri: og.id_galeri,
+          },
+        });
+        deleteFile(og.url);
+      });
+    } else {
+      auctionGaleri = oldGaleri;
+    }
+
+    await ModelLelang.update(postData, { where: { id_lelang: auctionId } });
+
+    res.status(200).json({
+      status: true,
+      message: "Berhasil Mengubah lelang",
+    });
+  } catch (error) {
+    throw new ResponseError(error.statusCode, error.message, error.errors);
+  }
+});
+
 export const getUserAuction = asyncHandler(async (req, res, next) => {
   try {
     const idMember = req.user.id_member;
@@ -202,6 +272,54 @@ export const getUserAuction = asyncHandler(async (req, res, next) => {
   }
 });
 
+export const getAuctionDetails = asyncHandler(async (req, res) => {
+  const auctionId = req.params.auctionId;
+
+  try {
+    const auction = await ModelLelang.findOne({
+      where: { id_lelang: auctionId },
+      attributes: {
+        exclude: ["ModelMemberIdMember", "ModelKategoriIdKategori"],
+      },
+    });
+
+    if (auction) {
+      if (auction.id_member !== req.user.id_member) {
+        console.log("okk");
+        throw new ResponseError(400, "Gagal mengambil data");
+      }
+
+      const images = await ModelGaleri.findAll({
+        where: { id_lelang: auctionId },
+        attributes: {
+          exclude: ["ModelLelangIdLelang"],
+        },
+      });
+      const kategori = await auction.getModelKategori();
+
+      const dateEnd = daysJs(auction.tgl_selesai);
+      const dateStart = daysJs(auction.tgl_mulai);
+      const duration = dateEnd.diff(dateStart, "day");
+      const timeStart = dateStart.format("HH:mm");
+
+      auction.setDataValue("durasi", duration);
+      auction.setDataValue("gambar", images);
+      auction.setDataValue("kategori", kategori.kategori);
+      auction.setDataValue("jam_mulai", timeStart);
+      return res.status(200).json({
+        status: true,
+        lelang: auction,
+      });
+    }
+    res.status(200).json({
+      status: true,
+      lelang: null,
+    });
+  } catch (error) {
+    throw new ResponseError(error.statusCode, error.message, error.errors);
+  }
+});
+
 export const postUserStartAuction = asyncHandler(async (req, res) => {
   const auctionId = req.body.id_lelang;
 
@@ -223,11 +341,13 @@ export const postUserStartAuction = asyncHandler(async (req, res) => {
   } catch (error) {
     throw new ResponseError(error.statusCode, error.message, error.errors);
   }
-  // userAuctions = fetchAuctions.map(auc => {
-  //   return {
-  //     judul: auc.judul,
-  //     tgl_mulai: daysJs(auc.tgl_mulai).format("DD/mm/YYYY - HH:mm"),
-  //     tgl_selesai: daysJs(auc.tgl_selesai).format("DD/mm/YYYY - HH:mm"),
-  //   };
-  // });
+});
+
+export const getIsValidData = asyncHandler(async (req, res) => {
+  const valid = req.user.isValidData;
+
+  res.status(200).json({
+    status: true,
+    isValidData: valid,
+  });
 });

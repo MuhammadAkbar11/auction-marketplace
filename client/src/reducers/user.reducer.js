@@ -6,10 +6,14 @@ import {
   USER_UPDATE_PROFILE_SUCCESS,
   USER_UPDATE_PROFILE_FAIL,
   USER_UPDATE_PROFILE_RESET,
-  USER_CHANGE_PASSWORD_REQUEST,
-  USER_CHANGE_PASSWORD_SUCCESS,
-  USER_CHANGE_PASSWORD_FAIL,
-  USER_CHANGE_PASSWORD_RESET,
+  USER_UPDATE_AUCTION_REQ,
+  USER_UPDATE_AUCTION_SUCCESS,
+  USER_UPDATE_AUCTION_FAIL,
+  USER_UPDATE_AUCTION_RESET,
+  USER_AUCTION_DETAILS_REQ,
+  USER_AUCTION_DETAILS_SUCCESS,
+  USER_AUCTION_DETAILS_FAIL,
+  USER_AUCTION_DETAILS_RESET,
   ADD_CATEGORY_AUCTION,
   ADD_DESC_AUCTION,
   ADD_TIME_PRICE_AUCTION,
@@ -23,6 +27,8 @@ import {
   USER_ACTIVE_AUCTION_REQ,
   USER_ACTIVE_AUCTION_SUCCESS,
   USER_ACTIVE_AUCTION_FAIL,
+  USER_AUCTION_MESSAGE,
+  USER_AUCTION_RESET_MESSAGE,
 } from "../constants/user.contanst";
 
 export const userDetailsReducer = (
@@ -148,6 +154,7 @@ const userActionInitState = {
 };
 
 export const userAuctionReducer = (state = userActionInitState, action) => {
+  console.log(action);
   switch (action.type) {
     case USER_AUCTION_REQ:
       return {
@@ -179,31 +186,79 @@ export const userAuctionReducer = (state = userActionInitState, action) => {
         ...state,
         active: action.payload,
       };
+    case USER_AUCTION_MESSAGE:
+      return {
+        ...state,
+        message: action.payload,
+      };
+    case USER_AUCTION_RESET_MESSAGE: {
+      return {
+        ...state,
+        message: null,
+      };
+    }
     default:
       return state;
   }
 };
-// export const userPostStartAuctionReducer = (
-//   state = {
-//     loading: false,
-//   },
-//   action
-// ) => {
-//   switch (action.type) {
-//     case USER_START_AUCTION_REQ:
-//       return {
-//         loading: false,
-//       };
-//     case USER_START_AUCTION_SUCCESS:
-//       return {
-//         loading: false,
-//         success: action.payload,
-//       };
-//     case USER_START_AUCTION_FAIL:
-//       return {
-//         ...action.payload,
-//       };
-//     default:
-//       return state;
-//   }
-// };
+export const userUpdateAuctionReducer = (
+  state = {
+    loading: false,
+  },
+  action
+) => {
+  switch (action.type) {
+    case USER_UPDATE_AUCTION_REQ:
+      return {
+        loading: true,
+      };
+    case USER_UPDATE_AUCTION_SUCCESS:
+      return {
+        loading: false,
+        success: action.payload,
+      };
+    case USER_UPDATE_AUCTION_FAIL:
+      return {
+        ...action.payload,
+      };
+    case USER_UPDATE_AUCTION_FAIL:
+      return {
+        loading: false,
+      };
+    default:
+      return state;
+  }
+};
+
+const auctionDetailsInit = {
+  loading: true,
+  auction: null,
+};
+
+export const userAuctionDetailsReducer = (
+  state = auctionDetailsInit,
+  action
+) => {
+  switch (action.type) {
+    case USER_AUCTION_DETAILS_REQ:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case USER_AUCTION_DETAILS_SUCCESS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+
+    case USER_AUCTION_DETAILS_FAIL:
+      return { loading: false, error: action.payload };
+    case USER_AUCTION_DETAILS_RESET:
+      return {
+        loading: false,
+      };
+    default:
+      return state;
+  }
+};

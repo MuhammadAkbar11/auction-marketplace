@@ -14,6 +14,7 @@ import UserDashboard from "./Pages/User/UserDashboard";
 import UserAuction from "./Pages/User/UserAuction";
 import Profile from "./Pages/User/Profile";
 import CreateAuction from "./Pages/User/CreateAuction";
+import UpdateAuction from "./Pages/User/UpdateAuction";
 
 function App() {
   return (
@@ -34,6 +35,10 @@ function App() {
         <PrivateRoute path="/akun/dashboard" component={UserDashboard} />
         <PrivateRoute path="/akun/lelang" component={UserAuction} />
         <PrivateRoute path="/akun/buat-lelang" component={CreateAuction} />
+        <PrivateRoute
+          path="/akun/edit-lelang/:idAuction"
+          component={UpdateAuction}
+        />
         <PrivateRoute path="/akun/info" component={Profile} />
         <Route path="/lelang" component={ListAuction} />
         <Route path="/produk/:prodId" component={ProductDetail} />
