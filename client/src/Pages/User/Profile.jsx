@@ -200,17 +200,19 @@ const Profile = ({ history }) => {
               </Card.Header>
               <Card.Body>
                 {" "}
-                {userDetailsError && !userDetailsLoading ? (
-                  <div className=" py-2 d-flex flex-column align-items-center justify-content-center ">
-                    <WarningCircle size={50} className="text-danger " />{" "}
-                    <h5 className="text-center text-capitalize text-spacing-0 mt-1 text-danger ">
-                      Opps!
-                    </h5>
-                    <p className="text-center mt-1">
-                      Sepertinya ada kesalahan server, silahkan refresh halaman
-                      atau logout, kemudian login lagi
-                    </p>
-                  </div>
+                {userDetailsError ? (
+                  <>
+                    <div className=" py-2 d-flex flex-column align-items-center justify-content-center ">
+                      <WarningCircle size={50} className="text-danger " />{" "}
+                      <h5 className="text-center text-capitalize text-spacing-0 mt-1 text-danger ">
+                        Opps!
+                      </h5>
+                      <p className="text-center mt-1">
+                        Sepertinya ada kesalahan server, silahkan refresh
+                        halaman atau logout, kemudian login lagi
+                      </p>
+                    </div>
+                  </>
                 ) : (
                   <>
                     {error && !error.validation && (

@@ -90,9 +90,10 @@ ModelGaleri.belongsTo(ModelLelang, { foreignKey: foreignKeysData.idLelang });
 // relasi Tabel penawran dengan lelang
 ModelLelang.hasMany(ModelPenawaran);
 ModelPenawaran.belongsTo(ModelLelang, { foreignKey: foreignKeysData.idLelang });
-ModelMember.hasMany(ModelPenawaran);
+ModelMember.hasMany(ModelPenawaran, { as: "member" });
 ModelPenawaran.belongsTo(ModelMember, {
   foreignKey: foreignKeysData.idMember,
+  as: "member",
 });
 
 ModelPenawaran.hasOne(ModelTransaksi);

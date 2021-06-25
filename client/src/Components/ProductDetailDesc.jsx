@@ -1,8 +1,9 @@
 import React from "react";
 import { Col, Container, Row, Tabs, Tab, Nav } from "react-bootstrap";
 
-const ProductDetailDesc = () => {
+const ProductDetailDesc = ({ loading, auction }) => {
   const [key, setKey] = React.useState("home");
+
   return (
     <section className="description-review-wrapper ">
       <Container fluid className="px-md-8">
@@ -20,10 +21,15 @@ const ProductDetailDesc = () => {
               </Nav>
               <Tab.Content className="dec-review-bottom">
                 <Tab.Pane eventKey="des-details1">
-                  <h4 className=" font-weight-light ">Deskripsi</h4>
+                  {/* {}  */}
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: auction?.deskripsi || "",
+                    }}
+                  />
                 </Tab.Pane>
                 <Tab.Pane eventKey="des-details2">
-                  <h4 className=" font-weight-light ">Riwayat Penawaran</h4>
+                  <div className=" font-weight-light ">Riwayat Penawaran</div>
                 </Tab.Pane>
                 <Tab.Pane eventKey="des-details3">
                   <h4 className=" font-weight-light ">Diskusi produk</h4>

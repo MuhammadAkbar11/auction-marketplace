@@ -134,7 +134,6 @@ export const postUserCreateAuction = asyncHandler(async (req, res, next) => {
     });
 
     await ModelGaleri.bulkCreate(auctionGaleri);
-
     res.status(200).json({
       status: true,
       message: "Berhasil menambah lelang",
@@ -148,10 +147,10 @@ export const putUserUpdateAuction = asyncHandler(async (req, res, next) => {
   try {
     const images = req.fileimg?.data;
     const auctionId = req.body.id_lelang;
+    const reqStatusBrg = req.body.status_brg;
     const postData = {
       id_member: req.user.id_member,
       judul: req.body.judul,
-      status_brg: req.body.status_brg,
       hrg_awal: req.body.hrg_awal,
       kelipatan_hrg: req.body.kelipatan_hrg,
       batas_tawaran: +req.body.batas_tawaran,
@@ -201,8 +200,13 @@ export const putUserUpdateAuction = asyncHandler(async (req, res, next) => {
     } else {
       auctionGaleri = oldGaleri;
     }
-
-    await ModelLelang.update(postData, { where: { id_lelang: auctionId } });
+    const statusBrg =
+      reqStatusBrg !== "1" ? reqStatusBrg : existAuction.status_brg;
+    // console.log(reqStatusBrg !== "1");
+    await ModelLelang.update(
+      { ...postData, status_brg: statusBrg },
+      { where: { id_lelang: auctionId } }
+    );
 
     res.status(200).json({
       status: true,
@@ -302,7 +306,7 @@ export const getAuctionDetails = asyncHandler(async (req, res) => {
       const duration = dateEnd.diff(dateStart, "day");
       const timeStart = dateStart.format("HH:mm");
 
-      auction.setDataValue("durasi", duration);
+      auction.setDataValue("durasi", +duration);
       auction.setDataValue("gambar", images);
       auction.setDataValue("kategori", kategori.kategori);
       auction.setDataValue("jam_mulai", timeStart);

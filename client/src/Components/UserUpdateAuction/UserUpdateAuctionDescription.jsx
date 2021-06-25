@@ -136,7 +136,6 @@ const UserUpdateAuctionDescription = props => {
                 "Bekas Dengan kondisi cacat",
                 "Rusak",
               ].map((kondisi, idx) => {
-                const key = idx;
                 return (
                   <option key={idx} value={kondisi}>
                     {kondisi}

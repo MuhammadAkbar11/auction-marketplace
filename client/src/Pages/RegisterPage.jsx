@@ -49,6 +49,8 @@ const RegisterPage = () => {
 
   const registerFormik = useFormik({
     validationSchema: registerSchema,
+    validateOnChange: false,
+
     initialValues: {
       nama: "",
       username: "",
@@ -66,11 +68,6 @@ const RegisterPage = () => {
 
   if (agreeTermCond) {
     disableButton = false;
-    if (loading || !registerFormik.isValid) {
-      disableButton = true;
-    } else {
-      disableButton = false;
-    }
   } else {
     disableButton = true;
   }

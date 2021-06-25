@@ -7,13 +7,15 @@ import {
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
   USER_UPDATE_PROFILE_FAIL,
-  // USER_UPDATE_PROFILE_RESET,
-  // USER_CHANGE_PASSWORD_REQUEST,
-  // USER_CHANGE_PASSWORD_SUCCESS,
-  // USER_CHANGE_PASSWORD_FAIL,
-  // USER_CHANGE_PASSWORD_RESET,
+  USER_UPDATE_AUCTION_REQ,
+  USER_UPDATE_AUCTION_SUCCESS,
+  USER_UPDATE_AUCTION_FAIL,
+  USER_UPDATE_AUCTION_RESET,
+  USER_AUCTION_DETAILS_REQ,
+  USER_AUCTION_DETAILS_SUCCESS,
+  USER_AUCTION_DETAILS_FAIL,
+  USER_AUCTION_DETAILS_RESET,
   ADD_CATEGORY_AUCTION,
-  ADD_ADDRESS_AUCTION,
   ADD_DESC_AUCTION,
   ADD_TIME_PRICE_AUCTION,
   USER_CREATE_AUCTION_REQ,
@@ -27,6 +29,8 @@ import {
   USER_ACTIVE_AUCTION_SUCCESS,
   USER_ACTIVE_AUCTION_FAIL,
   USER_UPDATE_PROFILE_RESET,
+  USER_AUCTION_MESSAGE,
+  USER_AUCTION_RESET_MESSAGE,
 } from "../constants/user.contanst";
 
 import { _dateFormat } from "../utils/date-format";
@@ -240,6 +244,7 @@ export const postUserCreateAuctionAction =
 
     dispatch({
       type: USER_CREATE_AUCTION_REQ,
+      payload: { loading: true },
     });
 
     const { steps, category, description } = userCreateAuction;
@@ -283,6 +288,14 @@ export const postUserCreateAuctionAction =
         dispatch({
           type: USER_CREATE_AUCTION_SUCCESS,
         });
+
+        dispatch({
+          type: USER_AUCTION_MESSAGE,
+          payload: {
+            type: "success",
+            text: "Berhasil membuat lelang",
+          },
+        });
       } else {
         throw new Error("Pengisian data belum lengkap");
       }
@@ -302,6 +315,152 @@ export const postUserCreateAuctionAction =
 
       dispatch({
         type: USER_CREATE_AUCTION_FAIL,
+        payload: {
+          error: errData,
+          loading: false,
+        },
+      });
+    }
+  };
+
+export const postUserUpdateAuctionAction =
+  values => async (dispatch, getState) => {
+    const {
+      authUser: { userInfo },
+    } = getState();
+
+    dispatch({
+      type: USER_UPDATE_AUCTION_REQ,
+    });
+    console.log(values);
+    const dateStart = new Date(values.dateStart);
+    let dateEnd = new Date();
+    dateEnd.setDate(dateStart.getDate() + +values.duration);
+    try {
+      const auction = {
+        id_lelang: values.auctionId,
+        judul: values.title,
+        status_brg: values.status,
+        hrg_awal: values.openBid,
+        kelipatan_hrg: values.multiples,
+        id_kategori: +values.category,
+        batas_tawaran: values.maxBid,
+        deskripsi: values.description,
+        tgl_mulai: `${_dateFormat(dateStart, "strip")} ${values.timeStart}`,
+        tgl_selesai: `${_dateFormat(dateEnd, "strip")} ${values.timeStart}`,
+        status_lelang: values.status,
+      };
+      console.log(auction);
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+      let postData = new FormData();
+      Object.keys(auction).forEach(ac => {
+        postData.append(ac, auction[ac]);
+      });
+
+      values.images.forEach(img => {
+        postData.append("files", img.file);
+      });
+
+      const { data } = await axios.put(
+        `/api/user/auction/update`,
+        postData,
+        config
+      );
+
+      dispatch({
+        type: USER_UPDATE_AUCTION_SUCCESS,
+      });
+      dispatch({
+        type: USER_AUCTION_MESSAGE,
+        payload: {
+          type: "success",
+          text: data?.message,
+        },
+      });
+    } catch (error) {
+      let errData = {
+        message: error.message,
+      };
+
+      if (error.response && error.response.data.message) {
+        const errorData =
+          error.response.data.errors && error.response.data.errors;
+        errData = {
+          message: error.response.data.message,
+          ...errorData,
+        };
+      }
+
+      dispatch({
+        type: USER_UPDATE_AUCTION_FAIL,
+        payload: {
+          error: errData,
+          loading: false,
+        },
+      });
+    }
+  };
+
+export const userAuctionResetMessageAction = () => dispatch => {
+  dispatch({
+    type: USER_AUCTION_RESET_MESSAGE,
+  });
+};
+
+export const getUserAuctionDetailsAction =
+  idAuction => async (dispatch, getState) => {
+    const {
+      authUser: { userInfo },
+    } = getState();
+
+    dispatch({
+      type: USER_AUCTION_DETAILS_REQ,
+      payload: {
+        loading: true,
+      },
+    });
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        "/api/user/auction/" + idAuction,
+        config
+      );
+      dispatch({
+        type: USER_AUCTION_DETAILS_SUCCESS,
+        payload: {
+          loading: false,
+          auction: data.lelang,
+          error: null,
+        },
+      });
+    } catch (error) {
+      let errData = {
+        message: error.message,
+      };
+
+      if (error.response && error.response.data.message) {
+        const errorData =
+          error.response.data.errors && error.response.data.errors;
+        errData = {
+          message: error.response.data.message,
+          ...errorData,
+        };
+      }
+
+      dispatch({
+        type: USER_AUCTION_DETAILS_FAIL,
         payload: {
           error: errData,
           loading: false,

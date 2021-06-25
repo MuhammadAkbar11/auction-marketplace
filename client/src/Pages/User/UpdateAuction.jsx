@@ -52,19 +52,20 @@ const UpdateAuction = props => {
       auctionId,
       category: auction?.id_kategori || "",
       title: auction?.judul || "",
-      status: auction?.status_brg || "",
+      status: auction?.status_brg,
       description: auction?.deskripsi || "",
       images: imagesUploader.images,
       openBid: auction?.hrg_awal.replace(/^[0-9]*$/, "") || "",
       multiples: auction?.kelipatan_hrg.replace(/^[0-9]*$/, "") || "",
       maxBid: auction?.batas_tawaran || "",
-      duration: auction?.durasi || 1,
+      duration: +auction?.durasi || 1,
       dateStart: auction?.tgl_mulai || "",
       timeStart: auction?.jam_mulai || "",
       status: auction?.status_lelang || 0,
     },
     onSubmit: values => {
       dispatch(postUserUpdateAuctionAction(values));
+
       history.push("/akun/lelang?tab=" + tabKey);
     },
   });

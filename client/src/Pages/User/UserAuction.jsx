@@ -1,17 +1,31 @@
 import React from "react";
-import { Col, Container, Row, Nav, Card, Tab } from "react-bootstrap";
+import { Col, Container, Row, Nav, Card, Tab, Alert } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
 import BreadcrumbsContainer from "../../Components/Layouts/BreadcrumbsContainer";
 import UserActiveAuctionsTab from "../../Components/UserAuctionTabs/UserActiveAuctionsTab";
 import UserPlanningAuctionsTab from "../../Components/UserAuctionTabs/UserPlanningAuctionsTab";
 import UserSidebarMenu from "../../Components/UserMenuLayout/UserSidebarMenu";
+
+import { userAuctionResetMessageAction } from "../../actions/user.actions";
+
 const UserAuction = props => {
   const { match, location } = props;
 
   const tabKey = new URLSearchParams(location.search).get("tab");
+  const dispatch = useDispatch();
+  const { message } = useSelector(state => state.userAuction);
 
-  console.log(tabKey);
+  // if
+  React.useEffect(() => {
+    if (message) {
+      setTimeout(() => {
+        dispatch(userAuctionResetMessageAction());
+      }, 7000);
+    }
+  }, [message]);
+
   return (
     <>
       <BreadcrumbsContainer
@@ -50,6 +64,11 @@ const UserAuction = props => {
                   {/* </Nav.Item> */}
                 </Nav>
               </Card>
+              {message && (
+                <div className="mt-4">
+                  <Alert variant={message.type}>{message.text}</Alert>
+                </div>
+              )}
               <Tab.Content>
                 <Tab.Pane eventKey="default">
                   <UserPlanningAuctionsTab />

@@ -3,27 +3,26 @@ import BreadcrumbsContainer from "../../Components/Layouts/BreadcrumbsContainer"
 import CategoryTab from "../../Components/UserCreateAuction/CategoryTab";
 import DescProductTab from "../../Components/UserCreateAuction/DescProductTab";
 import PriceAndTimeTab from "../../Components/UserCreateAuction/PriceAndTimeTab";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getUserDetailsAction,
-  userProfileError,
-} from "../../actions/user.actions";
-import { checkProperties } from "../../utils/checkObj";
+import { useSelector } from "react-redux";
+import useIsValidData from "../../hooks/useIsValidData";
+import { Card, Col, Container, Row } from "react-bootstrap";
+import CardAlert from "../../Components/UI/CardAlert";
+// import { Link } from "react-router-dom";
 
 const CreateAuction = props => {
   const { location, history } = props;
-
-  const dispatch = useDispatch();
   const { userInfo } = useSelector(state => state.authUser);
-  const userDetails = useSelector(state => state.userDetails);
   const [activeTab, setActiveTab] = React.useState("default");
+
+  const isValidData = useIsValidData();
+
+  console.log(isValidData);
 
   React.useEffect(() => {
     if (!userInfo) {
       history.push("/akun/masuk");
       return;
     } else {
-      dispatch(getUserDetailsAction());
     }
   }, [userInfo]);
 
@@ -40,19 +39,6 @@ const CreateAuction = props => {
     }
   }, [location]);
 
-  const isValidData = checkProperties(userDetails.details);
-
-  React.useEffect(() => {
-    if (!isValidData) {
-      history.push("/akun/info");
-      dispatch(
-        userProfileError("USER_UPDATE_PROFILE_FAIL", {
-          message: "Silahkan lengkapi data diri anda",
-        })
-      );
-    }
-  }, [isValidData]);
-
   switch (activeTab) {
     case "kategori":
       tabContent = <CategoryTab />;
@@ -66,6 +52,24 @@ const CreateAuction = props => {
     default:
       tabContent = <CategoryTab />;
       break;
+  }
+
+  if (!isValidData) {
+    tabContent = (
+      <Container fluid className="px-md-8 py-6">
+        <Row>
+          <Col md={7} className="mx-auto">
+            <CardAlert
+              action
+              title="Belum bisa membuat lelang"
+              linkAction={{ url: "/akun/info", text: "Lengkapi data diri" }}
+            >
+              <p>Silahkan lengkapi data diri anda untuk melajutkan! </p>
+            </CardAlert>
+          </Col>
+        </Row>
+      </Container>
+    );
   }
 
   return (

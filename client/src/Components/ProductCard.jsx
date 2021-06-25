@@ -54,7 +54,7 @@ const productActionVariants = {
   },
 };
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ auction }) => {
   return (
     <motion.div
       variants={singleProductWrapVariants}
@@ -64,10 +64,10 @@ const ProductCard = ({ product }) => {
       className="single-product-wrap mb35"
     >
       <div className="product-img product-img-zoom mb15 bg-light">
-        <Link to={`/produk/${product.id}`}>
+        <Link to={`/item/${auction.id_lelang}`}>
           <motion.img
             variants={productImgVariants}
-            src={product.image}
+            src={auction.gambar[0].url}
             alt="test"
           />
         </Link>
@@ -87,46 +87,45 @@ const ProductCard = ({ product }) => {
       </div>
       <div className="product-content-wrap-2 text-center">
         <div className="product-content-categories">
-          <Link to={`/kategori/${product.categori}`}>{product.categori}</Link>
+          <Link to={`/kategori/${auction.id_kategori}`}>
+            {auction.kategori?.kategori}
+          </Link>
         </div>
         <h3>
-          <Link to={`/produk/${product.id}`}>{product.title}</Link>
+          <Link to={`/item/${auction.id_lelang}`}>{auction.judul}</Link>
         </h3>
         <div className="product-price-2 text-primary py-2">
           <small className="text-dark mb-0 ">Bid saat ini</small>
           <br />
-          <span>{product.price}</span>
+          <span>{auction.price}</span>
         </div>
       </div>
       <div className="product-content-wrap-2 product-content-position text-center">
         <div className="product-content-categories text-gray-800">
-          <a href="shop.html">{product.categori}</a>
+          <Link to={`/kategori/${auction.id_kategori}`}>
+            {auction.kategori?.kategori}
+          </Link>
         </div>
         <h3>
-          <a href="product-details.html">{product.title}</a>
+          <Link to={`/item/${auction.id_lelang}`}>{auction.judul}</Link>
         </h3>
         <div className="product-price-2 text-primary py-2">
           <small className="text-dark mb-0 ">Bid saat ini</small>
           <br />
-          <span>$20.50</span>
+          <span>
+            Rp.{" "}
+            {auction.tawaran.length !== 0
+              ? auction.tawaran[0].nilai_tawaran
+              : 0}
+          </span>
         </div>
         <div className="d-flex flex-column justify-content-between align-items-center">
           <small className="">Berakhir pada</small>
-          <small className="">{product.endsOn}</small>
+          <small className="">{auction.tgl_selesai}</small>
         </div>
       </div>
     </motion.div>
   );
-};
-
-ProductCard.defaultProps = {
-  product: {
-    title: "No Title",
-    categori: "Categori",
-    image: process.env.PUBLIC_URL + "/images/products/product-13.jpg",
-    price: 0,
-    endsOn: "11 January, 2001 - 11.00",
-  },
 };
 
 export default ProductCard;

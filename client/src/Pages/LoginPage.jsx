@@ -32,6 +32,7 @@ const LoginPage = () => {
 
   const loginFormik = useFormik({
     validationSchema: loginSchema,
+    validateOnChange: false,
     initialValues: {
       email: "",
       password: "",

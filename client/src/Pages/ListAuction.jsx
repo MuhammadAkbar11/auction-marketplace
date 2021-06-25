@@ -1,14 +1,23 @@
 import React from "react";
-import { Col, Container, Row, Form, Nav } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Col, Container, Row, Form } from "react-bootstrap";
 import BreadcrumbsContainer from "../Components/Layouts/BreadcrumbsContainer";
 import ListAuctionSidebar from "../Components/ListAuctionSidebar";
 import ProductCard from "../Components/ProductCard";
 
 import { ListIcon, SquaresFourIcon } from "../Components/UI/Icons/Index";
 import productsData from "../data/product";
+import { getListAuctionAction } from "../actions/auctions.actions";
+import Loader from "../Components/UI/Loader";
 
 const ListAuction = () => {
   const products = productsData;
+  const dispatch = useDispatch();
+  const { loading, auctions } = useSelector(state => state.auctionList);
+
+  React.useEffect(() => {
+    dispatch(getListAuctionAction());
+  }, []);
   return (
     <>
       <BreadcrumbsContainer
@@ -17,6 +26,7 @@ const ListAuction = () => {
           { title: "Daftar Lelang", url: "/lelang", active: true },
         ]}
       />
+
       <section className="shop-area">
         <Container fluid className="px-md-8">
           <Row className=" flex-row-reverse ">
@@ -71,13 +81,33 @@ const ListAuction = () => {
                 </Col>
               </Row>
               <Row className="top-bottom-area">
-                {products.map(product => {
-                  return (
-                    <Col key={product.id} xs={12} sm={6} md={6} lg={3} xl={3}>
-                      <ProductCard product={product} />
-                    </Col>
-                  );
-                })}
+                {loading ? (
+                  <div className=" d-flex w-100 justify-content-center ">
+                    {" "}
+                    <Loader variant="primary" />
+                  </div>
+                ) : auctions.length === 0 ? (
+                  <div>
+                    <h2>Belum ada lelang</h2>
+                  </div>
+                ) : (
+                  <>
+                    {auctions.map(auction => {
+                      return (
+                        <Col
+                          key={auction.id_lelang}
+                          xs={6}
+                          sm={6}
+                          md={6}
+                          lg={3}
+                          xl={3}
+                        >
+                          <ProductCard auction={auction} />
+                        </Col>
+                      );
+                    })}
+                  </>
+                )}
               </Row>
             </Col>
             <Col lg={3}>

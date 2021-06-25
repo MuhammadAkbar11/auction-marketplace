@@ -154,7 +154,6 @@ const userActionInitState = {
 };
 
 export const userAuctionReducer = (state = userActionInitState, action) => {
-  console.log(action);
   switch (action.type) {
     case USER_AUCTION_REQ:
       return {

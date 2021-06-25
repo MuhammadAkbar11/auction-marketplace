@@ -8,13 +8,13 @@ import PrivateRoute from "./Components/Route/PrivateRoute";
 import Home from "./Pages/Home";
 import ListAuction from "./Pages/ListAuction";
 import LoginPage from "./Pages/LoginPage";
-import ProductDetail from "./Pages/ProductDetail";
 import RegisterPage from "./Pages/RegisterPage";
 import UserDashboard from "./Pages/User/UserDashboard";
 import UserAuction from "./Pages/User/UserAuction";
 import Profile from "./Pages/User/Profile";
 import CreateAuction from "./Pages/User/CreateAuction";
 import UpdateAuction from "./Pages/User/UpdateAuction";
+import DetailsAuction from "./Pages/DetailsAuction";
 
 function App() {
   return (
@@ -41,7 +41,7 @@ function App() {
         />
         <PrivateRoute path="/akun/info" component={Profile} />
         <Route path="/lelang" component={ListAuction} />
-        <Route path="/item/:prodId" component={ProductDetail} />
+        <Route path="/item/:itemId" component={DetailsAuction} />
       </Switch>
       <Footer />
     </Layout>
