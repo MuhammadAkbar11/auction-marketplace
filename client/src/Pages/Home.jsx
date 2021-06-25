@@ -3,9 +3,9 @@ import { Col, Container, Row } from "react-bootstrap";
 
 import Banner from "../Components/Banner";
 import LatestAuction from "../Components/LatestAuction";
-import ProductCategories from "../Components/ProductCategories";
+// import ProductCategories from "../Components/ProductCategories";
 import { WishListIcon } from "../Components/UI/Icons/Index";
-import { popularCategories } from "../data/categories";
+// import { popularCategories } from "../data/categories";
 
 import bgBanner from "../";
 
@@ -71,7 +71,7 @@ const Home = () => {
           </div>
         </Container>
       </div>
-      <ProductCategories categories={popularCategories} />
+      {/* <ProductCategories categories={popularCategories} /> */}
       <div className="product-area">
         <LatestAuction />
       </div>
