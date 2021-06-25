@@ -149,6 +149,7 @@
         a {
           height: 100%;
           img {
+            object-fit: cover;
             border: 1px solid red;
             width: 100%;
           }
@@ -167,6 +168,16 @@
       }
     }
     a {
+      @include media-breakpoint-up(lg) {
+        height: 210px;
+        a {
+          height: 100%;
+          img {
+            height: 100% !important;
+          }
+        }
+      }
+
       display: block;
       img {
         height: 100%;
