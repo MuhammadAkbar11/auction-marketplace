@@ -105,7 +105,7 @@ const UserPlanningAuctionsTab = () => {
                     <td>
                       <Link
                         className="btn btn-teal btn-sm"
-                        to={`/akun/lelang/edit/${ac.id_lelang}`}
+                        to={`/akun/edit-lelang/${ac.id_lelang}`}
                       >
                         <PencilLine size={18} />
                       </Link>

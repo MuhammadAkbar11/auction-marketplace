@@ -42,6 +42,7 @@ const UserUpdateAuctionDescription = props => {
     // console.log(e);
     const idCat = e.target.id;
     setSelected(+idCat);
+    formik.setFieldValue("category", +idCat);
     setShow(false);
   };
 

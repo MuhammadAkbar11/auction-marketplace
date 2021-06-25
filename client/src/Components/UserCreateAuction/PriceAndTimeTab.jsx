@@ -12,10 +12,10 @@ import {
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import CreateAuctionSteps from "./CreateAuctionSteps";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import { _dateFormat } from "../../utils/date-format";
 import convertRupiah from "../../utils/convertRupiah";
-import { CloudFog } from "phosphor-react";
+
 import {
   postUserCreateAuctionAction,
   userAddAuctionRegularData,
@@ -23,12 +23,16 @@ import {
 } from "../../actions/user.actions";
 import Loader from "../UI/Loader";
 
+const yesterday = new Date(Date.now() - 86400000);
+
 const formikSchema = Yup.object().shape({
   openBid: Yup.string().required("Harga awal belum terisi"),
   multiples: Yup.string().required("Kelipatan bid belum terisi"),
   maxBid: Yup.string().required("Total Tawaran belum terisi"),
   duration: Yup.string().required("Durasi belum dipilih"),
-  dateStart: Yup.string().required("Tanggal Mulai belum terisi"),
+  dateStart: Yup.date()
+    .min(yesterday, "Tanggal mulai maksimal dari hari ini")
+    .required("Tanggal Mulai belum terisi"),
   timeStart: Yup.string().required("Tanggal Mulai belum terisi"),
 });
 
@@ -47,10 +51,8 @@ const PriceAndTimeTab = () => {
       openBid: timePriceState?.openBid || "",
       multiples: timePriceState?.multiples || "",
       maxBid: timePriceState?.maxBid || "",
-      multiples: timePriceState?.multiples || "",
       duration: timePriceState?.duration || 1,
       dateStart: timePriceState?.dateStart || "",
-
       timeStart: timePriceState?.timeStart || "",
     },
     onSubmit: values => {
@@ -92,7 +94,7 @@ const PriceAndTimeTab = () => {
     <Container fluid className=" px-md-8">
       <Row>
         <Col xs={12}>
-          <CreateAuctionSteps step1 step2 currentStep="step2" />
+          <CreateAuctionSteps step1 step2 step3 currentStep="step3" />
         </Col>
       </Row>
       <Form onSubmit={formik.handleSubmit}>
@@ -118,7 +120,7 @@ const PriceAndTimeTab = () => {
               >
                 {createAuctionState.loading ? (
                   <>
-                    <Loader size={11} />{" "}
+                    <Loader variant="light" size={11} />{" "}
                     <span className="ml-2"> Buat Lelang</span>
                   </>
                 ) : (

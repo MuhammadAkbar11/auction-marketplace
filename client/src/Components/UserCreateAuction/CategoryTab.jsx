@@ -33,19 +33,6 @@ const CategoryTab = () => {
   const searchHandler = e => {
     const value = e.target.value;
     setSearchTerms(value);
-    const oldCategories = categories;
-    // if (value !== "") {
-    //   const filterCategories = categoriesState.filter(cat => {
-    //     const find = cat.name.toLowerCase().includes(value.toLowerCase());
-    //     if (find) {
-    //       return cat;
-    //     }
-    //   });
-
-    //   setCategories(filterCategories);
-    // } else {
-    //   setCategories(oldCategories);
-    // }
   };
 
   const selectCategoryHandler = e => {
@@ -60,10 +47,8 @@ const CategoryTab = () => {
     history.push("/akun/buat-lelang?tab=deskripsi");
   };
 
-  console.log(selected);
-
   return (
-    <Container className="px-md-8 pb-8">
+    <Container fluid className="px-md-8 pb-8">
       <Row>
         <Col xs={12}>
           <CreateAuctionSteps step1 currentStep="step1" />

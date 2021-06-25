@@ -83,7 +83,7 @@ const UserActiveAuctionsTab = ({ isActive }) => {
               <th>Penawaran saat ini</th>
               <th>Edit</th>
               <th>Hapus</th>
-              <th>Mulai Sekarang</th>
+              <th>Tutup</th>
             </tr>
           </thead>
           <tbody>
@@ -121,7 +121,7 @@ const UserActiveAuctionsTab = ({ isActive }) => {
                     <td>
                       <Link
                         className="btn btn-teal btn-sm"
-                        to={`/akun/lelang/edit/${ac.id_lelang}`}
+                        to={`/akun/edit-lelang/${ac.id_lelang}?tab=active`}
                       >
                         <PencilLine size={18} />
                       </Link>
@@ -138,7 +138,7 @@ const UserActiveAuctionsTab = ({ isActive }) => {
                         variant="primary"
                         size="sm"
                       >
-                        Mulai
+                        Tutup
                       </Button>
                     </td>
                   </tr>
