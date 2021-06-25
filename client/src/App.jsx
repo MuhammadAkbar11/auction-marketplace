@@ -41,7 +41,7 @@ function App() {
         />
         <PrivateRoute path="/akun/info" component={Profile} />
         <Route path="/lelang" component={ListAuction} />
-        <Route path="/produk/:prodId" component={ProductDetail} />
+        <Route path="/item/:prodId" component={ProductDetail} />
       </Switch>
       <Footer />
     </Layout>

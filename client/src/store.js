@@ -15,19 +15,30 @@ import {
   userDetailsReducer,
   userUpdateProfileReducer,
   userPostStartAuctionReducer,
+  userUpdateAuctionReducer,
+  userAuctionDetailsReducer,
 } from "./reducers/user.reducer";
 import { categoriesReducer } from "./reducers/categories.reducer";
+import {
+  AuctionDetailsReducer,
+  auctionListReducer,
+  auctionsLatestReducer,
+} from "./reducers/auctions.reducer";
 
 const reducer = combineReducers({
   productList: productListReducer,
+  auctionDetails: AuctionDetailsReducer,
+  auctionsLatest: auctionsLatestReducer,
+  auctionList: auctionListReducer,
   authLogin: authLoginReducer,
   authRegister: authRegisterReducer,
   authUser: authUserReducer,
   userDetails: userDetailsReducer,
   userUpdateProfile: userUpdateProfileReducer,
   userAuction: userAuctionReducer,
+  userAuctionDetails: userAuctionDetailsReducer,
   userCreateAuction: userCreateNewAuction,
-  // userSetStartAuction: userPostStartAuctionReducer,
+  userUpdateAuction: userUpdateAuctionReducer,
   menu: menuReducer,
   categories: categoriesReducer,
 });
