@@ -29,6 +29,12 @@ import {
   USER_ACTIVE_AUCTION_FAIL,
   USER_AUCTION_MESSAGE,
   USER_AUCTION_RESET_MESSAGE,
+  USER_DELETE_AUCTION_REQ,
+  USER_DELETE_AUCTION_SUCCESS,
+  USER_DELETE_AUCTION_FAIL,
+  USER_CLOSE_AUCTION_REQ,
+  USER_CLOSE_AUCTION_SUCCESS,
+  USER_CLOSE_AUCTION_FAIL,
 } from "../constants/user.contanst";
 
 export const userDetailsReducer = (
@@ -256,6 +262,56 @@ export const userAuctionDetailsReducer = (
     case USER_AUCTION_DETAILS_RESET:
       return {
         loading: false,
+      };
+    default:
+      return state;
+  }
+};
+
+export const userDeleteAuctionReducer = (
+  state = {
+    loading: false,
+  },
+  action
+) => {
+  switch (action.type) {
+    case USER_DELETE_AUCTION_REQ:
+      return {
+        loading: true,
+      };
+    case USER_DELETE_AUCTION_SUCCESS:
+      return {
+        loading: false,
+        // success: action.payload,
+      };
+    case USER_DELETE_AUCTION_FAIL:
+      return {
+        ...action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+export const userCloseAuctionReducer = (
+  state = {
+    loading: false,
+  },
+  action
+) => {
+  switch (action.type) {
+    case USER_CLOSE_AUCTION_REQ:
+      return {
+        loading: true,
+      };
+    case USER_CLOSE_AUCTION_SUCCESS:
+      return {
+        loading: false,
+        success: action.payload,
+      };
+    case USER_CLOSE_AUCTION_FAIL:
+      return {
+        ...action.payload,
       };
     default:
       return state;

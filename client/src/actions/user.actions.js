@@ -31,7 +31,14 @@ import {
   USER_UPDATE_PROFILE_RESET,
   USER_AUCTION_MESSAGE,
   USER_AUCTION_RESET_MESSAGE,
+  USER_DELETE_AUCTION_REQ,
+  USER_DELETE_AUCTION_SUCCESS,
+  USER_DELETE_AUCTION_FAIL,
+  USER_CLOSE_AUCTION_REQ,
+  USER_CLOSE_AUCTION_SUCCESS,
+  USER_CLOSE_AUCTION_FAIL,
 } from "../constants/user.contanst";
+import { axiosConfigAuth } from "../utils/axiosConfig";
 
 import { _dateFormat } from "../utils/date-format";
 
@@ -553,7 +560,6 @@ export const getUserAuctionsActiveAction = () => async (dispatch, getState) => {
     };
 
     const { data } = await axios.get("/api/user/auction?status=active", config);
-    console.log(data, "data <=");
     dispatch({
       type: USER_ACTIVE_AUCTION_SUCCESS,
       payload: {
@@ -581,6 +587,120 @@ export const getUserAuctionsActiveAction = () => async (dispatch, getState) => {
       payload: {
         error: errData,
         loading: false,
+      },
+    });
+  }
+};
+
+export const userAuctionDeleteAction = id => async (dispatch, getState) => {
+  dispatch({
+    type: USER_DELETE_AUCTION_REQ,
+  });
+
+  try {
+    const {
+      authUser: { userInfo },
+    } = getState();
+
+    const config = axiosConfigAuth(userInfo.token);
+
+    await axios.delete("/api/user/auction/" + id, config);
+
+    dispatch({
+      type: USER_DELETE_AUCTION_SUCCESS,
+    });
+    dispatch({
+      type: USER_AUCTION_MESSAGE,
+      payload: {
+        type: "success",
+        text: "Berhasil menghapus data!",
+      },
+    });
+
+    // reload plan auction
+
+    const getPlanAuction = await axios.get(
+      "/api/user/auction?status=planning",
+      config
+    );
+    console.log(getPlanAuction);
+    dispatch({
+      type: USER_AUCTION_SUCCESS,
+      payload: {
+        loading: false,
+        data: getPlanAuction?.data?.lelang,
+        error: null,
+      },
+    });
+
+    // reload active auction
+
+    const getActiveAuction = await axios.get(
+      "/api/user/auction?status=active",
+      config
+    );
+    dispatch({
+      type: USER_ACTIVE_AUCTION_SUCCESS,
+      payload: {
+        loading: false,
+        data: getActiveAuction?.data?.lelang,
+        error: null,
+      },
+    });
+
+    // }, 3000);
+  } catch (error) {
+    dispatch({
+      type: USER_DELETE_AUCTION_FAIL,
+    });
+    dispatch({
+      type: USER_AUCTION_MESSAGE,
+      payload: {
+        type: "danger",
+        text: "Gagal menghapus data!",
+      },
+    });
+  }
+};
+
+export const userAuctionCloseAction = id => async (dispatch, getState) => {
+  dispatch({
+    type: USER_CLOSE_AUCTION_REQ,
+  });
+
+  try {
+    // const { data } = axios.delete("/api/action/delete/" + id);
+    const {
+      authUser: { userInfo },
+    } = getState();
+
+    const config = axiosConfigAuth(userInfo.token);
+
+    console.log(config, id);
+
+    const { data } = await axios.put("/api/user/auction/close/" + id, config);
+    console.log(data, "put");
+    setTimeout(() => {
+      dispatch({
+        type: USER_CLOSE_AUCTION_SUCCESS,
+      });
+      dispatch({
+        type: USER_AUCTION_MESSAGE,
+        payload: {
+          type: "success",
+          text: "Berhasil menutup lelang!",
+        },
+      });
+    }, 3000);
+  } catch (error) {
+    dispatch({
+      type: USER_CLOSE_AUCTION_FAIL,
+    });
+    dispatch({
+      type: USER_AUCTION_MESSAGE,
+      payload: {
+        type: "danger",
+        text: "Gagal menghapus data!",
       },
     });
   }
