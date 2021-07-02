@@ -2,8 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Badge, Col, Container, Row } from "react-bootstrap";
 import { motion } from "framer-motion";
-import bannerImg14 from "../assets/images/banner/banner-14.jpg";
-import bannerImg15 from "../assets/images/banner/banner-15.jpg";
+import bannerImg14 from "../assets/images/banner/banner-mini-2.png";
+import bannerImg15 from "../assets/images/banner/Banner-mini.png";
 import BannerSlider from "./BannerSlider";
 
 const bannerImgVariants = {
@@ -27,17 +27,17 @@ const Banner = () => {
           <Col lg={4}>
             <Row className=" h-100  ">
               <Col sm={6} lg={12} md={6} className="mb-4 mb-sm-0 mb-lg-4 ">
-                <motion.div whileHover="hover" className="bannerWrap mb30">
+                <div className="bannerWrap mb30 bg-primary">
                   <div className="bannerImg">
                     <Link to="/deal">
-                      <motion.img
+                      <img
                         variants={bannerImgVariants}
                         src={bannerImg14}
                         alt="alt banner"
                       />
                     </Link>
                   </div>
-                  <div className="bannerContent  ">
+                  {/* <div className="bannerContent   ">
                     <div>
                       <span>20x absorbs</span>
                       <h2>
@@ -55,21 +55,17 @@ const Banner = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
+                  </div> */}
+                </div>
               </Col>
-              <Col sm={6} lg={12} md={6}>
-                <motion.div whileHover="hover" className="bannerWrap mb30 ">
+              <Col sm={6} lg={12} md={6} className="">
+                <div className="bannerWrap mb30 border ">
                   <div className="bannerImg">
-                    <Link to="/product">
-                      <motion.img
-                        variants={bannerImgVariants}
-                        src={bannerImg15}
-                        alt=""
-                      />
-                    </Link>
+                    <div>
+                      <img src={bannerImg15} alt="mini-banner-2" />
+                    </div>
                   </div>
-                  <div className="bannerContent2">
+                  {/* <div className="bannerContent2">
                     <Badge variant="cyan" className="bannerContent2Badge ">
                       ZHnio
                     </Badge>
@@ -78,8 +74,8 @@ const Banner = () => {
                       phone
                     </h2>
                     <p>new version 3.0 for new era</p>
-                  </div>
-                </motion.div>
+                  </div> */}
+                </div>
               </Col>
             </Row>
           </Col>
