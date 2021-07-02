@@ -6,11 +6,21 @@
     height: 100%;
     position: relative;
     overflow: hidden;
+    div {
+      display: flex;
+      height: 100%;
+      img {
+        object-fit: cover;
+        opacity: 1;
+        height: 100%;
+        width: 100%;
+      }
+    }
     a {
       display: flex;
       height: 100%;
       img {
-        opacity: 0.3;
+        opacity: 1;
         height: 100%;
         width: 100%;
       }

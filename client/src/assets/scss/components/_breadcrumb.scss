@@ -37,3 +37,10 @@
     }
   }
 }
+
+.admin-breadcrumb {
+  margin-top: 1.3rem;
+  & > .breadcrumb {
+    background: none !important;
+  }
+}
