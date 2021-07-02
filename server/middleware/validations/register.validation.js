@@ -18,8 +18,6 @@ const registerValidation = checkSchema({
         const isExist = await ModelMember.findOne({
           where: { username: value },
         });
-
-        console.log(isExist, "username checked");
         if (isExist) {
           throw new Error("Username sudah tersedia!");
         }
