@@ -1,7 +1,9 @@
 import path from "path";
 import dotenv from "dotenv";
-import colors from "colors";
+import "colors";
 import express from "express";
+import http from "http";
+import SocketApp from "./socker/socketio.js";
 import sequelize from "./configs/database.js";
 import bodyParser from "body-parser";
 import ModelMember from "./models/m_member.js";
@@ -13,13 +15,12 @@ import ModelPesanDiskusi from "./models/m_pesan_diskusi.js";
 import ModelRuangDiskusi from "./models/m_ruang_diskusi.js";
 import ModelAkunBank from "./models/m_akun_bank.js";
 import { errorHandler, notFound } from "./middleware/error.middleware.js";
-
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
 import auctionRoutes from "./routes/auction.routes.js";
 import categoriesRoutes from "./routes/category.routes.js";
 import ModelGaleri from "./models/m_galeri_lelang.js";
-import { uploadFilesMiddleware } from "./middleware/uploads.js";
 import ModelAdmin from "./models/m_admin.js";
 import ModelTransaksi from "./models/m_transaksi.js";
 import ModelDetailTransaksi from "./models/m_detail_transaksi.js";
@@ -37,10 +38,13 @@ dotenv.config({
   path: envFile,
 });
 
-const app = express();
-
 const PORT = process.env.PORT || 8080;
 const MODE = process.env.NODE_ENV;
+
+const app = express();
+const server = http.createServer(app);
+
+SocketApp(server);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -66,6 +70,7 @@ app.get("/api", (req, res) => {
 });
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/admin", adminRoutes);
 app.use("/api/auction", auctionRoutes);
 app.use("/api/categories", categoriesRoutes);
 app.use(notFound);
@@ -130,7 +135,7 @@ ModelRuangDiskusi.belongsTo(ModelLelang, {
 (async () => {
   await sequelize.sync();
   // await sequelize.sync({ force: true });
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log(
       `\nServer running in ${MODE} mode on port ${PORT.underline} `.yellow.bold
     );
