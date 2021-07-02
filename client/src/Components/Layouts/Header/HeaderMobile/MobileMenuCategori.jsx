@@ -64,7 +64,7 @@ const navItemVariants = {
   },
 };
 
-const MobileMenuCategori = ({ open, toggle }) => {
+const MobileMenuCategori = ({ open, toggle, categories }) => {
   return (
     <div className="mobileHeaderPaddingBorder3 mobileMenuCategori">
       <motion.div
@@ -98,42 +98,16 @@ const MobileMenuCategori = ({ open, toggle }) => {
           defaultActiveKey="/home"
           className={`flex-column mobileMenuNav menuCategoriNav px-0  pt-3 pb-0 `}
         >
-          {[
-            {
-              id: 1,
-              url: "/all",
-              text: "All",
-            },
-            {
-              id: 2,
-              url: "/all2",
-              text: "All 2",
-            },
-            {
-              id: 3,
-              url: "/all2",
-              text: "All 2",
-            },
-            {
-              id: 4,
-              url: "/all2",
-              text: "All 2",
-            },
-            {
-              id: 5,
-              url: "/all2",
-              text: "All 2",
-            },
-          ].map(item => {
+          {categories.map(item => {
             return (
               <LinkContainer
-                key={item.id}
-                to={item.url}
-                className="mobileMenuNavLink "
+                key={item.id_kategori}
+                to={`/kategori/${item.id_kategori}`}
+                className="mobileMenuNavLink"
               >
                 <Nav.Link as={motion.a} variants={navItemVariants}>
                   {" "}
-                  {item.text}
+                  {item.kategori}
                 </Nav.Link>
               </LinkContainer>
             );

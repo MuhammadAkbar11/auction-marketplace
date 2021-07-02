@@ -1,34 +1,13 @@
 import React from "react";
-
+import { useSelector } from "react-redux";
 import { Button, Form, Nav } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { MagnifyingGlassIcon, TimesIcon } from "../../../UI/Icons/Index";
-
 import MobileMenuCategori from "./MobileMenuCategori";
-
-// const variants = {
-//   show: {
-//     height: "auto",
-//     scaleY: 1,
-//     opacity: 1,
-//     transition: {
-//       duration: 0.2,
-//       when: "beforeChildren",
-//     },
-//   },
-//   closed: {
-//     marginTop: "-30px",
-//     paddingBottom: 0,
-//     // height: "0px",
-//     clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)",
-//     scaleY: 0,
-//     opacity: 0,
-//   },
-// };
 
 const HeaderMobileMenu = ({ show, toggle }) => {
   const [categoriNavActive, setCategoriNavActive] = React.useState(false);
-
+  const { categories } = useSelector(state => state.categories);
   const toggleCategoriNav = e => {
     e.preventDefault();
 
@@ -44,9 +23,9 @@ const HeaderMobileMenu = ({ show, toggle }) => {
         </a>
         <div className="mobileHeaderContentArea">
           <div className="mobileHeaderTitle mobileHeaderPaddingBorder4">
-            <p>
+            {/* <p>
               <span>FREE SHIPPING</span> world wide for all orders over $199
-            </p>
+            </p> */}
           </div>
           <div className="mobileSearch mobileHeaderPaddingBorder1">
             <Form
@@ -72,11 +51,24 @@ const HeaderMobileMenu = ({ show, toggle }) => {
                 <Nav.Link> Home</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/cart" className="mobileMenuNavLink ">
-                <Nav.Link> Daftar Lelang</Nav.Link>
+                <Nav.Link> Lelang</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to="/cart" className="mobileMenuNavLink ">
+                <Nav.Link> Terbaru</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to="/cart" className="mobileMenuNavLink ">
+                <Nav.Link> Tentang Kami</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to="/cart" className="mobileMenuNavLink ">
+                <Nav.Link> Kontak</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to="/cart" className="mobileMenuNavLink ">
+                <Nav.Link> Syarat dan Kententuan</Nav.Link>
               </LinkContainer>
             </Nav>
           </div>
           <MobileMenuCategori
+            categories={categories}
             open={categoriNavActive}
             toggle={toggleCategoriNav}
           />

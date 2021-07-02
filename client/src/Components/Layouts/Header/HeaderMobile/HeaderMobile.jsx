@@ -1,19 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { Badge, Col, Container, Row } from "react-bootstrap";
-import { User, Heart } from "phosphor-react";
+import { useSelector, useDispatch } from "react-redux";
+import { Badge, Col, Container, Row, Dropdown } from "react-bootstrap";
+import { User, Heart, UserCircle, SignOut, UserGear } from "phosphor-react";
 import { ListIcon, WishListIcon } from "../../../UI/Icons/Index";
+import { authLogoutAuction } from "../../../../actions/auth.actions";
 
 const HeaderMobile = ({ toggle }) => {
   const { userInfo } = useSelector(state => state.authUser);
+  const dispatch = useDispatch();
   return (
     <Container fluid className=" px-3 px-sm-5 ">
       <Row className=" align-items-center flex-nowrap ">
         <Col xs={5}>
           <div className="mobileLogo">
             <Link to="/" className=" display-6 mt-n2">
-              Logo
+              <h5 className="my-0 text-primary font-weight-bold">BaeBid</h5>
             </Link>
           </div>
         </Col>
@@ -30,9 +32,44 @@ const HeaderMobile = ({ toggle }) => {
                   </Link>
                 </div>
                 <div className="headerMiddleActionItem mr-1">
-                  <Link to="/akun/profile">
+                  {/* <Link to="/akun/profile">
                     <User size="32" />
-                  </Link>
+                  </Link> */}
+                  <Dropdown>
+                    <Dropdown.Toggle
+                      className="headerMiddleActionItem userDropdownToggle"
+                      variant="success"
+                      id="dropdown-basic"
+                      as="a"
+                    >
+                      <User size="32" />
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu className=" shadow-sm ">
+                      <Dropdown.Item
+                        className=" d-flex align-items-center  "
+                        as={Link}
+                        to="/akun/dashboard"
+                      >
+                        <UserGear size={22} className="mr-2" /> Dashboard
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        className=" d-flex align-items-center  "
+                        as={Link}
+                        to="/akun/info"
+                      >
+                        <UserCircle size={22} className="mr-2" /> Profile
+                      </Dropdown.Item>
+                      <Dropdown.Divider />
+                      <Dropdown.Item
+                        className=" d-flex align-items-center  text-dark"
+                        onClick={() => dispatch(authLogoutAuction())}
+                      >
+                        <SignOut size={22} className="mr-2" />
+                        Logout
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
                 </div>
               </>
             ) : (
