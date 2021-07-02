@@ -23,6 +23,7 @@ import {
 } from "../../actions/user.actions";
 import Loader from "../../Components/UI/Loader";
 import { setResetAction } from "../../actions/app.actions";
+import Layout from "../../Components/Layouts/Layout";
 
 const updateProfileSchema = Yup.object().shape({
   nama: Yup.string().required("Nama belum terisi"),
@@ -181,7 +182,7 @@ const Profile = ({ history }) => {
   // Contents
 
   return (
-    <>
+    <Layout>
       <BreadcrumbsContainer
         items={[
           { title: "Home", url: "/" },
@@ -502,7 +503,7 @@ const Profile = ({ history }) => {
           </Col>
         </Row>
       </Container>
-    </>
+    </Layout>
   );
 };
 

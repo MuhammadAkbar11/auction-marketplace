@@ -4,22 +4,21 @@ import { Col, Container, Row, Form } from "react-bootstrap";
 import BreadcrumbsContainer from "../Components/Layouts/BreadcrumbsContainer";
 import ListAuctionSidebar from "../Components/ListAuctionSidebar";
 import ProductCard from "../Components/ProductCard";
-
 import { ListIcon, SquaresFourIcon } from "../Components/UI/Icons/Index";
-import productsData from "../data/product";
 import { getListAuctionAction } from "../actions/auctions.actions";
 import Loader from "../Components/UI/Loader";
+import Layout from "../Components/Layouts/Layout";
 
 const ListAuction = () => {
-  const products = productsData;
   const dispatch = useDispatch();
   const { loading, auctions } = useSelector(state => state.auctionList);
+  const { categories } = useSelector(state => state.categories);
 
   React.useEffect(() => {
     dispatch(getListAuctionAction());
   }, []);
   return (
-    <>
+    <Layout>
       <BreadcrumbsContainer
         items={[
           { title: "Home", url: "/" },
@@ -82,14 +81,19 @@ const ListAuction = () => {
               </Row>
               <Row className="top-bottom-area">
                 {loading ? (
-                  <div className=" d-flex w-100 justify-content-center ">
+                  <Col
+                    xs={12}
+                    className=" d-flex w-100 justify-content-center "
+                  >
                     {" "}
                     <Loader variant="primary" />
-                  </div>
+                  </Col>
                 ) : auctions.length === 0 ? (
-                  <div>
-                    <h2>Belum ada lelang</h2>
-                  </div>
+                  <Col xs={12} className="mt-4 d-flex justify-content-center  ">
+                    <h5 className="text-black-50 text-capitalize text-spacing-0 ">
+                      Belum ada lelang
+                    </h5>
+                  </Col>
                 ) : (
                   <>
                     {auctions.map(auction => {
@@ -111,12 +115,12 @@ const ListAuction = () => {
               </Row>
             </Col>
             <Col lg={3}>
-              <ListAuctionSidebar />
+              <ListAuctionSidebar categories={categories} />
             </Col>
           </Row>
         </Container>
       </section>
-    </>
+    </Layout>
   );
 };
 

@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import BreadcrumbContainer from "../Components/Layouts/BreadcrumbsContainer";
 import Loader from "../Components/UI/Loader";
 import { authLoginAction, authResetErrorAction } from "../actions/auth.actions";
+import Layout from "../Components/Layouts/Layout";
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
@@ -27,7 +28,6 @@ const loginSchema = Yup.object().shape({
 const LoginPage = () => {
   const dispatch = useDispatch();
 
-  const { userInfo } = useSelector(state => state.authUser);
   const { loading, error } = useSelector(state => state.authLogin);
 
   const loginFormik = useFormik({
@@ -39,12 +39,11 @@ const LoginPage = () => {
     },
     onSubmit: values => {
       dispatch(authLoginAction(values));
-      // history.push('/payment');
     },
   });
 
   return (
-    <>
+    <Layout>
       <BreadcrumbContainer
         items={[
           { title: "Home", url: "/" },
@@ -117,7 +116,7 @@ const LoginPage = () => {
                       type="submit"
                       variant="primary"
                       className=" d-flex align-items-center "
-                      disabled={loading || !loginFormik.isValid}
+                      disabled={loading}
                     >
                       {loading ? (
                         <>
@@ -140,7 +139,7 @@ const LoginPage = () => {
           </Row>
         </Container>
       </section>
-    </>
+    </Layout>
   );
 };
 

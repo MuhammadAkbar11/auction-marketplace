@@ -1,10 +1,11 @@
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import BreadcrumbsContainer from "../../Components/Layouts/BreadcrumbsContainer";
+import Layout from "../../Components/Layouts/Layout";
 import UserSidebarMenu from "../../Components/UserMenuLayout/UserSidebarMenu";
 const UserDashboard = () => {
   return (
-    <>
+    <Layout>
       <BreadcrumbsContainer
         items={[
           { title: "Home", url: "/" },
@@ -19,7 +20,7 @@ const UserDashboard = () => {
           <Col md={9}></Col>
         </Row>
       </Container>
-    </>
+    </Layout>
   );
 };
 

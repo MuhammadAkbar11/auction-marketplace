@@ -20,6 +20,7 @@ import {
   authRegisterAction,
   authResetErrorAction,
 } from "../actions/auth.actions";
+import Layout from "../Components/Layouts/Layout";
 
 const registerSchema = Yup.object().shape({
   nama: Yup.string().required("Nama belum terisi"),
@@ -91,7 +92,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <>
+    <Layout>
       <BreadcrumbContainer
         items={[
           { title: "Home", url: "/" },
@@ -230,7 +231,7 @@ const RegisterPage = () => {
           </Row>
         </Container>
       </section>
-    </>
+    </Layout>
   );
 };
 

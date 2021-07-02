@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import useIsValidData from "../../hooks/useIsValidData";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import CardAlert from "../../Components/UI/CardAlert";
+import Layout from "../../Components/Layouts/Layout";
 // import { Link } from "react-router-dom";
 
 const CreateAuction = props => {
@@ -73,7 +74,7 @@ const CreateAuction = props => {
   }
 
   return (
-    <>
+    <Layout>
       <BreadcrumbsContainer
         items={[
           { title: "Home", url: "/" },
@@ -81,7 +82,7 @@ const CreateAuction = props => {
         ]}
       />
       <section>{tabContent}</section>
-    </>
+    </Layout>
   );
 };
 

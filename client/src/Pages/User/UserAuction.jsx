@@ -8,7 +8,14 @@ import UserActiveAuctionsTab from "../../Components/UserAuctionTabs/UserActiveAu
 import UserPlanningAuctionsTab from "../../Components/UserAuctionTabs/UserPlanningAuctionsTab";
 import UserSidebarMenu from "../../Components/UserMenuLayout/UserSidebarMenu";
 
-import { userAuctionResetMessageAction } from "../../actions/user.actions";
+import {
+  getUserAuctionAction,
+  getUserAuctionsActiveAction,
+  userAuctionCloseAction,
+  userAuctionDeleteAction,
+  userAuctionResetMessageAction,
+} from "../../actions/user.actions";
+import Layout from "../../Components/Layouts/Layout";
 
 const UserAuction = props => {
   const { match, location } = props;
@@ -16,6 +23,17 @@ const UserAuction = props => {
   const tabKey = new URLSearchParams(location.search).get("tab");
   const dispatch = useDispatch();
   const { message } = useSelector(state => state.userAuction);
+  const userAuctionState = useSelector(state => state.userAuction);
+  const planAuctions = userAuctionState?.planning;
+  const activeAuctions = userAuctionState?.active;
+
+  const deleteAuction = useSelector(state => state.userDeleteAuction);
+  const closeAuctionState = useSelector(state => state.userCloseAuction);
+
+  React.useEffect(() => {
+    dispatch(getUserAuctionsActiveAction());
+    dispatch(getUserAuctionAction());
+  }, []);
 
   // if
   React.useEffect(() => {
@@ -26,8 +44,18 @@ const UserAuction = props => {
     }
   }, [message]);
 
+  const handleDelete = id => {
+    // console.log(object);
+    dispatch(userAuctionDeleteAction(id));
+    console.log(id);
+  };
+
+  const handleClose = id => {
+    dispatch(userAuctionCloseAction(id));
+  };
+
   return (
-    <>
+    <Layout>
       <BreadcrumbsContainer
         items={[
           { title: "Home", url: "/" },
@@ -71,10 +99,21 @@ const UserAuction = props => {
               )}
               <Tab.Content>
                 <Tab.Pane eventKey="default">
-                  <UserPlanningAuctionsTab />
+                  <UserPlanningAuctionsTab
+                    auctions={planAuctions}
+                    delLoading={deleteAuction.loading}
+                    handleDelete={handleDelete}
+                  />
                 </Tab.Pane>
                 <Tab.Pane eventKey="active">
-                  <UserActiveAuctionsTab isActive={tabKey === "active"} />
+                  <UserActiveAuctionsTab
+                    auctions={activeAuctions}
+                    isActive={tabKey === "active"}
+                    delLoading={deleteAuction.loading}
+                    closeLoading={closeAuctionState.loading}
+                    handleDelete={handleDelete}
+                    handleClose={handleClose}
+                  />
                 </Tab.Pane>
               </Tab.Content>
             </Tab.Container>
@@ -84,7 +123,7 @@ const UserAuction = props => {
           </Col>
         </Row>
       </Container>
-    </>
+    </Layout>
   );
 };
 

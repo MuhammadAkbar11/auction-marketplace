@@ -1,14 +1,14 @@
 import React from "react";
-import { Col, Container, Row } from "react-bootstrap";
+// import { Col, Container, Row } from "react-bootstrap";
 import Banner from "../Components/Banner";
 import LatestAuction from "../Components/LatestAuction";
-import { WishListIcon } from "../Components/UI/Icons/Index";
+// import { WishListIcon } from "../Components/UI/Icons/Index";
 
 import { io } from "socket.io-client";
 import { SERVER_ENDPOINT } from "../constants/socket.constants";
 import Layout from "../Components/Layouts/Layout";
 
-import bannerImg from "../assets/images/banner/auction-banner.jpg";
+// import bannerImg from "../assets/images/banner/auction-banner.jpg";
 let socket;
 
 const Home = () => {

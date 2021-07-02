@@ -13,6 +13,7 @@ import UserUpdateAuctionDescription from "../../Components/UserUpdateAuction/Use
 import UserUpdateAuctionRegular from "../../Components/UserUpdateAuction/UserUpdateAuctionRegular";
 import { Redirect } from "react-router";
 import Loader from "../../Components/UI/Loader";
+import Layout from "../../Components/Layouts/Layout";
 
 const yesterday = new Date(Date.now() - 86400000);
 
@@ -81,7 +82,7 @@ const UpdateAuction = props => {
 
   if (loading) {
     return (
-      <>
+      <Layout>
         <BreadcrumbsContainer
           items={[
             { title: "Home", url: "/" },
@@ -95,7 +96,7 @@ const UpdateAuction = props => {
             </Col>
           </Row>
         </Container>
-      </>
+      </Layout>
     );
   }
 
@@ -104,7 +105,7 @@ const UpdateAuction = props => {
   return auction === null ? (
     <Redirect to="/not-found" />
   ) : isAuthor ? (
-    <>
+    <Layout>
       <BreadcrumbsContainer
         items={[
           { title: "Home", url: "/" },
@@ -150,7 +151,7 @@ const UpdateAuction = props => {
           </Button>
         </Form>
       </Container>
-    </>
+    </Layout>
   ) : (
     <Redirect to="/akun/lelang" />
   );
