@@ -1,0 +1,24 @@
+$adm-pt: 2rem;
+$adm-pl: 2rem;
+$adm-pr: 1.9rem;
+
+.adm {
+  &-wrapper {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background-color: $light;
+    width: 100%;
+    display: grid;
+    grid-template-areas: "sidebar header" "sidebar main";
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
+
+    @import "./sidebar";
+
+    @import "./main";
+
+    @import "./header";
+    @import "./footer";
+  }
+}

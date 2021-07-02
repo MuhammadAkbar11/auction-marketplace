@@ -18,7 +18,8 @@ const proptypes = {
 
 const CreateAuctionSteps = ({ step1, step2, step3, currentStep }) => {
   const navLinkActiveClass = " text-primary step-active ";
-
+  console.log(step1, step2, step3);
+  console.log(step1 && step2 && step3);
   return (
     <Nav className=" justify-content-center create-auction-step ">
       <CreateAuctionStepItem
@@ -30,7 +31,7 @@ const CreateAuctionSteps = ({ step1, step2, step3, currentStep }) => {
       />
       <CreateAuctionStepItem
         active={step2}
-        isPrev={step2 && step3}
+        isPrev={step1 && step2 && step3}
         active={currentStep === "step2"}
         text="Deskripsi Produk"
         number={2}

@@ -1,0 +1,49 @@
+.adm-header {
+  position: relative;
+  grid-area: header;
+  width: 100%;
+  height: 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  margin-left: 0.4rem;
+  border-radius: 5px;
+
+  border-bottom: 1px solid $gray-300;
+  user-select: auto;
+
+  padding: {
+    left: 0.5rem;
+    right: 0.5rem;
+  }
+
+  .adm--header {
+    display: flex;
+    height: 100%;
+    &-left {
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    &-main {
+      justify-content: center;
+      align-items: center;
+    }
+    &-right {
+      justify-content: flex-end;
+      align-items: center;
+
+      .adm--header-usermenu {
+        box-shadow: none;
+        border: none;
+      }
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    padding: {
+      left: $adm-pl;
+      right: $adm-pr + 1;
+    }
+  }
+}

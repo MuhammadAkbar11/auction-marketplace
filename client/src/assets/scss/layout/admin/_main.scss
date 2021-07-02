@@ -1,0 +1,25 @@
+.adm-main {
+  position: relative;
+  grid-area: main;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: {
+    left: 0.5rem;
+    right: 0.5rem;
+    top: 1.8em;
+  }
+  min-height: 1fr;
+
+  overflow-y: scroll;
+
+  @include media-breakpoint-up(md) {
+    &.baebid-main-100vh {
+      height: 1fr;
+    }
+    padding: {
+      left: $adm-pl;
+      right: $adm-pr;
+      top: 1.8em;
+    }
+  }
+}

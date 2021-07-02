@@ -1,0 +1,19 @@
+.widget-card {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  flex-direction: row;
+  @include media-breakpoint-only(md) {
+    flex-direction: column;
+  }
+
+  &-icon {
+    box-shadow: 0 0 0.2rem currentColor;
+    top: -1.5rem;
+    padding: 1.2rem;
+    position: absolute;
+  }
+  // &-content {
+  // background-attachment: ;
+  // }
+}
