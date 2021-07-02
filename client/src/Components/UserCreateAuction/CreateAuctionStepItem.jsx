@@ -23,7 +23,7 @@ const CreateAuctionStepItem = ({ active, isPrev, text, number, to }) => {
           </Badge>
         </div>
         <LinkContainer to={to}>
-          <Nav.Link>Kategori Produk</Nav.Link>
+          <Nav.Link>{text}</Nav.Link>
         </LinkContainer>
       </>
     );

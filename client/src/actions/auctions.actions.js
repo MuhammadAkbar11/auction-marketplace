@@ -67,7 +67,6 @@ export const getLatestAuctionAction = () => async (dispatch, getState) => {
 
   try {
     const { data } = await axios.get("/api/auction?latest=true");
-    console.log(data.lelang);
     dispatch({
       type: AUCTION_LATEST_SUCCESS,
       payload: {
