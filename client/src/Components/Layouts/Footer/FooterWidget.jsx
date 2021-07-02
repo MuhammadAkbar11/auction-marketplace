@@ -7,7 +7,6 @@ import {
   PhoneIcon,
   TwitterIcon,
 } from "../../UI/Icons/Index";
-import { useDispatch, useSelector } from "react-redux";
 
 const FooterWidget = ({ title, categories, contact, links }) => {
   return (
@@ -33,8 +32,8 @@ const FooterWidget = ({ title, categories, contact, links }) => {
                 <PhoneIcon size={24} />
               </div>
               <div className="contact-info-2-content">
-                <p>Got a question? Call us 24/7</p>
-                <h3 className="text-primary mb-1">(365) 8635 56-24-02 </h3>
+                <p>Punya pertayaan? Hubungi kami 24/7</p>
+                <h3 className="text-primary mb-1">(+62) 813 5644-2402 </h3>
               </div>
             </div>
             <div className="single-contact-info-2">
@@ -42,7 +41,7 @@ const FooterWidget = ({ title, categories, contact, links }) => {
                 <PaperPlaneTiltIcon size={24} />
               </div>
               <div className="contact-info-2-content">
-                <p>268 Orchard St, Mahattan, 12005, CA, United State</p>
+                <p>Jl Jatiwaringin Jakarta Timur</p>
               </div>
             </div>
             <div className="single-contact-info-2 mt-1">
@@ -50,7 +49,7 @@ const FooterWidget = ({ title, categories, contact, links }) => {
                 <EnvolopeOpenIcon size={24} />
               </div>
               <div className="contact-info-2-content">
-                <p>contact@norda.com</p>
+                <p>baebid@gmail.com</p>
               </div>
             </div>
           </div>

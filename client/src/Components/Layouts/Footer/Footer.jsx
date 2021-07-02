@@ -9,8 +9,8 @@ const Footer = () => {
   const useFullLinks = [
     {
       id: 1,
-      url: "/akun/info",
-      name: "My Account",
+      url: "/tentang-kami",
+      name: "Tentang kami",
     },
     {
       id: 3,
@@ -27,13 +27,16 @@ const Footer = () => {
     return;
   }, []);
 
-  const transformCategories = categories.map(item => {
-    return {
-      id: item.id_kategori,
-      url: "/kategori/" + item.id_kategori,
-      name: item.kategori,
-    };
-  });
+  const transformCategories =
+    categories.length !== 0
+      ? categories.map(item => {
+          return {
+            id: item.id_kategori,
+            url: "/kategori/" + item.id_kategori,
+            name: item.kategori,
+          };
+        })
+      : [];
 
   return (
     <footer className="footer-area bg-gray-100">
