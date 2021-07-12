@@ -7,16 +7,18 @@ import {
   authRegisterReducer,
   authUserReducer,
 } from "./reducers/auth.reducer";
-import { userInfoFromStorage } from "./utils/auth";
+import { adminInfoFromStorage, userInfoFromStorage } from "./utils/auth";
 import { menuReducer } from "./reducers/menu.reducer";
 import {
   userAuctionReducer,
   userCreateNewAuction,
   userDetailsReducer,
   userUpdateProfileReducer,
-  userPostStartAuctionReducer,
+  // userPostStartAuctionReducer,
   userUpdateAuctionReducer,
   userAuctionDetailsReducer,
+  userCloseAuctionReducer,
+  userDeleteAuctionReducer,
 } from "./reducers/user.reducer";
 import { categoriesReducer } from "./reducers/categories.reducer";
 import {
@@ -24,8 +26,16 @@ import {
   auctionListReducer,
   auctionsLatestReducer,
 } from "./reducers/auctions.reducer";
+import {
+  adminLoginReducer,
+  authAdminReducer,
+} from "./reducers/admin/adminAuth.reducer";
+import { adminCategoriesReducer } from "./reducers/admin/adminCategories.reducer";
 
 const reducer = combineReducers({
+  adminLogin: adminLoginReducer,
+  adminAuth: authAdminReducer,
+  adminCategories: adminCategoriesReducer,
   productList: productListReducer,
   auctionDetails: AuctionDetailsReducer,
   auctionsLatest: auctionsLatestReducer,
@@ -39,14 +49,15 @@ const reducer = combineReducers({
   userAuctionDetails: userAuctionDetailsReducer,
   userCreateAuction: userCreateNewAuction,
   userUpdateAuction: userUpdateAuctionReducer,
+  userDeleteAuction: userDeleteAuctionReducer,
+  userCloseAuction: userCloseAuctionReducer,
   menu: menuReducer,
   categories: categoriesReducer,
 });
 
 const initialState = {
-  authUser: {
-    userInfo: userInfoFromStorage,
-  },
+  authUser: { userInfo: userInfoFromStorage },
+  adminAuth: { adminInfo: adminInfoFromStorage },
 };
 
 const middleware = [thunk];
