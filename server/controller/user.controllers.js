@@ -1,10 +1,12 @@
 import asyncHandler from "express-async-handler";
+import Sequelize from "sequelize";
 import daysJs from "dayjs";
 import ResponseError from "../utils/responseError.js";
 import ModelMember from "../models/m_member.js";
 import ModelLelang from "../models/m_lelang.js";
 import ModelGaleri from "../models/m_galeri_lelang.js";
 import { deleteFile } from "../utils/file.js";
+import ModelPenawaran from "../models/m_penawaran.js";
 
 export const getUserProfile = asyncHandler(async (req, res) => {
   try {
@@ -253,14 +255,132 @@ export const getUserAuction = asyncHandler(async (req, res, next) => {
       });
 
       if (activeAuctions.length !== 0) {
-        userAuctions = activeAuctions.map(auc => {
-          return {
-            id_lelang: auc.id_lelang,
-            judul: auc.judul,
-            tgl_mulai: daysJs(auc.tgl_mulai).format("DD/MM/YYYY - HH:mm"),
-            tgl_selesai: daysJs(auc.tgl_selesai).format("DD/MM/YYYY - HH:mm"),
-          };
-        });
+        userAuctions = await Promise.all(
+          activeAuctions.map(async auction => {
+            const auctionData = auction.dataValues;
+            const auctionId = auctionData.id_lelang;
+
+            const tawaran = await ModelPenawaran.findAll({
+              where: {
+                id_lelang: auctionId,
+              },
+              order: [["tgl_tawaran", "DESC"]],
+              include: {
+                model: ModelMember,
+                as: "member",
+                attributes: ["id_member", "nama", "username", "email"],
+              },
+              attributes: {
+                exclude: ["ModelMemberIdMember", "ModelLelangIdLelang"],
+                // include: ["id_member", "nama", "username", "email"],
+              },
+            });
+
+            const transformTawaranArr =
+              tawaran.length !== 0
+                ? tawaran.map(bid => {
+                    const bidData = bid.dataValues;
+                    return {
+                      ...bidData,
+                      tgl_tawaran: daysJs(bidData.tgl_tawaran).format(
+                        "DD/MM/YYYY - HH:mm"
+                      ),
+                      // member: await bid.getModelMember(),
+                    };
+                  })
+                : tawaran;
+
+            return {
+              id_lelang: auctionData.id_lelang,
+              judul: auctionData.judul,
+              tgl_mulai: daysJs(auctionData.tgl_mulai).format(
+                "DD/MM/YYYY - HH:mm"
+              ),
+              tgl_selesai: daysJs(auctionData.tgl_selesai).format(
+                "DD/MM/YYYY - HH:mm"
+              ),
+              tawaran: transformTawaranArr,
+            };
+          })
+        );
+
+        // userAuctions = activeAuctions.map(auc => {
+        //   return {
+        //     id_lelang: auc.id_lelang,
+        //     judul: auc.judul,
+        //     tgl_mulai: daysJs(auc.tgl_mulai).format("DD/MM/YYYY - HH:mm"),
+        //     tgl_selesai: daysJs(auc.tgl_selesai).format("DD/MM/YYYY - HH:mm"),
+        //   };
+        // });
+      } else {
+        userAuctions = [];
+      }
+    } else if (queryStatus === "complete") {
+      const doneAuctions = await ModelLelang.findAll({
+        where: {
+          id_member: idMember,
+          status_lelang: 2,
+        },
+      });
+
+      if (doneAuctions.length !== 0) {
+        userAuctions = await Promise.all(
+          doneAuctions.map(async auction => {
+            const auctionData = auction.dataValues;
+            const auctionId = auctionData.id_lelang;
+
+            const tawaran = await ModelPenawaran.findAll({
+              where: {
+                id_lelang: auctionId,
+              },
+              order: [["tgl_tawaran", "DESC"]],
+              include: {
+                model: ModelMember,
+                as: "member",
+                attributes: ["id_member", "nama", "username", "email"],
+              },
+              attributes: {
+                exclude: ["ModelMemberIdMember", "ModelLelangIdLelang"],
+                // include: ["id_member", "nama", "username", "email"],
+              },
+            });
+
+            const transformTawaranArr =
+              tawaran.length !== 0
+                ? tawaran.map(bid => {
+                    const bidData = bid.dataValues;
+                    return {
+                      ...bidData,
+                      tgl_tawaran: daysJs(bidData.tgl_tawaran).format(
+                        "DD/MM/YYYY - HH:mm"
+                      ),
+                      // member: await bid.getModelMember(),
+                    };
+                  })
+                : tawaran;
+
+            return {
+              id_lelang: auctionData.id_lelang,
+              judul: auctionData.judul,
+              tgl_mulai: daysJs(auctionData.tgl_mulai).format(
+                "DD/MM/YYYY - HH:mm"
+              ),
+              tgl_selesai: daysJs(auctionData.tgl_selesai).format(
+                "DD/MM/YYYY - HH:mm"
+              ),
+              tawaran: transformTawaranArr,
+            };
+          })
+        );
+
+        // userAuctions = activeAuctions.map(auc => {
+        //   return {
+        //     id_lelang: auc.id_lelang,
+        //     judul: auc.judul,
+        //     tgl_mulai: daysJs(auc.tgl_mulai).format("DD/MM/YYYY - HH:mm"),
+        //     tgl_selesai: daysJs(auc.tgl_selesai).format("DD/MM/YYYY - HH:mm"),
+        //   };
+        // });
       } else {
         userAuctions = [];
       }
@@ -289,7 +409,6 @@ export const getAuctionDetails = asyncHandler(async (req, res) => {
 
     if (auction) {
       if (auction.id_member !== req.user.id_member) {
-        console.log("okk");
         throw new ResponseError(400, "Gagal mengambil data");
       }
 
@@ -330,8 +449,9 @@ export const postUserStartAuction = asyncHandler(async (req, res) => {
   // console.log(auctionId, "lelang id");
 
   try {
+    const currentDate = daysJs().format("YYYY-MM-DD HH:mm:ss");
     await ModelLelang.update(
-      { status_lelang: 1, tgl_mulai: daysJs().format("YYYY-MM-DD HH:mm:ss") },
+      { status_lelang: 1, tgl_mulai: currentDate },
       {
         where: {
           id_lelang: auctionId,
@@ -354,4 +474,88 @@ export const getIsValidData = asyncHandler(async (req, res) => {
     status: true,
     isValidData: valid,
   });
+});
+
+export const postDeleteAuction = asyncHandler(async (req, res) => {
+  const id = req.params.auctionId;
+
+  try {
+    await ModelLelang.destroy({ where: { id_lelang: id } });
+
+    const oldGaleri = await ModelGaleri.findAll({
+      where: { id_lelang: id },
+      attributes: {
+        exclude: ["ModelLelangIdLelang"],
+      },
+    });
+
+    const galeriId = oldGaleri.map(gal => gal.id_galeri);
+    await ModelGaleri.destroy({
+      where: {
+        id_galeri: [...galeriId],
+      },
+    });
+    oldGaleri.map(async og => {
+      deleteFile(og.url);
+    });
+
+    res.status(201).json({
+      id,
+      status: true,
+      message: "Berhasil menghapus data",
+    });
+  } catch (error) {
+    throw new ResponseError(error.statusCode, error.message, error.errors);
+  }
+});
+
+export const postCloseAuction = asyncHandler(async (req, res) => {
+  const id = req.params.auctionId;
+
+  try {
+    await ModelLelang.update(
+      {
+        status_lelang: 2,
+        tgl_selesai: daysJs().format("YYYY-MM-DD HH:mm:ss"),
+      },
+      {
+        where: {
+          id_lelang: id,
+        },
+      }
+    );
+    const bids = await ModelPenawaran.findAll({
+      where: {
+        id_lelang: id,
+      },
+      order: [["tgl_tawaran", "DESC"]],
+      attributes: {
+        exclude: ["ModelMemberIdMember", "ModelLelangIdLelang"],
+      },
+    });
+
+    // console.log(bids[]);
+    if (bids.length !== 0) {
+      const highestBid = bids[0].dataValues;
+      const highestBidId = highestBid.id_tawaran;
+      await ModelPenawaran.update(
+        { status_tawaran: 1 },
+        {
+          where: {
+            id_tawaran: highestBidId,
+          },
+        }
+      );
+    }
+
+    res.status(201).json({
+      id,
+      status: true,
+      type: "close",
+      message: "Berhasil menghapus data",
+    });
+  } catch (error) {
+    console.log(error);
+    throw new ResponseError(error.statusCode, error.message, error.errors);
+  }
 });
