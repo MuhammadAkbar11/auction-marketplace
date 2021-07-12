@@ -8,6 +8,8 @@ import {
   getIsValidData,
   putUserUpdateAuction,
   getAuctionDetails,
+  postDeleteAuction,
+  postCloseAuction,
 } from "../controller/user.controllers.js";
 import { protect } from "../middleware/auth.middlerware.js";
 import { uploadFilesMiddleware } from "../middleware/uploads.js";
@@ -32,5 +34,7 @@ router.put(
 );
 router.put("/auction/start", protect, postUserStartAuction);
 router.get("/auction/:auctionId", protect, getAuctionDetails);
+router.delete("/auction/:auctionId", protect, postDeleteAuction);
+router.get("/auction/close/:auctionId", protect, postCloseAuction);
 
 export default router;

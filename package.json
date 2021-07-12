@@ -10,8 +10,8 @@
     "start": "node server/app.js",
     "server": "nodemon server/app.js --dev",
     "debug": "nodemon server/app.js --dev-debug",
-    "client": "yarn --cwd ./client/ start",
-    "dev": "concurrently \"yarn run server\" \"yarn run client\"",
+    "client": "",
+    "dev": "concurrently \"yarn run server\" \"cd client && yarn run start\"",
     "dev:debug": "concurrently \"yarn run debug\" \"yarn run client\""
   },
   "devDependencies": {
@@ -31,6 +31,7 @@
     "multer": "^1.4.2",
     "mysql2": "^2.2.5",
     "path": "^0.12.7",
-    "sequelize": "^6.6.2"
+    "sequelize": "^6.6.2",
+    "socket.io": "^4.1.2"
   }
 }
