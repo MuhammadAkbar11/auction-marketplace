@@ -27,6 +27,9 @@ export const getListAuction = asyncHandler(async (req, res) => {
         tgl_mulai: {
           [Op.lte]: dayjs().format("YYYY-MM-DD HH:mm:ss"),
         },
+        status_lelang: {
+          [Op.in]: [1],
+        },
       },
       attributes: {
         exclude: ["ModelMemberIdMember", "ModelKategoriIdKategori"],
@@ -144,6 +147,13 @@ export const getAuction = asyncHandler(async (req, res) => {
       const dateStart = dayjs(auction.tgl_mulai);
       const duration = dateEnd.diff(dateStart, "day");
       const timeStart = dateStart.format("HH:mm");
+      let isOver = false;
+      const diffNowAndDateEnd = dateEnd.valueOf() - dayjs().valueOf();
+
+      if (diffNowAndDateEnd <= 0) {
+        isOver = true;
+      }
+      // console.log();
 
       auction.setDataValue("durasi", duration);
       auction.setDataValue("gambar", images);
@@ -155,6 +165,7 @@ export const getAuction = asyncHandler(async (req, res) => {
         "tgl_selesai",
         dayjs(auction.tgl_selesai).format("D MMM, YYYY - HH:mm")
       );
+      auction.setDataValue("telah_berakhir", isOver);
       return res.status(200).json({
         status: true,
         lelang: auction,
