@@ -27,8 +27,8 @@ const Footer = () => {
     return;
   }, []);
 
-  const transformCategories =
-    categories.length !== 0
+  const transformCategories = categories
+    ? categories.length !== 0
       ? categories.map(item => {
           return {
             id: item.id_kategori,
@@ -36,7 +36,8 @@ const Footer = () => {
             name: item.kategori,
           };
         })
-      : [];
+      : []
+    : [];
 
   return (
     <footer className="footer-area bg-gray-100">
