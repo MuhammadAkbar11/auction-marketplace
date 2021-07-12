@@ -65,7 +65,7 @@ const ModelMember = sequelize.define(
 );
 
 ModelMember.beforeCreate(async (member, option) => {
-  const id = await getAutoNumber("tbl_member", "id_member", "MBR", 8);
+  const id = await getAutoNumber("tbl_member", "id_member", "MBR", 6);
   member.id_member = id;
 });
 

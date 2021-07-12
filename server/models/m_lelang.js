@@ -1,5 +1,6 @@
 import Sequelize from "sequelize";
 import sequelize from "../configs/database.js";
+import ModelGaleri from "./m_galeri_lelang.js";
 
 const DataTypes = Sequelize.DataTypes;
 
@@ -45,6 +46,20 @@ const ModelLelang = sequelize.define(
     timestamps: true,
     createdAt: "tgl_dibuat",
     updatedAt: "tgl_diubah",
+    hooks: {
+      beforeBulkDestroy: function (options) {
+        options.individualHooks = true;
+        return options;
+      },
+      beforeDestroy: async function (lelang) {
+        const id = lelang.id_lelang;
+        await ModelGaleri.destroy({
+          where: {
+            id_lelang: id,
+          },
+        });
+      },
+    },
   }
 );
 

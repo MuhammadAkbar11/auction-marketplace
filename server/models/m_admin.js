@@ -1,5 +1,6 @@
 import Sequelize from "sequelize";
 import sequelize from "../configs/database.js";
+import getAutoNumber from "../utils/getAutoNumber.js";
 
 const DataTypes = Sequelize.DataTypes;
 
