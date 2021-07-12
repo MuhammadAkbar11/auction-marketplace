@@ -1,5 +1,5 @@
 import multer from "multer";
-
+import dayjs from "dayjs";
 import path from "path";
 
 const __dirname = path.resolve();
@@ -9,8 +9,15 @@ const fileStorage = multer.diskStorage({
     cb(null, "uploads/auctions");
   },
   filename: (req, file, cb) => {
-    const fileName = file.originalname.split(" ").join("-");
-    cb(null, "baeBid-" + new Date().toISOString() + "-" + fileName);
+    const filenameToArr = file.originalname.split(" ").join("").split(".");
+    // const fileName = file.originalname.split(" ").splice(0, 1).join("-");
+    const ext = filenameToArr[filenameToArr.length - 1];
+    cb(
+      null,
+      `BaeBid-${dayjs().format("YYYY-MM-DD")}_${
+        req.user.id_member
+      }_${dayjs().valueOf()}.${ext}`
+    );
   },
 });
 
