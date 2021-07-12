@@ -49,23 +49,33 @@ const ImageUploader = ({
                       }}
                     />
                   </Col>
-                  <Col xs={10} className="px-3 d-flex justify-content-between ">
-                    <div className="d-flex flex-column justify-content-center flex-grow-1 ">
-                      <Card.Text className="my-0">{img.file?.type}</Card.Text>
-                      <Card.Text className="my-0">{img.file?.name}</Card.Text>
-                    </div>
-                    <a
-                      href="#/"
-                      onClick={e => {
-                        e.preventDefault();
-                        handleRemove(img);
-                      }}
-                      size="sm"
-                      variant="link"
-                      style={{ height: "max-content", width: 10 }}
-                    >
-                      <Trash size={18} />
-                    </a>
+                  <Col xs={10} className="px-3  ">
+                    <Row>
+                      <Col xs={10}>
+                        <div className="d-flex flex-column justify-content-center  flex-grow-1 ">
+                          <Card.Text className="my-0">
+                            {img.file?.type}
+                          </Card.Text>
+                          <Card.Text className="my-0">
+                            {img.file?.name}
+                          </Card.Text>
+                        </div>
+                      </Col>
+                      <Col xs={2}>
+                        <a
+                          href="#/"
+                          onClick={e => {
+                            e.preventDefault();
+                            handleRemove(img);
+                          }}
+                          size="sm"
+                          variant="link"
+                          style={{ height: "max-content", width: 10 }}
+                        >
+                          <Trash size={18} />
+                        </a>
+                      </Col>
+                    </Row>
                   </Col>
                 </Row>
               </Card>
