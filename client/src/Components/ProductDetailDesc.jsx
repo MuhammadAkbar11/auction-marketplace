@@ -1,9 +1,10 @@
 import React from "react";
-import { Col, Container, Row, Tabs, Tab, Nav } from "react-bootstrap";
+import { Col, Container, Row, Tab, Nav, Table } from "react-bootstrap";
 
-const ProductDetailDesc = ({ loading, auction }) => {
+const ProductDetailDesc = ({ loading, auction, listBid }) => {
   const [key, setKey] = React.useState("home");
 
+  const seen = new Set();
   return (
     <section className="description-review-wrapper ">
       <Container fluid className="px-md-8">
@@ -29,7 +30,38 @@ const ProductDetailDesc = ({ loading, auction }) => {
                   />
                 </Tab.Pane>
                 <Tab.Pane eventKey="des-details2">
-                  <div className=" font-weight-light ">Riwayat Penawaran</div>
+                  {/* <div className=" font-weight-light ">
+
+                  </div> */}
+                  <Table striped bordered hover size="sm">
+                    <thead>
+                      <tr>
+                        <th>Harga Penawaran</th>
+                        <th>Waktu Penawaran</th>
+                        <th>Bidder</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {listBid.length !== 0 &&
+                        listBid
+                          .filter(el => {
+                            const duplicate = seen.has(el.id_tawaran);
+                            seen.add(el.id_tawaran);
+                            return !duplicate;
+                          })
+                          .map(bid => {
+                            return (
+                              <tr key={bid.id_tawaran}>
+                                {/* <td>1</td> */}
+                                <td>Rp. {bid.nilai_tawaran}</td>
+                                <td>{bid.tgl_tawaran}</td>
+                                <td>{bid?.member?.username}</td>
+                              </tr>
+                            );
+                          })}
+                      {/*  */}
+                    </tbody>
+                  </Table>
                 </Tab.Pane>
                 <Tab.Pane eventKey="des-details3">
                   <h4 className=" font-weight-light ">Diskusi produk</h4>
