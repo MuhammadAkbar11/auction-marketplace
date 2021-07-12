@@ -4,3 +4,7 @@ export const checkProperties = obj => {
   }
   return false;
 };
+
+export const isEmptyObj = obj => {
+  return !Object.values(obj).some(element => element === null);
+};
