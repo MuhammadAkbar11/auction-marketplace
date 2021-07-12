@@ -1,75 +1,20 @@
 import React from "react";
 import { Alert, Button, Card, Table } from "react-bootstrap";
 import { Info, PencilLine, Trash } from "phosphor-react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getUserAuctionAction,
-  getUserAuctionsActiveAction,
-} from "../../actions/user.actions";
-import { axiosConfigAuth } from "../../utils/axiosConfig";
-import axios from "axios";
 import Loader from "../UI/Loader";
 import { Link } from "react-router-dom";
 
-const UserActiveAuctionsTab = ({ isActive }) => {
-  const dispatch = useDispatch();
-
-  React.useEffect(() => {
-    if (isActive) {
-      dispatch(getUserAuctionsActiveAction());
-    }
-  }, [isActive]);
-
-  const { userInfo } = useSelector(state => state.authUser);
-  const userAuctionState = useSelector(state => state.userAuction);
-  const allAuctions = userAuctionState?.active;
-
-  const [loading, setLoading] = React.useState(false);
-  const [message, setMessage] = React.useState({
-    show: false,
-    type: "danger",
-    message: "",
-  });
-
-  const handleCloseAuction = async id => {
-    const config = axiosConfigAuth(userInfo.token);
-    setLoading(true);
-    try {
-      const setClose = await axios.put(
-        "/api/user/auction/close",
-        { id_lelang: id },
-        config
-      );
-      setMessage({
-        show: true,
-        type: "success",
-        message: setClose?.data?.message,
-      });
-      dispatch(getUserAuctionsActiveAction());
-      setLoading(false);
-    } catch (error) {
-      setMessage({ show: true, type: "danger", message: error.message });
-      setLoading(false);
-    }
-  };
-
+const UserActiveAuctionsTab = ({
+  auctions,
+  handleDelete,
+  delLoading,
+  handleClose,
+  closeLoading,
+}) => {
   return (
     <Card className="mt-4">
       <Card.Header className="bg-transparent pt-4 text-dark text-uppercase font-weight-bold">
-        <Card.Title>Leleng Aktif</Card.Title>
-        {message.show && (
-          <div className="my-3 text-capitalize font-weight-normal">
-            <Alert
-              variant={message.type}
-              onClose={() =>
-                setMessage({ show: false, message: "", type: "danger" })
-              }
-              dismissible
-            >
-              {message.message}
-            </Alert>
-          </div>
-        )}
+        <Card.Title>Lelang Aktif</Card.Title>
       </Card.Header>
 
       <Card.Body>
@@ -87,7 +32,7 @@ const UserActiveAuctionsTab = ({ isActive }) => {
             </tr>
           </thead>
           <tbody>
-            {!allAuctions ? (
+            {!auctions ? (
               <tr>
                 <td colSpan={7}>
                   <Alert variant="info" className="text-center">
@@ -95,13 +40,13 @@ const UserActiveAuctionsTab = ({ isActive }) => {
                   </Alert>
                 </td>
               </tr>
-            ) : allAuctions?.loading ? (
+            ) : auctions?.loading ? (
               <tr>
                 <td colSpan={7}>
                   <Loader size={20} />
                 </td>
               </tr>
-            ) : allAuctions.data?.length === 0 ? (
+            ) : auctions.data?.length === 0 ? (
               <tr>
                 <td colSpan={7}>
                   <Alert variant="info" className="text-center">
@@ -110,35 +55,76 @@ const UserActiveAuctionsTab = ({ isActive }) => {
                 </td>
               </tr>
             ) : (
-              allAuctions?.data?.map(ac => {
+              auctions?.data?.map(ac => {
                 return (
                   <tr key={ac.id_lelang}>
-                    <td>{ac.judul}</td>
+                    <td>
+                      <Link to={`/item/${ac.id_lelang}`}>{ac.judul}</Link>
+                    </td>
                     <td className="text-nowrap">{ac.tgl_mulai}</td>
                     <td className="text-nowrap">{ac.tgl_selesai}</td>
-                    <td>0</td>
-                    <td>-</td>
-                    <td>
-                      <Link
-                        className="btn btn-teal btn-sm"
-                        to={`/akun/edit-lelang/${ac.id_lelang}?tab=active`}
-                      >
-                        <PencilLine size={18} />
-                      </Link>
+                    <td className="text-success">
+                      {ac?.tawaran.length} Tawaran
+                    </td>
+                    <td className="  font-weight-normal text-black-50 ">
+                      {ac?.tawaran.length !== 0 ? (
+                        <>
+                          <span className="text-primary">
+                            Rp. {ac?.tawaran[0].nilai_tawaran}
+                          </span>{" "}
+                          <br />
+                          (By {ac?.tawaran[0]?.member?.username})
+                        </>
+                      ) : (
+                        "-"
+                      )}
                     </td>
                     <td>
-                      <Button variant="danger" size="sm">
-                        <Trash size={18} />
-                      </Button>
+                      {ac?.tawaran.length === 0 ? (
+                        <Link
+                          className="btn btn-teal btn-sm"
+                          to={`/akun/edit-lelang/${ac.id_lelang}?tab=active`}
+                        >
+                          <PencilLine size={18} />
+                        </Link>
+                      ) : (
+                        <div className="text-primary text-center">
+                          <Info size={25} />
+                        </div>
+                      )}
+                    </td>
+                    <td>
+                      {ac?.tawaran.length === 0 ? (
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleDelete(ac.id_lelang)}
+                          disabled={delLoading}
+                        >
+                          {delLoading ? (
+                            <Loader size={18} variant="light" />
+                          ) : (
+                            <Trash size={18} />
+                          )}
+                        </Button>
+                      ) : (
+                        <div className="text-primary text-center">
+                          <Info size={25} />
+                        </div>
+                      )}
                     </td>
                     <td>
                       <Button
-                        disabled={loading}
-                        onClick={() => handleCloseAuction(ac.id_lelang)}
+                        disabled={closeLoading}
+                        onClick={() => handleClose(ac.id_lelang)}
                         variant="primary"
                         size="sm"
                       >
-                        Tutup
+                        {closeLoading ? (
+                          <Loader variant="light" size={18} />
+                        ) : (
+                          "Tutup"
+                        )}
                       </Button>
                     </td>
                   </tr>

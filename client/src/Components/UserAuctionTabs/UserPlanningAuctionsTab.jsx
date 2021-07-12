@@ -8,16 +8,10 @@ import axios from "axios";
 import Loader from "../UI/Loader";
 import { Link } from "react-router-dom";
 
-const UserPlanningAuctionsTab = () => {
+const UserPlanningAuctionsTab = ({ handleDelete, delLoading, auctions }) => {
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
-    dispatch(getUserAuctionAction());
-  }, []);
-
   const { userInfo } = useSelector(state => state.authUser);
-  const userAuctionState = useSelector(state => state.userAuction);
-  const allAuctions = userAuctionState?.planning;
 
   const [loading, setLoading] = React.useState(false);
   const [message, setMessage] = React.useState({
@@ -25,7 +19,6 @@ const UserPlanningAuctionsTab = () => {
     type: "danger",
     message: "",
   });
-  // const [setA]
 
   const handleStartAuction = async id => {
     const config = axiosConfigAuth(userInfo.token);
@@ -81,13 +74,13 @@ const UserPlanningAuctionsTab = () => {
             </tr>
           </thead>
           <tbody>
-            {allAuctions?.loading ? (
+            {auctions?.loading ? (
               <tr>
                 <td colSpan={7}>
                   <Loader size={20} />
                 </td>
               </tr>
-            ) : allAuctions.data?.length === 0 ? (
+            ) : auctions.data?.length === 0 ? (
               <tr>
                 <td colSpan={7}>
                   <Alert variant="info" className="text-center">
@@ -96,10 +89,12 @@ const UserPlanningAuctionsTab = () => {
                 </td>
               </tr>
             ) : (
-              allAuctions.data?.map(ac => {
+              auctions.data?.map(ac => {
                 return (
                   <tr key={ac.id_lelang}>
-                    <td>{ac.judul}</td>
+                    <td>
+                      <Link to={`/item/${ac.id_lelang}`}>{ac.judul}</Link>
+                    </td>
                     <td className="text-nowrap">{ac.tgl_mulai}</td>
                     <td className="text-nowrap">{ac.tgl_selesai}</td>
                     <td>
@@ -111,8 +106,17 @@ const UserPlanningAuctionsTab = () => {
                       </Link>
                     </td>
                     <td>
-                      <Button variant="danger" size="sm">
-                        <Trash size={18} />
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        onClick={() => handleDelete(ac.id_lelang)}
+                        disabled={delLoading}
+                      >
+                        {delLoading ? (
+                          <Loader size={18} variant="light" />
+                        ) : (
+                          <Trash size={18} />
+                        )}
                       </Button>
                     </td>
                     <td>
