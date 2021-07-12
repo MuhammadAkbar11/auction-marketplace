@@ -16,10 +16,19 @@ import CreateAuction from "./Pages/User/CreateAuction";
 import UpdateAuction from "./Pages/User/UpdateAuction";
 import DetailsAuction from "./Pages/DetailsAuction";
 
+import AdminPublicRoute from "./Components/Route/AdminPublicRoute";
+import AdminLoginPage from "./Pages/Admin/AdminLoginPage";
+import AdminPrivateRoute from "./Components/Route/AdminPrivateRoute";
+import Dashboard from "./Pages/Admin/Dashboard";
+import AdminKategori from "./Pages/Admin/Kategori";
+import Users from "./Pages/Admin/Users";
+import AdminComingSoon from "./Pages/Admin/AdminComingSoon";
+import MyBid from "./Pages/User/MyBid";
+import TransactionRepot from "./Pages/Admin/TransactionRepot";
+
 function App() {
   return (
-    <Layout>
-      <Header />
+    <>
       <Switch>
         <Route exact path="/" component={Home} />
         <PublicRoute
@@ -34,6 +43,7 @@ function App() {
         />
         <PrivateRoute path="/akun/dashboard" component={UserDashboard} />
         <PrivateRoute path="/akun/lelang" component={UserAuction} />
+        <PrivateRoute path="/akun/pembelian" component={MyBid} />
         <PrivateRoute path="/akun/buat-lelang" component={CreateAuction} />
         <PrivateRoute
           path="/akun/edit-lelang/:idAuction"
@@ -42,9 +52,32 @@ function App() {
         <PrivateRoute path="/akun/info" component={Profile} />
         <Route path="/lelang" component={ListAuction} />
         <Route path="/item/:itemId" component={DetailsAuction} />
+        {/* Admin */}
+        {/* <AdminP */}
+        <AdminPublicRoute
+          path="/administrator/login"
+          restricted={true}
+          component={AdminLoginPage}
+        />
+        <AdminPrivateRoute
+          path="/administrator/dashboard"
+          component={Dashboard}
+        />
+        <AdminPrivateRoute
+          path="/administrator/kategori"
+          component={AdminKategori}
+        />
+        <AdminPrivateRoute path="/administrator/anggota" component={Users} />
+        <AdminPrivateRoute
+          path="/administrator/lelang"
+          component={AdminComingSoon}
+        />
+        <AdminPrivateRoute
+          path="/administrator/laporan-transaksi"
+          component={TransactionRepot}
+        />
       </Switch>
-      <Footer />
-    </Layout>
+    </>
   );
 }
 
