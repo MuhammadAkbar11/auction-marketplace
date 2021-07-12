@@ -97,7 +97,12 @@ const ProductCard = ({ auction }) => {
         <div className="product-price-2 text-primary py-2">
           <small className="text-dark mb-0 ">Bid saat ini</small>
           <br />
-          <span>{auction.price}</span>
+          <span>
+            Rp.{" "}
+            {auction.tawaran.length !== 0
+              ? auction.tawaran[0].nilai_tawaran
+              : auction?.hrg_awal}
+          </span>
         </div>
       </div>
       <div className="product-content-wrap-2 product-content-position text-center">
@@ -116,7 +121,7 @@ const ProductCard = ({ auction }) => {
             Rp.{" "}
             {auction.tawaran.length !== 0
               ? auction.tawaran[0].nilai_tawaran
-              : 0}
+              : auction?.hrg_awal}
           </span>
         </div>
         <div className="d-flex flex-column justify-content-between align-items-center">

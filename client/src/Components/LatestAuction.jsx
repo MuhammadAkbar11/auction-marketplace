@@ -75,7 +75,7 @@ const LatestAuction = () => {
 
   return (
     <>
-      <Container fluid className="px-md-8">
+      <Container fluid className="px-md-8 mt-6">
         <SectionTitle title="Lelang Terbaru" actionText="Semua Produk" />
         {loading ? (
           <div className=" d-flex w-100 justify-content-center ">
@@ -83,8 +83,10 @@ const LatestAuction = () => {
             <Loader variant="light" />
           </div>
         ) : latestAuction.length === 0 ? (
-          <div>
-            <h2>Empty</h2>
+          <div className="d-flex justify-content-center w-100">
+            <h5 className=" text-black-50 text-capitalize text-spacing-0 ">
+              Belum ada lelang terbaru
+            </h5>
           </div>
         ) : (
           <>
@@ -165,7 +167,7 @@ const LatestAuction = () => {
                                 Rp.{" "}
                                 {item.tawaran.length !== 0
                                   ? item.tawaran[0].nilai_tawaran
-                                  : 0}
+                                  : item.hrg_awal}
                               </span>
                             </div>
                           </div>
@@ -195,9 +197,9 @@ const LatestAuction = () => {
                               <br />
                               <span className="text-primary">
                                 Rp.{" "}
-                                {item.tawaran.length !== 0
-                                  ? item.tawaran[0].nilai_tawaran
-                                  : 0}
+                                {item?.tawaran.length !== 0
+                                  ? item?.tawaran[0].nilai_tawaran
+                                  : item.hrg_awal}
                               </span>
                             </div>
                             <div className="d-flex flex-column ">
@@ -238,13 +240,13 @@ const LatestAuction = () => {
                 }}
                 slidesPerView={6}
                 onSwiper={swiper => {
-                  setTimeout(() => {
-                    swiper.params.navigation.prevEl = navigationPrevRef.current;
-                    swiper.params.navigation.nextEl = navigationNextRef.current;
-                    swiper.navigation.destroy();
-                    swiper.navigation.init();
-                    swiper.navigation.update();
-                  });
+                  // setTimeout(() => {
+                  swiper.params.navigation.prevEl = navigationPrevRef.current;
+                  swiper.params.navigation.nextEl = navigationNextRef.current;
+                  swiper.navigation.destroy();
+                  swiper.navigation.init();
+                  swiper.navigation.update();
+                  // });
                 }}
                 className="latest-product-slider"
               >
@@ -322,7 +324,9 @@ const LatestAuction = () => {
                             <small className="text-dark">Bid saat ini </small>
                             <br />
                             <span className="text-primary">
-                              {item.tawaran || 0}
+                              {item.tawaran.length !== 0
+                                ? item.tawaran[0]?.nilai_tawaran
+                                : item.hrg_awal}
                             </span>
                           </div>
                         </div>
@@ -351,9 +355,9 @@ const LatestAuction = () => {
                             <small className="text-dark">Bid saat ini </small>
                             <br />
                             <span className="text-primary">
-                              {/* {item.tawaran.length !== 0
+                              {item.tawaran.length !== 0
                                 ? item.tawaran[0]?.nilai_tawaran
-                                : 0} */}
+                                : item.hrg_awal}
                             </span>
                           </div>
                           <div className="d-flex flex-column ">

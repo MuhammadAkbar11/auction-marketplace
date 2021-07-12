@@ -14,8 +14,6 @@ const ProductDetailImage = ({ images, loading }) => {
 
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
-  // const images = dumbImages;
-  console.log(images);
   return (
     <div className="product-details-tab">
       {images.length > 1 ? (
