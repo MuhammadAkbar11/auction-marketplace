@@ -16,6 +16,9 @@ import {
   userAuctionResetMessageAction,
 } from "../../actions/user.actions";
 import Layout from "../../Components/Layouts/Layout";
+import UserSoldOutTab from "../../Components/UserAuctionTabs/UserSoldOutAuctionsTab";
+import UserPaymentProofTab from "../../Components/UserAuctionTabs/UserPaymentProofTab";
+import UserCompleteListAuctionTab from "../../Components/UserAuctionTabs/UserCompleteListAuctionTab";
 
 const UserAuction = props => {
   const { match, location } = props;
@@ -38,6 +41,8 @@ const UserAuction = props => {
   // if
   React.useEffect(() => {
     if (message) {
+      dispatch(getUserAuctionsActiveAction());
+      dispatch(getUserAuctionAction());
       setTimeout(() => {
         dispatch(userAuctionResetMessageAction());
       }, 7000);
@@ -47,12 +52,13 @@ const UserAuction = props => {
   const handleDelete = id => {
     // console.log(object);
     dispatch(userAuctionDeleteAction(id));
-    console.log(id);
   };
 
   const handleClose = id => {
     dispatch(userAuctionCloseAction(id));
   };
+
+  const soldOut = [];
 
   return (
     <Layout>
@@ -89,6 +95,21 @@ const UserAuction = props => {
                       Aktif
                     </Nav.Link>
                   </LinkContainer>
+                  <LinkContainer to={`${match.path}?tab=complete`}>
+                    <Nav.Link eventKey="complete" className="text-center">
+                      Selesai
+                    </Nav.Link>
+                  </LinkContainer>
+                  <LinkContainer to={`${match.path}?tab=payment`}>
+                    <Nav.Link eventKey="payment" className="text-center">
+                      Bukti Pembayaran
+                    </Nav.Link>
+                  </LinkContainer>
+                  <LinkContainer to={`${match.path}?tab=sold`}>
+                    <Nav.Link eventKey="sold" className="text-center">
+                      Barang Terjual
+                    </Nav.Link>
+                  </LinkContainer>
                   {/* </Nav.Item> */}
                 </Nav>
               </Card>
@@ -104,6 +125,12 @@ const UserAuction = props => {
                     delLoading={deleteAuction.loading}
                     handleDelete={handleDelete}
                   />
+                  <Link
+                    to={`/akun/buat-lelang`}
+                    className="btn btn-primary mt-3"
+                  >
+                    Buat Lelang anda
+                  </Link>
                 </Tab.Pane>
                 <Tab.Pane eventKey="active">
                   <UserActiveAuctionsTab
@@ -114,12 +141,34 @@ const UserAuction = props => {
                     handleDelete={handleDelete}
                     handleClose={handleClose}
                   />
+                  <Link
+                    to={`/akun/buat-lelang`}
+                    className="btn btn-primary mt-3"
+                  >
+                    Buat Lelang anda
+                  </Link>
+                </Tab.Pane>
+                <Tab.Pane eventKey="complete">
+                  <UserCompleteListAuctionTab />
+                </Tab.Pane>
+                <Tab.Pane eventKey="payment">
+                  <UserPaymentProofTab
+                    isActive={tabKey === "payment"}
+                    closeLoading={closeAuctionState.loading}
+                    handleClose={handleClose}
+                  />
+                </Tab.Pane>
+
+                <Tab.Pane eventKey="sold">
+                  <UserSoldOutTab
+                    // auctions={soldOut}
+                    isActive={tabKey === "sold"}
+                    closeLoading={closeAuctionState.loading}
+                    handleClose={handleClose}
+                  />
                 </Tab.Pane>
               </Tab.Content>
             </Tab.Container>
-            <Link to={`/akun/buat-lelang`} className="btn btn-primary mt-3">
-              Buat Lelang anda
-            </Link>
           </Col>
         </Row>
       </Container>

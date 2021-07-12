@@ -27,6 +27,9 @@ import {
   USER_ACTIVE_AUCTION_REQ,
   USER_ACTIVE_AUCTION_SUCCESS,
   USER_ACTIVE_AUCTION_FAIL,
+  USER_COMPLETE_LIST_AUCTION_REQ,
+  USER_COMPLETE_LIST_AUCTION_SUCCESS,
+  USER_COMPLETE_LIST_AUCTION_FAIL,
   USER_AUCTION_MESSAGE,
   USER_AUCTION_RESET_MESSAGE,
   USER_DELETE_AUCTION_REQ,
@@ -190,6 +193,21 @@ export const userAuctionReducer = (state = userActionInitState, action) => {
       return {
         ...state,
         active: action.payload,
+      };
+    case USER_COMPLETE_LIST_AUCTION_REQ:
+      return {
+        ...state,
+        completeList: action.payload,
+      };
+    case USER_COMPLETE_LIST_AUCTION_SUCCESS:
+      return {
+        ...state,
+        completeList: action.payload,
+      };
+    case USER_COMPLETE_LIST_AUCTION_FAIL:
+      return {
+        ...state,
+        completeList: action.payload,
       };
     case USER_AUCTION_MESSAGE:
       return {

@@ -28,6 +28,9 @@ import {
   USER_ACTIVE_AUCTION_REQ,
   USER_ACTIVE_AUCTION_SUCCESS,
   USER_ACTIVE_AUCTION_FAIL,
+  USER_COMPLETE_LIST_AUCTION_REQ,
+  USER_COMPLETE_LIST_AUCTION_SUCCESS,
+  USER_COMPLETE_LIST_AUCTION_FAIL,
   USER_UPDATE_PROFILE_RESET,
   USER_AUCTION_MESSAGE,
   USER_AUCTION_RESET_MESSAGE,
@@ -592,6 +595,63 @@ export const getUserAuctionsActiveAction = () => async (dispatch, getState) => {
   }
 };
 
+export const getUserAuctionsCompleteAction =
+  () => async (dispatch, getState) => {
+    const {
+      authUser: { userInfo },
+    } = getState();
+
+    dispatch({
+      type: USER_COMPLETE_LIST_AUCTION_REQ,
+      payload: {
+        loading: true,
+      },
+    });
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        "/api/user/auction?status=complete",
+        config
+      );
+      dispatch({
+        type: USER_COMPLETE_LIST_AUCTION_SUCCESS,
+        payload: {
+          loading: false,
+          data: data.lelang,
+          error: null,
+        },
+      });
+    } catch (error) {
+      let errData = {
+        message: error.message,
+      };
+
+      if (error.response && error.response.data.message) {
+        const errorData =
+          error.response.data.errors && error.response.data.errors;
+        errData = {
+          message: error.response.data.message,
+          ...errorData,
+        };
+      }
+
+      dispatch({
+        type: USER_COMPLETE_LIST_AUCTION_FAIL,
+        payload: {
+          error: errData,
+          loading: false,
+        },
+      });
+    }
+  };
+
 export const userAuctionDeleteAction = id => async (dispatch, getState) => {
   dispatch({
     type: USER_DELETE_AUCTION_REQ,
@@ -674,24 +734,27 @@ export const userAuctionCloseAction = id => async (dispatch, getState) => {
       authUser: { userInfo },
     } = getState();
 
-    const config = axiosConfigAuth(userInfo.token);
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
 
-    console.log(config, id);
+    const { data } = await axios.get("/api/user/auction/close/" + id, config);
 
-    const { data } = await axios.put("/api/user/auction/close/" + id, config);
-    console.log(data, "put");
-    setTimeout(() => {
-      dispatch({
-        type: USER_CLOSE_AUCTION_SUCCESS,
-      });
-      dispatch({
-        type: USER_AUCTION_MESSAGE,
-        payload: {
-          type: "success",
-          text: "Berhasil menutup lelang!",
-        },
-      });
-    }, 3000);
+    // setTimeout(() => {
+    dispatch({
+      type: USER_CLOSE_AUCTION_SUCCESS,
+    });
+    dispatch({
+      type: USER_AUCTION_MESSAGE,
+      payload: {
+        type: "success",
+        text: "Berhasil menutup lelang!",
+      },
+    });
+    // }, 3000);
   } catch (error) {
     dispatch({
       type: USER_CLOSE_AUCTION_FAIL,
