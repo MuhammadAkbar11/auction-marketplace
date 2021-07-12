@@ -115,6 +115,15 @@ export const authRegisterAction = values => async dispatch => {
   }
 };
 
+export const authLoginErrorMessageAction = message => dispatch => {
+  dispatch({
+    type: AUTH_LOGIN_FAIL,
+    payload: {
+      message: message,
+    },
+  });
+};
+
 export const authResetErrorAction =
   (type = "login") =>
   dispatch => {
@@ -132,4 +141,5 @@ export const authResetErrorAction =
 export const authLogoutAuction = () => dispatch => {
   setLogout();
   dispatch({ type: AUTH_REMOVE_USER, payload: null });
+  document.location.href = "/";
 };
