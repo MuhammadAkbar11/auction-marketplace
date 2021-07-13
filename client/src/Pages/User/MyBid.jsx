@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import BreadcrumbsContainer from "../../Components/Layouts/BreadcrumbsContainer";
 import Layout from "../../Components/Layouts/Layout";
 import UserSidebarMenu from "../../Components/UserMenuLayout/UserSidebarMenu";
+import UserMyBidsTab from "../../Components/UserMyPurchaseTabs/UserMyBidsTab";
 
 const MyBid = props => {
   const { match, location } = props;
@@ -17,7 +18,6 @@ const MyBid = props => {
   const message = null;
   return (
     <Layout>
-      <h1>Tawaran saya</h1>
       <BreadcrumbsContainer
         items={[
           { title: "Home", url: "/" },
@@ -66,9 +66,7 @@ const MyBid = props => {
                   </div>
                 </Tab.Pane>
                 <Tab.Pane eventKey="mybids">
-                  <div>
-                    <h1>My Bids</h1>
-                  </div>
+                  <UserMyBidsTab />
                 </Tab.Pane>
               </Tab.Content>
             </Tab.Container>
