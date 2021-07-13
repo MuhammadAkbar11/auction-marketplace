@@ -559,3 +559,27 @@ export const postCloseAuction = asyncHandler(async (req, res) => {
     throw new ResponseError(error.statusCode, error.message, error.errors);
   }
 });
+
+export const postConfirmBid = asyncHandler(async (req, res) => {
+  const idTawaran = req.body.id_tawaran;
+
+  try {
+    const bid = await ModelPenawaran.update(
+      { status_tawaran: 1 },
+      {
+        where: {
+          id_tawaran: idTawaran,
+        },
+      }
+    );
+
+    res.status(201).json({
+      tawaran: bid,
+      status: true,
+      message: "Berhasil mengkonfirmasi",
+    });
+  } catch (error) {
+    console.log(error);
+    throw new ResponseError(error.statusCode, error.message, error.errors);
+  }
+});

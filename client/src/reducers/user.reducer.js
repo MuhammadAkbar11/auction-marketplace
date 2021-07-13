@@ -38,6 +38,9 @@ import {
   USER_CLOSE_AUCTION_REQ,
   USER_CLOSE_AUCTION_SUCCESS,
   USER_CLOSE_AUCTION_FAIL,
+  USER_CONFIRM_BID_REQ,
+  USER_CONFIRM_BID_SUCCESS,
+  USER_CONFIRM_BID_FAIL,
 } from "../constants/user.contanst";
 
 export const userDetailsReducer = (
@@ -328,6 +331,31 @@ export const userCloseAuctionReducer = (
         success: action.payload,
       };
     case USER_CLOSE_AUCTION_FAIL:
+      return {
+        ...action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+export const userConfirmBidReducer = (
+  state = {
+    loading: false,
+  },
+  action
+) => {
+  switch (action.type) {
+    case USER_CONFIRM_BID_REQ:
+      return {
+        loading: true,
+      };
+    case USER_CONFIRM_BID_SUCCESS:
+      return {
+        loading: false,
+        // success: action.payload,
+      };
+    case USER_CONFIRM_BID_FAIL:
       return {
         ...action.payload,
       };

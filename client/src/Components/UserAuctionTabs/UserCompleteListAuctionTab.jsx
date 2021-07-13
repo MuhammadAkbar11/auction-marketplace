@@ -1,21 +1,31 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Alert, Card, Table } from "react-bootstrap";
+import { Alert, Card, Table, Button } from "react-bootstrap";
 import { Info } from "phosphor-react";
 import Loader from "../UI/Loader";
 import { Link } from "react-router-dom";
-import { getUserAuctionsCompleteAction } from "../../actions/user.actions";
+import {
+  getUserAuctionsCompleteAction,
+  postUserConfirmBid,
+} from "../../actions/user.actions";
 
 const UserCompleteListAuctionTab = () => {
   const dispatch = useDispatch();
 
   const userAuctionState = useSelector(state => state.userAuction);
+  const userConfirmBidState = useSelector(state => state.userConfirmBid);
 
   const auctions = userAuctionState?.completeList;
+
+  const loadingConfirm = userConfirmBidState.loading;
 
   React.useEffect(() => {
     dispatch(getUserAuctionsCompleteAction());
   }, []);
+
+  const confirmBidHandler = idBid => {
+    dispatch(postUserConfirmBid(idBid));
+  };
 
   return (
     <Card className="mt-4">
@@ -32,6 +42,7 @@ const UserCompleteListAuctionTab = () => {
               <th>Berakhir</th>
               <th>Total Bids</th>
               <th>Tawaran tertinggi</th>
+              <th>Konfirmasi</th>
             </tr>
           </thead>
           <tbody>
@@ -77,6 +88,27 @@ const UserCompleteListAuctionTab = () => {
                           </span>{" "}
                           <br />
                           (By {ac?.tawaran[0]?.member?.username})
+                        </>
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                    <td>
+                      {ac?.tawaran.length !== 0 ? (
+                        <>
+                          {ac?.tawaran[0].status_tawaran === 0 ? (
+                            <Button
+                              disabled={loadingConfirm}
+                              onClick={() =>
+                                confirmBidHandler(ac?.tawaran[0].id_tawaran)
+                              }
+                              size="sm"
+                            >
+                              Konfirmasi
+                            </Button>
+                          ) : (
+                            <span>Sudah dikonfirmasi</span>
+                          )}
                         </>
                       ) : (
                         "-"

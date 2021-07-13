@@ -40,6 +40,9 @@ import {
   USER_CLOSE_AUCTION_REQ,
   USER_CLOSE_AUCTION_SUCCESS,
   USER_CLOSE_AUCTION_FAIL,
+  USER_CONFIRM_BID_REQ,
+  USER_CONFIRM_BID_SUCCESS,
+  USER_CONFIRM_BID_FAIL,
 } from "../constants/user.contanst";
 import { axiosConfigAuth } from "../utils/axiosConfig";
 
@@ -651,6 +654,80 @@ export const getUserAuctionsCompleteAction =
       });
     }
   };
+
+export const postUserConfirmBid = idBid => async (dispatch, getState) => {
+  const {
+    authUser: { userInfo },
+  } = getState();
+
+  dispatch({
+    type: USER_CONFIRM_BID_REQ,
+    payload: {
+      loading: true,
+    },
+  });
+
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    await axios.post(
+      "/api/user/auction/confirm-bid",
+      { id_tawaran: idBid },
+      config
+    );
+
+    dispatch(getUserAuctionsCompleteAction());
+
+    dispatch({
+      type: USER_CONFIRM_BID_SUCCESS,
+      payload: {
+        loading: false,
+        error: null,
+      },
+    });
+    dispatch({
+      type: USER_AUCTION_MESSAGE,
+      payload: {
+        type: "success",
+        text: "Berhasil Konfirmasi!",
+      },
+    });
+  } catch (error) {
+    let errData = {
+      message: error.message,
+    };
+    console.log(error);
+
+    if (error.response && error.response.data.message) {
+      const errorData =
+        error.response.data.errors && error.response.data.errors;
+      errData = {
+        message: error.response.data.message,
+        ...errorData,
+      };
+    }
+
+    dispatch({
+      type: USER_CONFIRM_BID_FAIL,
+      payload: {
+        error: errData,
+        loading: false,
+      },
+    });
+    dispatch({
+      type: USER_AUCTION_MESSAGE,
+      payload: {
+        type: "danger",
+        text: "Gagal menghapus data!",
+      },
+    });
+  }
+};
 
 export const userAuctionDeleteAction = id => async (dispatch, getState) => {
   dispatch({

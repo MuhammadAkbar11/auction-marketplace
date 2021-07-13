@@ -10,6 +10,7 @@ import {
   getAuctionDetails,
   postDeleteAuction,
   postCloseAuction,
+  postConfirmBid,
 } from "../controller/user.controllers.js";
 import { getUserBids } from "../controller/user.purchase.controller.js";
 import { protect } from "../middleware/auth.middlerware.js";
@@ -37,6 +38,7 @@ router.put("/auction/start", protect, postUserStartAuction);
 router.get("/auction/:auctionId", protect, getAuctionDetails);
 router.delete("/auction/:auctionId", protect, postDeleteAuction);
 router.get("/auction/close/:auctionId", protect, postCloseAuction);
+router.post("/auction/confirm-bid", protect, postConfirmBid);
 
 router.get("/mybids", protect, getUserBids);
 
