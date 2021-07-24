@@ -17,7 +17,7 @@ const foreignKeysData = {
   },
   idTawaran: {
     name: "id_tawaran",
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING(12),
   },
   idTransaksi: {
     name: "id_transaksi",

@@ -133,7 +133,7 @@ export default io => {
         currentBid.setDataValue("tgl_tawaran", dateBid);
 
         io.to("bid-room-" + id_lelang).emit("current-bid", currentBid);
-        console.log(currentBid);
+
         callback &&
           callback(
             { status: true, message: "Berhasil", isLastBid, bid: currentBid },
@@ -145,6 +145,7 @@ export default io => {
         });
       }
     } catch (error) {
+      console.log(error);
       const err = {
         statusCode: error.statusCode,
         message: error.message,
@@ -194,6 +195,7 @@ export default io => {
           null
         );
     } catch (error) {
+      console.log(error);
       const err = {
         statusCode: error.statusCode,
         message: error.message,
@@ -225,7 +227,7 @@ export default io => {
       }
 
       const dateEnd = dayjs(auction.tgl_selesai).valueOf();
-      console.log(dateEnd);
+
       const auctionCountDown = setInterval(() => {
         const now = dayjs().valueOf();
 
@@ -254,8 +256,6 @@ export default io => {
         const hours = Math.floor((countdown % _day) / _hour);
         const minutes = Math.floor((countdown % _hour) / _minute);
         const seconds = Math.floor((countdown % _minute) / _second);
-
-        console.log(days, hours, minutes, seconds);
 
         io.emit("set-countdown-item", {
           isEnd: false,

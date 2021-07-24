@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import { Server as SocketServer } from "socket.io";
 import ModelLelang from "../models/m_lelang.js";
+import ModelPenawaran from "../models/m_penawaran.js";
 import ResponseError from "../utils/responseError.js";
 import registerAuctionHandler from "./auctionHandler.js";
 
