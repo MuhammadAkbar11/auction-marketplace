@@ -41,13 +41,16 @@ const UserAuction = props => {
   // if
   React.useEffect(() => {
     if (message) {
-      dispatch(getUserAuctionsActiveAction());
+      if (tabKey === "active") {
+        dispatch(getUserAuctionsActiveAction());
+      }
+
       dispatch(getUserAuctionAction());
       setTimeout(() => {
         dispatch(userAuctionResetMessageAction());
       }, 7000);
     }
-  }, [message]);
+  }, [message, tabKey]);
 
   const handleDelete = id => {
     // console.log(object);
@@ -149,7 +152,9 @@ const UserAuction = props => {
                   </Link>
                 </Tab.Pane>
                 <Tab.Pane eventKey="complete">
-                  <UserCompleteListAuctionTab />
+                  <UserCompleteListAuctionTab
+                    isActive={tabKey === "complete"}
+                  />
                 </Tab.Pane>
                 <Tab.Pane eventKey="payment">
                   <UserPaymentProofTab
