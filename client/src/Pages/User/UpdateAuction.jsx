@@ -11,6 +11,7 @@ import { Container, Row, Col, Card, Button, Form } from "react-bootstrap";
 import useImagesUploader from "../../hooks/useImagesUploader";
 import UserUpdateAuctionDescription from "../../Components/UserUpdateAuction/UserUpdateAuctionDescription";
 import UserUpdateAuctionRegular from "../../Components/UserUpdateAuction/UserUpdateAuctionRegular";
+import UserUpdateAuctionDelivery from "../../Components/UserUpdateAuction/UserUpdateAuctionDelivery";
 import { Redirect } from "react-router";
 import Loader from "../../Components/UI/Loader";
 import Layout from "../../Components/Layouts/Layout";
@@ -43,6 +44,10 @@ const UpdateAuction = props => {
 
   const imagesUploader = useImagesUploader();
 
+  const dimensionItem = JSON.parse(auction?.dimensi_brg);
+  const delivery = JSON.parse(auction?.alamat_barang);
+  const typeDel = JSON.parse(auction?.jenis_pengiriman);
+
   const formik = useFormik({
     validationSchema: formikSchema(auction?.status_lelang),
     validateOnBlur: false,
@@ -63,10 +68,24 @@ const UpdateAuction = props => {
       dateStart: auction?.tgl_mulai || "",
       timeStart: auction?.jam_mulai || "",
       status: auction?.status_lelang || 0,
+      id_provinsi: delivery?.id_provinsi || "",
+      id_kota: delivery?.id_kota || "",
+      id_kecamatan: delivery?.id_kecamatan || "",
+      id_kelurahan: delivery?.id_kelurahan || "",
+      alamat: delivery?.alamat || "",
+      kode_pos: delivery?.kode_pos || "",
+      jenis_pengiriman: typeDel || {
+        pickup: false,
+        courier_service: false,
+      },
+      panjang: dimensionItem?.panjang || "",
+      lebar: dimensionItem?.lebar || "",
+      tinggi: dimensionItem?.tinggi || "",
+      berat: dimensionItem?.berat || "",
+      biaya_packing: auction?.biaya_packing || "",
     },
     onSubmit: values => {
       dispatch(postUserUpdateAuctionAction(values));
-
       history.push("/akun/lelang?tab=" + tabKey);
     },
   });
@@ -123,6 +142,7 @@ const UpdateAuction = props => {
             status={auction?.status_lelang}
             formik={formik}
           />
+          <UserUpdateAuctionDelivery formik={formik} />
           <Row>
             {/* <Col md={3}>
             <UserSidebarMenu />

@@ -43,6 +43,7 @@ import {
   USER_CONFIRM_BID_REQ,
   USER_CONFIRM_BID_SUCCESS,
   USER_CONFIRM_BID_FAIL,
+  ADD_DELIVERY_AUCTION,
 } from "../constants/user.contanst";
 import { axiosConfigAuth } from "../utils/axiosConfig";
 
@@ -243,6 +244,30 @@ export const userAddAuctionDesc = value => dispatch => {
   });
 };
 
+export const userAddAuctionDelivery = values => dispatch => {
+  const data = {
+    id_provinsi: values.id_provinsi,
+    id_kota: values.id_kota,
+    id_kecamatan: values.id_kecamatan,
+    id_kelurahan: values.id_kelurahan,
+    alamat: values.alamat,
+    kode_pos: values.kode_pos,
+    jenis_pengiriman: values.jenis_pengiriman,
+    dimensi_brg: {
+      panjang: values.panjang,
+      lebar: values.lebar,
+      tinggi: values.tinggi,
+      berat: values.berat,
+    },
+    biaya_packing: values.biaya_packing,
+  };
+
+  dispatch({
+    type: ADD_DELIVERY_AUCTION,
+    payload: data,
+  });
+};
+
 export const postUserCreateAuctionAction =
   values => async (dispatch, getState) => {
     const {
@@ -251,8 +276,23 @@ export const postUserCreateAuctionAction =
     } = getState();
 
     dispatch({
-      type: ADD_TIME_PRICE_AUCTION,
-      payload: values,
+      type: ADD_DELIVERY_AUCTION,
+      payload: {
+        id_provinsi: values.id_provinsi,
+        id_kota: values.id_kota,
+        id_kecamatan: values.id_kecamatan,
+        id_kelurahan: values.id_kelurahan,
+        alamat: values.alamat,
+        kode_pos: values.kode_pos,
+        jenis_pengiriman: values.jenis_pengiriman,
+        dimensi_brg: {
+          panjang: values.panjang,
+          lebar: values.lebar,
+          tinggi: values.tinggi,
+          berat: values.berat,
+        },
+        biaya_packing: values.biaya_packing,
+      },
     });
 
     dispatch({
@@ -260,24 +300,47 @@ export const postUserCreateAuctionAction =
       payload: { loading: true },
     });
 
-    const { steps, category, description } = userCreateAuction;
+    const { steps, category, description, regular } = userCreateAuction;
 
-    const dateStart = new Date(values.dateStart);
+    const dateStart = new Date(regular.dateStart);
     let dateEnd = new Date();
-    dateEnd.setDate(dateStart.getDate() + +values.duration);
+    dateEnd.setDate(dateStart.getDate() + +regular.duration);
+
     try {
-      if (steps.step1 && steps.step2) {
+      if (steps.step1 && steps.step2 && steps.step3) {
+        const transformedValues = {
+          alamat_barang: JSON.stringify({
+            id_provinsi: values.id_provinsi,
+            id_kota: values.id_kota,
+            id_kecamatan: values.id_kecamatan,
+            id_kelurahan: values.id_kelurahan,
+            alamat: values.alamat,
+            kode_pos: values.kode_pos,
+          }),
+          jenis_pengiriman: JSON.stringify(values.jenis_pengiriman),
+          dimensi_brg: JSON.stringify({
+            panjang: values.panjang,
+            lebar: values.lebar,
+            tinggi: values.tinggi,
+            berat: values.berat,
+          }),
+          biaya_packing: values.biaya_packing,
+        };
+
         const auction = {
           judul: description.title,
           status_brg: description.status,
-          hrg_awal: values.openBid,
-          kelipatan_hrg: values.multiples,
+          hrg_awal: regular.openBid,
+          kelipatan_hrg: regular.multiples,
           id_kategori: +category,
-          batas_tawaran: values.maxBid,
+          batas_tawaran: regular.maxBid,
           deskripsi: description.description,
-          tgl_mulai: `${_dateFormat(dateStart, "strip")} ${values.timeStart}`,
-          tgl_selesai: `${_dateFormat(dateEnd, "strip")} ${values.timeStart}`,
+          tgl_mulai: `${_dateFormat(dateStart, "strip")} ${regular.timeStart}`,
+          tgl_selesai: `${_dateFormat(dateEnd, "strip")} ${regular.timeStart}`,
+          ...transformedValues,
         };
+
+        console.log(auction);
 
         const config = {
           headers: {
@@ -350,6 +413,25 @@ export const postUserUpdateAuctionAction =
     let dateEnd = new Date();
     dateEnd.setDate(dateStart.getDate() + +values.duration);
     try {
+      const transformedValues = {
+        alamat_barang: JSON.stringify({
+          id_provinsi: values.id_provinsi,
+          id_kota: values.id_kota,
+          id_kecamatan: values.id_kecamatan,
+          id_kelurahan: values.id_kelurahan,
+          alamat: values.alamat,
+          kode_pos: values.kode_pos,
+        }),
+        jenis_pengiriman: JSON.stringify(values.jenis_pengiriman),
+        dimensi_brg: JSON.stringify({
+          panjang: values.panjang,
+          lebar: values.lebar,
+          tinggi: values.tinggi,
+          berat: values.berat,
+        }),
+        biaya_packing: values.biaya_packing,
+      };
+
       const auction = {
         id_lelang: values.auctionId,
         judul: values.title,
@@ -362,8 +444,9 @@ export const postUserUpdateAuctionAction =
         tgl_mulai: `${_dateFormat(dateStart, "strip")} ${values.timeStart}`,
         tgl_selesai: `${_dateFormat(dateEnd, "strip")} ${values.timeStart}`,
         status_lelang: values.status,
+        ...transformedValues,
       };
-      console.log(auction);
+
       const config = {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -655,7 +738,7 @@ export const getUserAuctionsCompleteAction =
     }
   };
 
-export const postUserConfirmBid = idBid => async (dispatch, getState) => {
+export const postUserConfirmBid = values => async (dispatch, getState) => {
   const {
     authUser: { userInfo },
   } = getState();
@@ -675,11 +758,7 @@ export const postUserConfirmBid = idBid => async (dispatch, getState) => {
       },
     };
 
-    await axios.post(
-      "/api/user/auction/confirm-bid",
-      { id_tawaran: idBid },
-      config
-    );
+    await axios.post("/api/user/auction/confirm-bid", { ...values }, config);
 
     dispatch(getUserAuctionsCompleteAction());
 

@@ -47,6 +47,7 @@ const PriceAndTimeTab = () => {
   const formik = useFormik({
     validationSchema: formikSchema,
     enableReinitialize: true,
+    validateOnChange: false,
     initialValues: {
       openBid: timePriceState?.openBid || "",
       multiples: timePriceState?.multiples || "",
@@ -56,7 +57,8 @@ const PriceAndTimeTab = () => {
       timeStart: timePriceState?.timeStart || "",
     },
     onSubmit: values => {
-      dispatch(postUserCreateAuctionAction(values));
+      dispatch(userAddAuctionRegularData(values));
+      history.push("/akun/buat-lelang?tab=pengiriman");
     },
   });
 
@@ -77,16 +79,16 @@ const PriceAndTimeTab = () => {
     });
   }
 
-  React.useEffect(() => {
-    if (success) {
-      history.push("/akun/lelang");
-    }
-    return () => {
-      if (success) {
-        dispatch(userResetCreateAuction());
-      }
-    };
-  }, [success]);
+  // React.useEffect(() => {
+  //   if (success) {
+  //     history.push("/akun/lelang");
+  //   }
+  //   return () => {
+  //     if (success) {
+  //       dispatch(userResetCreateAuction());
+  //     }
+  //   };
+  // }, [success]);
 
   return !descriptionState ? (
     <Redirect to="/akun/buat-lelang?tab=deskripsi" />
@@ -105,31 +107,15 @@ const PriceAndTimeTab = () => {
               {" "}
               <Button
                 onClick={() => {
-                  dispatch(userAddAuctionRegularData(formik.values));
                   history.push("/akun/buat-lelang?tab=deskripsi");
                 }}
                 className="btn btn-primary"
               >
                 Kembali
               </Button>
-              <Button
-                type="submit"
-                variant="primary"
-                className="ml-2"
-                disabled={createAuctionState.loading}
-              >
-                {createAuctionState.loading ? (
-                  <>
-                    <Loader variant="light" size={11} />{" "}
-                    <span className="ml-2"> Buat Lelang</span>
-                  </>
-                ) : (
-                  "Buat Lelang"
-                )}
-              </Button>
-              {/* <Button type="submit" className="ml-2" dis>
+              <Button type="submit" className="ml-2">
                 Next
-              </Button> */}
+              </Button>
             </div>
             <Card body className="pt-3 pb-5 mb-5">
               <Row>

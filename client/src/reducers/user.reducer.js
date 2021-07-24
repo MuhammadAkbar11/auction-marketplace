@@ -41,6 +41,7 @@ import {
   USER_CONFIRM_BID_REQ,
   USER_CONFIRM_BID_SUCCESS,
   USER_CONFIRM_BID_FAIL,
+  ADD_DELIVERY_AUCTION,
 } from "../constants/user.contanst";
 
 export const userDetailsReducer = (
@@ -146,7 +147,18 @@ export const userCreateNewAuction = (
         },
         regular: action.payload,
       };
-
+    case ADD_DELIVERY_AUCTION: {
+      return {
+        ...state,
+        steps: {
+          step1: true,
+          step2: true,
+          step3: true,
+          step4: true,
+        },
+        delivery: action.payload,
+      };
+    }
     default:
       return state;
   }

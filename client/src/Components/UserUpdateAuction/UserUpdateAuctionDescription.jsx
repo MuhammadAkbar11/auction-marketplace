@@ -9,7 +9,7 @@ import {
   ListGroup,
   Card,
 } from "react-bootstrap";
-import { getCategoriesAction } from "../../actions/categories.actions";
+
 import ImageUploader from "../UI/ImageUploader";
 import { CaretDown } from "phosphor-react";
 import Loader from "../UI/Loader";
