@@ -23,9 +23,6 @@ const ModelPengiriman = sequelize.define(
     no_resi: {
       type: DataTypes.STRING,
     },
-    ongkir: {
-      type: DataTypes.STRING(128),
-    },
   },
   {
     tableName: "tbl_pengiriman",

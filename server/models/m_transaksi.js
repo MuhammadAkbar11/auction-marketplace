@@ -1,5 +1,7 @@
+import dayjs from "dayjs";
 import Sequelize from "sequelize";
 import sequelize from "../configs/database.js";
+import getAutoNumber from "../utils/getAutoNumber.js";
 
 const DataTypes = Sequelize.DataTypes;
 
@@ -9,7 +11,7 @@ const ModelTransaksi = sequelize.define(
     id_transaksi: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,
+      // autoIncrement: true,
     },
     total_hrg: {
       type: DataTypes.STRING(128),
@@ -44,8 +46,11 @@ const ModelTransaksi = sequelize.define(
     batas_waktu_bayar: {
       type: DataTypes.DATE,
     },
-    layanan_pengiriman: {
-      type: DataTypes.STRING(25),
+    ongkir: {
+      type: DataTypes.STRING(128),
+    },
+    jenis_pengiriman: {
+      type: DataTypes.STRING(128),
     },
   },
   {
@@ -55,5 +60,16 @@ const ModelTransaksi = sequelize.define(
     updatedAt: "tgl_diubah",
   }
 );
+
+ModelTransaksi.beforeBulkCreate(options => {
+  options.individualHooks = true;
+  return options;
+});
+
+ModelTransaksi.beforeCreate(async (transaksi, options) => {
+  const prefix = dayjs().format("DDMMYY");
+  const id = await getAutoNumber("tbl_transaksi", "id_transaksi", prefix, 9);
+  transaksi.id_transaksi = +id;
+});
 
 export default ModelTransaksi;

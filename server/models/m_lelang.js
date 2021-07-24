@@ -1,5 +1,7 @@
+import dayjs from "dayjs";
 import Sequelize from "sequelize";
 import sequelize from "../configs/database.js";
+import getAutoNumber from "../utils/getAutoNumber.js";
 import ModelGaleri from "./m_galeri_lelang.js";
 
 const DataTypes = Sequelize.DataTypes;
@@ -10,16 +12,16 @@ const ModelLelang = sequelize.define(
     id_lelang: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,
+      // autoIncrement: true,
     },
     judul: {
-      type: DataTypes.STRING,
-    },
-    status_brg: {
       type: DataTypes.STRING(50),
     },
+    status_brg: {
+      type: DataTypes.STRING(30),
+    },
     hrg_awal: {
-      type: DataTypes.STRING(128),
+      type: DataTypes.STRING(30),
     },
     kelipatan_hrg: {
       type: DataTypes.STRING(20), // 20.000
@@ -40,6 +42,18 @@ const ModelLelang = sequelize.define(
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
+    alamat_barang: {
+      type: DataTypes.STRING,
+    },
+    jenis_pengiriman: {
+      type: DataTypes.STRING(128),
+    },
+    dimensi_brg: {
+      type: DataTypes.STRING(128),
+    },
+    biaya_packing: {
+      type: DataTypes.STRING(30),
+    },
   },
   {
     tableName: "tbl_lelang",
@@ -47,6 +61,21 @@ const ModelLelang = sequelize.define(
     createdAt: "tgl_dibuat",
     updatedAt: "tgl_diubah",
     hooks: {
+      beforeBulkCreate: function (options) {
+        options.individualHooks = true;
+        return options;
+      },
+      beforeCreate: async function (lelang, options) {
+        const prefix = dayjs().format("DDMMYY");
+        const idAuction = await getAutoNumber(
+          "tbl_lelang",
+          "id_lelang",
+          prefix,
+          9
+        );
+        console.log(idAuction);
+        lelang.id_lelang = +idAuction;
+      },
       beforeBulkDestroy: function (options) {
         options.individualHooks = true;
         return options;
