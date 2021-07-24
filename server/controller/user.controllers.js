@@ -7,6 +7,9 @@ import ModelLelang from "../models/m_lelang.js";
 import ModelGaleri from "../models/m_galeri_lelang.js";
 import { deleteFile } from "../utils/file.js";
 import ModelPenawaran from "../models/m_penawaran.js";
+import ModelTransaksi from "../models/m_transaksi.js";
+
+const Op = Sequelize.Op;
 
 export const getUserProfile = asyncHandler(async (req, res) => {
   try {
@@ -120,6 +123,10 @@ export const postUserCreateAuction = asyncHandler(async (req, res, next) => {
       id_kategori: req.body.id_kategori,
       tgl_mulai: req.body.tgl_mulai,
       tgl_selesai: req.body.tgl_selesai,
+      alamat_barang: req.body.alamat_barang,
+      jenis_pengiriman: req.body.jenis_pengiriman,
+      dimensi_brg: req.body.dimensi_brg,
+      biaya_packing: req.body.biaya_packing,
     };
 
     const result = await ModelLelang.create({
@@ -141,6 +148,7 @@ export const postUserCreateAuction = asyncHandler(async (req, res, next) => {
       message: "Berhasil menambah lelang",
     });
   } catch (error) {
+    console.log(error);
     throw new ResponseError(error.statusCode, error.message, error.errors);
   }
 });
@@ -159,6 +167,10 @@ export const putUserUpdateAuction = asyncHandler(async (req, res, next) => {
       deskripsi: req.body.deskripsi,
       id_kategori: req.body.id_kategori,
       tgl_selesai: req.body.tgl_selesai,
+      alamat_barang: req.body.alamat_barang,
+      jenis_pengiriman: req.body.jenis_pengiriman,
+      dimensi_brg: req.body.dimensi_brg,
+      biaya_packing: req.body.biaya_packing,
     };
 
     if (req.body.status_lelang === 0) {
@@ -220,10 +232,9 @@ export const putUserUpdateAuction = asyncHandler(async (req, res, next) => {
 });
 
 export const getUserAuction = asyncHandler(async (req, res, next) => {
+  const idMember = req.user.id_member;
+  const queryStatus = req.query.status.trim();
   try {
-    const idMember = req.user.id_member;
-    const queryStatus = req.query.status.trim();
-
     let userAuctions = [];
 
     // console.log(quert);
@@ -319,7 +330,9 @@ export const getUserAuction = asyncHandler(async (req, res, next) => {
       const doneAuctions = await ModelLelang.findAll({
         where: {
           id_member: idMember,
-          status_lelang: 2,
+          status_lelang: {
+            [Op.in]: [2, 3, 4],
+          },
         },
       });
 
@@ -362,6 +375,7 @@ export const getUserAuction = asyncHandler(async (req, res, next) => {
             return {
               id_lelang: auctionData.id_lelang,
               judul: auctionData.judul,
+              status_lelang: auctionData.status_lelang,
               tgl_mulai: daysJs(auctionData.tgl_mulai).format(
                 "DD/MM/YYYY - HH:mm"
               ),
@@ -561,23 +575,52 @@ export const postCloseAuction = asyncHandler(async (req, res) => {
 });
 
 export const postConfirmBid = asyncHandler(async (req, res) => {
-  const idTawaran = req.body.id_tawaran;
+  const bidId = req.body.id_tawaran;
+  const shippingType = req.body.jenis_pengiriman;
 
   try {
-    const bid = await ModelPenawaran.update(
-      { status_tawaran: 1 },
-      {
-        where: {
-          id_tawaran: idTawaran,
-        },
-      }
-    );
-
-    res.status(201).json({
-      tawaran: bid,
-      status: true,
-      message: "Berhasil mengkonfirmasi",
+    const getBid = await ModelPenawaran.findOne({
+      where: { id_tawaran: bidId },
+      attributes: {
+        exclude: ["ModelMemberIdMember", "ModelLelangIdLelang"],
+      },
     });
+
+    if (getBid) {
+      await ModelPenawaran.update(
+        { status_tawaran: 1 },
+        {
+          where: {
+            id_tawaran: bidId,
+          },
+        }
+      );
+
+      await ModelLelang.update(
+        { status_lelang: 3 },
+        {
+          where: {
+            id_lelang: getBid.id_lelang,
+          },
+        }
+      );
+
+      const invoice = await ModelTransaksi.create({
+        status_bayar: 0,
+        batas_waktu_bayar: daysJs().add(1, "day").format("YYYY-MM-DD HH:mm:ss"),
+        id_tawaran: getBid.id_tawaran,
+        jenis_pengiriman: JSON.stringify(shippingType),
+      });
+
+      // console.log(getBid);
+
+      res.status(201).json({
+        invoice,
+        tawaran: getBid,
+        status: true,
+        message: "Berhasil mengkonfirmasi",
+      });
+    }
   } catch (error) {
     console.log(error);
     throw new ResponseError(error.statusCode, error.message, error.errors);
