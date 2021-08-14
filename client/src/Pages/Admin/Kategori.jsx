@@ -21,13 +21,14 @@ const AdminKategori = () => {
   const [categoryInput, setCategoryInput] = React.useState("");
   const [categoryError, setCategoryError] = React.useState(null);
 
+  React.useEffect(() => {
+    dispatch(getCategoriesAction());
+  }, []);
+
   const handleSubmit = e => {
     e.preventDefault();
   };
 
-  React.useEffect(() => {
-    dispatch(getCategoriesAction());
-  }, []);
   let no = 1;
   return (
     <AdminLayout>
