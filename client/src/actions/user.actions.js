@@ -31,6 +31,9 @@ import {
   USER_COMPLETE_LIST_AUCTION_REQ,
   USER_COMPLETE_LIST_AUCTION_SUCCESS,
   USER_COMPLETE_LIST_AUCTION_FAIL,
+  USER_SOLDITEM_REQ,
+  USER_SOLDITEM_SUCCESS,
+  USER_SOLDITEM_FAIL,
   USER_UPDATE_PROFILE_RESET,
   USER_AUCTION_MESSAGE,
   USER_AUCTION_RESET_MESSAGE,
@@ -44,10 +47,13 @@ import {
   USER_CONFIRM_BID_SUCCESS,
   USER_CONFIRM_BID_FAIL,
   ADD_DELIVERY_AUCTION,
+  USER_SOLD_ITEM_INFO_REQ,
+  USER_SOLD_ITEM_INFO_SUCCESS,
+  USER_SOLD_ITEM_INFO_FAIL,
 } from "../constants/user.contanst";
 import { axiosConfigAuth } from "../utils/axiosConfig";
-
 import { _dateFormat } from "../utils/date-format";
+import { authLogoutAuction } from "./auth.actions";
 
 export const getUserDetailsAction = id => async (dispatch, getState) => {
   try {
@@ -79,7 +85,6 @@ export const getUserDetailsAction = id => async (dispatch, getState) => {
       },
     });
   } catch (error) {
-    console.log(error);
     let errData = {
       message: error.message,
     };
@@ -100,6 +105,123 @@ export const getUserDetailsAction = id => async (dispatch, getState) => {
         error: errData,
       },
     });
+
+    if (errData.message === "Not Authorized, token failed") {
+      dispatch(authLogoutAuction());
+    }
+  }
+};
+
+export const createUserAccountBankAction =
+  values => async (dispatch, getState) => {
+    const {
+      authUser: { userInfo },
+    } = getState();
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        "/api/user/create-account-bank",
+        values,
+        config
+      );
+
+      dispatch({
+        type: USER_UPDATE_PROFILE_SUCCESS,
+        payload: {
+          success: {
+            message: data.message,
+          },
+          loading: false,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      let errData = {
+        message: error.message,
+      };
+
+      if (error.response && error.response.data.message) {
+        const errorData =
+          error.response.data.errors && error.response.data.errors;
+        errData = {
+          message: error.response.data.message,
+          ...errorData,
+        };
+      }
+
+      dispatch({
+        type: USER_UPDATE_PROFILE_FAIL,
+        payload: {
+          error: errData,
+          loading: false,
+        },
+      });
+
+      return errData;
+    }
+  };
+
+export const deleteUserAccountBankAction = id => async (dispatch, getState) => {
+  const {
+    authUser: { userInfo },
+  } = getState();
+
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(
+      "/api/user/delete-account-bank",
+      { id_akun: id },
+      config
+    );
+
+    dispatch({
+      type: USER_UPDATE_PROFILE_SUCCESS,
+      payload: {
+        success: {
+          message: data.message,
+        },
+        loading: false,
+      },
+    });
+
+    return data;
+  } catch (error) {
+    let errData = {
+      message: error.message,
+    };
+
+    if (error.response && error.response.data.message) {
+      const errorData =
+        error.response.data.errors && error.response.data.errors;
+      errData = {
+        message: error.response.data.message,
+        ...errorData,
+      };
+    }
+
+    dispatch({
+      type: USER_UPDATE_PROFILE_FAIL,
+      payload: {
+        error: errData,
+        loading: false,
+      },
+    });
+
+    return errData;
   }
 };
 
@@ -340,8 +462,6 @@ export const postUserCreateAuctionAction =
           ...transformedValues,
         };
 
-        console.log(auction);
-
         const config = {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -372,6 +492,7 @@ export const postUserCreateAuctionAction =
             text: "Berhasil membuat lelang",
           },
         });
+        return { newAuction: data };
       } else {
         throw new Error("Pengisian data belum lengkap");
       }
@@ -542,6 +663,7 @@ export const getUserAuctionDetailsAction =
         },
       });
     } catch (error) {
+      console.log(error);
       let errData = {
         message: error.message,
       };
@@ -924,3 +1046,161 @@ export const userAuctionCloseAction = id => async (dispatch, getState) => {
     });
   }
 };
+
+export const getUserSoldItemsAction = () => async (dispatch, getState) => {
+  const {
+    authUser: { userInfo },
+  } = getState();
+
+  dispatch({
+    type: USER_SOLDITEM_REQ,
+    payload: {
+      loading: true,
+    },
+  });
+
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get("/api/user/auction?status=sold", config);
+    dispatch({
+      type: USER_SOLDITEM_SUCCESS,
+      payload: {
+        loading: false,
+        data: data.lelang,
+        error: null,
+      },
+    });
+  } catch (error) {
+    let errData = {
+      message: error.message,
+    };
+
+    if (error.response && error.response.data.message) {
+      const errorData =
+        error.response.data.errors && error.response.data.errors;
+      errData = {
+        message: error.response.data.message,
+        ...errorData,
+      };
+    }
+
+    dispatch({
+      type: USER_SOLDITEM_FAIL,
+      payload: {
+        error: errData,
+        loading: false,
+      },
+    });
+  }
+};
+
+export const getUserSoldItemDetailsAction =
+  id => async (dispatch, getState) => {
+    const {
+      authUser: { userInfo },
+    } = getState();
+
+    dispatch({
+      type: USER_SOLD_ITEM_INFO_REQ,
+      payload: {
+        loading: true,
+      },
+    });
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        "/api/user/auction/sold-items/" + id,
+        config
+      );
+
+      dispatch({
+        type: USER_SOLD_ITEM_INFO_SUCCESS,
+        payload: {
+          loading: false,
+          details: data.details,
+          error: null,
+        },
+      });
+    } catch (error) {
+      let errData = {
+        message: error.message,
+      };
+
+      if (error.response && error.response.data.message) {
+        const errorData =
+          error.response.data.errors && error.response.data.errors;
+        errData = {
+          message: error.response.data.message,
+          ...errorData,
+        };
+      }
+
+      dispatch({
+        type: USER_SOLD_ITEM_INFO_FAIL,
+        payload: {
+          error: errData,
+          loading: false,
+        },
+      });
+    }
+  };
+
+export const postSellerConfirmBillAction =
+  values => async (dispatch, getState) => {
+    const {
+      authUser: { userInfo },
+    } = getState();
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        "/api/user/auction/confirm-auction-bill",
+        { id_transaksi: values.id_transaksi, ongkir: values.ongkir },
+        config
+      );
+
+      dispatch({
+        type: USER_AUCTION_MESSAGE,
+        payload: {
+          type: "success",
+          text: data.message,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      let errData = {
+        message: error.message,
+      };
+
+      if (error.response && error.response.data.message) {
+        const errorData =
+          error.response.data.errors && error.response.data.errors;
+        errData = {
+          message: error.response.data.message,
+          ...errorData,
+        };
+      }
+
+      return errData;
+    }
+  };
