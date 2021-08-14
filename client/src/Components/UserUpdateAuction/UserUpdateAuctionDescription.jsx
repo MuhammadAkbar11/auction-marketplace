@@ -14,6 +14,7 @@ import ImageUploader from "../UI/ImageUploader";
 import { CaretDown } from "phosphor-react";
 import Loader from "../UI/Loader";
 import ReactQuill from "react-quill"; // ES6
+import { getCategoriesAction } from "../../actions/categories.actions";
 
 const UserUpdateAuctionDescription = props => {
   const { formik, handleUpload, oldImages } = props;
@@ -24,13 +25,14 @@ const UserUpdateAuctionDescription = props => {
 
   const [show, setShow] = React.useState(false);
   const [searchTerms, setSearchTerms] = React.useState("");
-  const [selected, setSelected] = React.useState(formik.values.category);
-
+  const [selected, setSelected] = React.useState(0);
+  // console.log(selected, formik.values.category);
   React.useEffect(() => {
+    setSelected(formik.values.category);
     return () => {
       setShow(false);
     };
-  }, []);
+  }, [formik.values.category]);
 
   const searchHandler = e => {
     const value = e.target.value;
@@ -47,7 +49,11 @@ const UserUpdateAuctionDescription = props => {
   };
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    // dispatch(getCategoriesAction());
+    setSelected(formik.values.category);
+    setShow(true);
+  };
 
   const editorOnChange = value => {
     formik.setFieldValue("description", value);
@@ -190,7 +196,7 @@ const UserUpdateAuctionDescription = props => {
             value={searchTerms}
           />
           <br />
-          {loading ? (
+          {show && loading ? (
             <Loader size={20} variant="primary" />
           ) : (
             <ListGroup>

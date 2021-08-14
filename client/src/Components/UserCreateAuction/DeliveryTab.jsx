@@ -1,7 +1,6 @@
 import React from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { useFormik } from "formik";
-// import axios from "axios";
 import * as Yup from "yup";
 import {
   Col,
@@ -33,14 +32,6 @@ import Loader from "../UI/Loader";
 import userIndonesianArea from "../../hooks/useIndonesianArea";
 
 const formikSchema = Yup.object().shape({
-  // openBid: Yup.string().required("Harga awal belum terisi"),
-  // multiples: Yup.string().required("Kelipatan bid belum terisi"),
-  // maxBid: Yup.string().required("Total Tawaran belum terisi"),
-  // duration: Yup.string().required("Durasi belum dipilih"),
-  // dateStart: Yup.date()
-  //   .min(yesterday, "Tanggal mulai maksimal dari hari ini")
-  //   .required("Tanggal Mulai belum terisi"),
-  // timeStart: Yup.string().required("Tanggal Mulai belum terisi"),
   id_provinsi: Yup.string().required("Silahkan pilih provinsi"),
   id_kota: Yup.string().required("Silahkan pilih kota"),
   id_kecamatan: Yup.string().required("Silahkan pilih kecamata"),
@@ -80,9 +71,6 @@ const DeliveryTab = () => {
   const [followUserAddress, setFollowUserAddress] = React.useState(false);
 
   React.useEffect(() => {
-    if (success) {
-      history.push("/akun/lelang");
-    }
     return () => {
       if (success) {
         dispatch(userResetCreateAuction());
@@ -118,8 +106,9 @@ const DeliveryTab = () => {
     },
     onSubmit: values => {
       // console.log(values);
-      dispatch(postUserCreateAuctionAction(values));
-      history.push("/akun/lelang");
+      dispatch(postUserCreateAuctionAction(values)).then(result => {
+        history.push("/akun/lelang");
+      });
     },
   });
 
@@ -131,7 +120,6 @@ const DeliveryTab = () => {
 
   const handleCheckedByUserAddress = e => {
     setFollowUserAddress(e.currentTarget.checked);
-    console.log(e.currentTarget.checked);
 
     if (e.currentTarget.checked) {
       formik.setFieldValue("alamat", userDetailsData?.alamat);
@@ -481,7 +469,7 @@ const DeliveryTab = () => {
                         </span>
                       </ToggleButton>
                     </ButtonGroup>
-                    <ButtonGroup toggle className=" mb-3 mt-3">
+                    <ButtonGroup toggle className="mr-md-4 mb-3 mt-3">
                       <ToggleButton
                         type="checkbox"
                         // variant="success"
@@ -522,6 +510,46 @@ const DeliveryTab = () => {
                         </span>
                       </ToggleButton>
                     </ButtonGroup>
+                    {/* start
+                    <ButtonGroup toggle className=" mb-3 mt-3">
+                      <ToggleButton
+                        type="checkbox"
+                        // variant="success"
+                        name="bySeller"
+                        className="p-0 d-flex bg-white border border-gray-400 shadow-none  rounded-sm "
+                        checked={formik.values?.jenis_pengiriman?.bySeller}
+                        value={1}
+                        onChange={e => handleChangeTypeDeliery(e)}
+                      >
+                        <div
+                          className={`px-2 py-2 ${
+                            formik.values?.jenis_pengiriman?.bySeller
+                              ? "bg-success"
+                              : "bg-gray-400"
+                          }  text-white`}
+                        >
+                          {formik.values?.jenis_pengiriman?.bySeller ? (
+                            <Check size={18} />
+                          ) : (
+                            <Check
+                              style={{
+                                opacity: 0,
+                              }}
+                              size={18}
+                            />
+                          )}
+                        </div>
+                        <span
+                          className={`px-3  py-2 ${
+                            formik.values?.jenis_pengiriman?.bySeller
+                              ? "text-gray-600"
+                              : "text-gray-700"
+                          } font-weight-lighter  text-capitalize `}
+                        >
+                          Diantar penjual
+                        </span>
+                      </ToggleButton>
+                    </ButtonGroup> */}
                   </div>
                   <Card.Title>Estimasi Dimensi Packing Barang</Card.Title>
                   <Form.Group className="mt-4">

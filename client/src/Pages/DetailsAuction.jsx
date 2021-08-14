@@ -53,9 +53,22 @@ const DetailsAuction = props => {
   }, [SERVER_ENDPOINT, match.params]);
 
   React.useEffect(() => {
+    socket.emit("get-countdown-item", { id: match.params?.itemId });
+
+    return () => {};
+  }, []);
+
+  React.useEffect(() => {
+    socket.on("current-bid", current => {
+      setCurrentBid(current);
+
+      setListBid(prevState => {
+        return [current, ...prevState];
+      });
+    });
+
     if (!loading) {
       if (!auction.telah_berakhir) {
-        socket.emit("get-countdown-item", { id: match.params?.itemId });
         socket.on("set-countdown-item", timer => {
           if (!auction.telah_berakhir && timer.isEnded) {
             window.location.reload();
@@ -66,18 +79,6 @@ const DetailsAuction = props => {
       }
     }
   }, [loading, auction]);
-
-  React.useEffect(() => {
-    socket.on("current-bid", current => {
-      console.log(current, "curr");
-
-      setCurrentBid(current);
-
-      setListBid(prevState => {
-        return [current, ...prevState];
-      });
-    });
-  }, [match.params, loading, auction]);
 
   const handleBid = bidValue => {
     setLoadingBid(true);
@@ -111,7 +112,12 @@ const DetailsAuction = props => {
     }
   };
 
-  console.log(countdown);
+  const seen = new Set();
+  const filteredListBid = listBid.filter(el => {
+    const duplicate = seen.has(el.id_tawaran);
+    seen.add(el.id_tawaran);
+    return !duplicate;
+  });
 
   return (
     <>
@@ -236,7 +242,8 @@ const DetailsAuction = props => {
                           <hr />
                           <div>
                             {!auction.telah_berakhir ? (
-                              listBid.length >= auction.batas_tawaran ? (
+                              filteredListBid.length >=
+                              auction.batas_tawaran ? (
                                 <div>
                                   <h5 className=" text-spacing-1 text-primary ">
                                     Penawaran telah ditutup

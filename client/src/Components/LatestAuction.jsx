@@ -31,36 +31,36 @@ const productImgVariants = {
   },
 };
 
-const productActionWrapVariants = {
-  hover: {
-    opacity: 1,
-    transition: {
-      when: "beforeChildren",
-      duration: 0.2,
-      staggerChildren: 0.07,
-      // delayChildren: 0.2,
-    },
-  },
-};
+// const productActionWrapVariants = {
+//   hover: {
+//     opacity: 1,
+//     transition: {
+//       when: "beforeChildren",
+//       duration: 0.2,
+//       staggerChildren: 0.07,
+//       // delayChildren: 0.2,
+//     },
+//   },
+// };
 
-const productActionVariants = {
-  open: {
-    opacity: 0,
-    y: -10,
-    transition: {
-      type: "linear",
-      duration: 0.1,
-    },
-  },
-  hover: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: "linear",
-      duration: 0.1,
-    },
-  },
-};
+// const productActionVariants = {
+//   open: {
+//     opacity: 0,
+//     y: -10,
+//     transition: {
+//       type: "linear",
+//       duration: 0.1,
+//     },
+//   },
+//   hover: {
+//     opacity: 1,
+//     y: 0,
+//     transition: {
+//       type: "linear",
+//       duration: 0.1,
+//     },
+//   },
+// };
 
 const LatestAuction = () => {
   const navigationNextRef = React.useRef(null);
@@ -71,7 +71,7 @@ const LatestAuction = () => {
 
   React.useEffect(() => {
     dispatch(getLatestAuctionAction());
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
@@ -94,7 +94,7 @@ const LatestAuction = () => {
               <Row>
                 {latestAuction.map(item => {
                   return (
-                    <Col xs={6} md={3}>
+                    <Col xs={6} md={3} className="mt-3">
                       <div className="product-plr-1">
                         <motion.div
                           variants={singleProductWrapVariants}
@@ -375,7 +375,7 @@ const LatestAuction = () => {
         )}
         {/* {} */}
       </Container>
-      {latestAuction.length >= 5 && (
+      {latestAuction.length > 5 && (
         <div className="w-auto">
           <div
             ref={navigationPrevRef}

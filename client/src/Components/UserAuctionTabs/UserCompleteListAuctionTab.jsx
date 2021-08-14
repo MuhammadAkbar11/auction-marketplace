@@ -124,7 +124,7 @@ const UserCompleteListAuctionTab = ({ isActive }) => {
                       <td>
                         {ac?.tawaran.length !== 0 ? (
                           <>
-                            {ac?.status_lelang === 3 ? (
+                            {ac?.status_lelang >= 3 ? (
                               <span>Sudah dikonfirmasi</span>
                             ) : (
                               <Button

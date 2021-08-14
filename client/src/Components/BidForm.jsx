@@ -1,28 +1,29 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Button, Form, Alert } from "react-bootstrap";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { onlyNumbers } from "../utils/replace";
-import { authLoginErrorMessageAction } from "../actions/auth.actions";
 import convertRupiah from "../utils/convertRupiah";
 import useKeepDigits from "../hooks/useKeepDigits";
 
 const BidForm = ({ loading, defaultValue, auction, handleBid }) => {
   const { userInfo } = useSelector(state => state.authUser);
-  const [bidValue, setBidValue] = React.useState("");
+  const [bidValue, setBidValue] = React.useState(defaultValue);
 
   React.useEffect(() => {
-    if (!loading) {
-      setBidValue(defaultValue?.trim());
-    }
+    // if (!loading) {
+    setBidValue(defaultValue);
+    // }
 
     return () => {
       setBidValue("");
     };
-  }, [defaultValue, "loading"]);
+  }, [defaultValue]);
 
   const [defValueNum] = useKeepDigits(defaultValue);
   const [bidValueNum] = useKeepDigits(bidValue);
+
+  console.log(defaultValue);
 
   const handleInc = () => {
     const multiple = onlyNumbers(auction?.kelipatan_hrg);
@@ -61,7 +62,7 @@ const BidForm = ({ loading, defaultValue, auction, handleBid }) => {
                 >
                   -
                 </Button>
-                <Form.Control readOnly value={bidValue} />
+                <Form.Control readOnly value={loading ? "0" : bidValue || ""} />
                 <Button
                   variant="success"
                   disabled={loading}

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Breadcrumb, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 
 const BreadcrumbContainer = ({ items }) => {
   return (
@@ -9,7 +9,6 @@ const BreadcrumbContainer = ({ items }) => {
         <div className="breadcrumb-content text-center">
           <ul>
             {items.map((item, index) => {
-              const key = index;
               return !item.active ? (
                 <li key={item.url}>
                   <Link to={item.url}>{item.title}</Link>

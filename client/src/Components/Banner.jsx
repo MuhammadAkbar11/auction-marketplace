@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Badge, Col, Container, Row } from "react-bootstrap";
-import { motion } from "framer-motion";
+import { Col, Container, Row } from "react-bootstrap";
 import bannerImg14 from "../assets/images/banner/banner-mini-2.png";
 import bannerImg15 from "../assets/images/banner/Banner-mini.png";
 import BannerSlider from "./BannerSlider";

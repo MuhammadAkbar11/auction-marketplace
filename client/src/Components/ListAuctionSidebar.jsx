@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { MagnifyingGlassIcon } from "../Components/UI/Icons/Index";
 import { Button, Form } from "react-bootstrap";
 
-const ListAuctionSidebar = () => {
+const ListAuctionSidebar = ({ categories }) => {
   return (
     <>
       <div className="sidebar-wrapper sidebar-wrapper-mrg-right">
@@ -19,10 +19,20 @@ const ListAuctionSidebar = () => {
           </div>
         </div>
         <div className="sidebar-widget shop-sidebar-border mb35 pt40">
-          <h4 className="sidebar-widget-title">Categories </h4>
+          <h4 className="sidebar-widget-title">Kategori</h4>
           <div className="shop-catigory">
             <ul>
-              <li>
+              {categories &&
+                categories.map(item => {
+                  return (
+                    <li key={item.id_kategori}>
+                      <Link to={`/kategori/${item.id_kategori}`}>
+                        {item.kategori}
+                      </Link>
+                    </li>
+                  );
+                })}
+              {/* <li>
                 <Link to="shop.html">T-Shirt</Link>
               </li>
               <li>
@@ -39,12 +49,12 @@ const ListAuctionSidebar = () => {
               </li>
               <li>
                 <Link to="shop.html">Accessories </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
 
-        <div className="sidebar-widget shop-sidebar-border mb40 pt40">
+        {/* <div className="sidebar-widget shop-sidebar-border mb40 pt40">
           <h4 className="sidebar-widget-title">Refine By </h4>
           <div className="sidebar-widget-list">
             <ul className="pl-0 list-unstyled ">
@@ -88,7 +98,7 @@ const ListAuctionSidebar = () => {
             <Link to="#">Women</Link>
             <Link to="#">Fashion</Link>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

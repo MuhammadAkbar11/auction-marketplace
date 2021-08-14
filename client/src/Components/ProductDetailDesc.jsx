@@ -14,7 +14,7 @@ const ProductDetailDesc = ({ loading, auction, listBid }) => {
               id="description-tabs"
               defaultActiveKey="des-details1"
             >
-              <Nav className="dec-review-topbar flex-nowrap  ">
+              <Nav className="dec-review-topbar   ">
                 <Nav.Link eventKey="des-details1">Informasi Produk</Nav.Link>
                 <Nav.Link eventKey="des-details2">Riwayat Penawaran</Nav.Link>
                 <Nav.Link eventKey="des-details3">Diskusi produk </Nav.Link>
