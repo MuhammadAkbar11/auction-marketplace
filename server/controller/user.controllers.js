@@ -8,6 +8,9 @@ import ModelGaleri from "../models/m_galeri_lelang.js";
 import { deleteFile } from "../utils/file.js";
 import ModelPenawaran from "../models/m_penawaran.js";
 import ModelTransaksi from "../models/m_transaksi.js";
+import ModelAkunBank from "../models/m_akun_bank.js";
+import onlyNumbers from "../utils/onlyNumber.js";
+import dayjs from "dayjs";
 
 const Op = Sequelize.Op;
 
@@ -19,6 +22,15 @@ export const getUserProfile = asyncHandler(async (req, res) => {
       },
     });
 
+    const bankAccounts = await ModelAkunBank.findAll({
+      where: {
+        id_member: user.id_member,
+      },
+      attributes: {
+        exclude: ["ModelMemberIdMember"],
+      },
+    });
+
     res.status(201).json({
       message: "success",
       details: {
@@ -26,6 +38,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
         foto: "/uploads/member/guest.png",
         tgl_dibuat: daysJs(user.tgl_dibuat).format("DD MMM, YYYY - HH.mm"),
         tgl_diubah: daysJs(user.tgl_diubah).format("DD MMM, YYYY - HH.mm"),
+        akun_bank: bankAccounts,
       },
     });
   } catch (error) {
@@ -107,6 +120,55 @@ export const postUpdateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+export const postUserCreateBankAccount = asyncHandler(
+  async (req, res, next) => {
+    const { no_rek, nama_rek, nama_bank } = req.body;
+    const userId = req.user.id_member;
+    try {
+      await ModelAkunBank.create({
+        no_rek,
+        nama_rek,
+        nama_bank,
+        id_member: userId,
+      });
+
+      res.status(201).json({
+        body: req.body,
+        status: true,
+        message: "Berhasil menambah akun bank",
+      });
+    } catch (error) {
+      throw new ResponseError(error.statusCode, error.message, error.errors);
+    }
+  }
+);
+
+export const deleteUserBankAccont = asyncHandler(async (req, res, next) => {
+  const accountId = req.body.id_akun;
+
+  try {
+    const getAccount = await ModelAkunBank.findByPk(accountId);
+
+    if (!getAccount) {
+      res.status(400);
+      throw new ResponseError(400, "Id Belum terdaftar tidak ditemukan");
+    }
+
+    await ModelAkunBank.destroy({
+      where: {
+        id_akun: getAccount.id_akun,
+      },
+    });
+
+    res.status(201).json({
+      status: true,
+      message: "Berhasil menghapus akun rekening",
+    });
+  } catch (error) {
+    throw new ResponseError(error.statusCode, error.message, error.errors);
+  }
+});
+
 export const postUserCreateAuction = asyncHandler(async (req, res, next) => {
   try {
     const images = req.fileimg?.data;
@@ -148,7 +210,6 @@ export const postUserCreateAuction = asyncHandler(async (req, res, next) => {
       message: "Berhasil menambah lelang",
     });
   } catch (error) {
-    console.log(error);
     throw new ResponseError(error.statusCode, error.message, error.errors);
   }
 });
@@ -209,7 +270,7 @@ export const putUserUpdateAuction = asyncHandler(async (req, res, next) => {
             id_galeri: og.id_galeri,
           },
         });
-        deleteFile(og.url);
+        // deleteFile(og.url);
       });
     } else {
       auctionGaleri = oldGaleri;
@@ -331,7 +392,7 @@ export const getUserAuction = asyncHandler(async (req, res, next) => {
         where: {
           id_member: idMember,
           status_lelang: {
-            [Op.in]: [2, 3, 4],
+            [Op.in]: [2, 3, 4, 5],
           },
         },
       });
@@ -398,6 +459,89 @@ export const getUserAuction = asyncHandler(async (req, res, next) => {
       } else {
         userAuctions = [];
       }
+    } else if (queryStatus === "sold") {
+      const soldItem = await ModelLelang.findAll({
+        where: {
+          id_member: idMember,
+          status_lelang: {
+            [Op.in]: [3, 4, 5],
+          },
+        },
+      });
+
+      if (soldItem.length !== 0) {
+        userAuctions = await Promise.all(
+          soldItem.map(async auction => {
+            const auctionData = auction.dataValues;
+            const auctionId = auctionData.id_lelang;
+
+            let expiredPayment = null;
+
+            const tawaran = await ModelPenawaran.findAll({
+              where: {
+                id_lelang: auctionId,
+              },
+              order: [["tgl_tawaran", "DESC"]],
+              include: {
+                model: ModelMember,
+                as: "member",
+                attributes: ["id_member", "nama", "username", "email"],
+              },
+              attributes: {
+                exclude: ["ModelMemberIdMember", "ModelLelangIdLelang"],
+              },
+            });
+
+            const transaction = await ModelTransaksi.findOne({
+              where: {
+                id_tawaran: tawaran[0]?.id_tawaran,
+              },
+              attributes: ["id_transaksi", "status_transaksi", "id_tawaran"],
+            });
+
+            if (transaction.batas_waktu_bayar) {
+              const paymentDeadline = daysJs(transaction.batas_waktu_bayar);
+              const diffNowAndPaymentDeadline =
+                paymentDeadline.valueOf() - dayjs().valueOf();
+
+              if (diffNowAndPaymentDeadline <= 0) {
+                expiredPayment = true;
+              } else {
+                expiredPayment = false;
+              }
+            }
+
+            const transformBids =
+              tawaran.length !== 0
+                ? tawaran.map(bid => {
+                    const bidData = bid.dataValues;
+                    return {
+                      ...bidData,
+                      tgl_tawaran: daysJs(bidData.tgl_tawaran).format(
+                        "DD/MM/YYYY - HH:mm"
+                      ),
+                      // member: await bid.getModelMember(),
+                    };
+                  })
+                : tawaran;
+
+            return {
+              id_lelang: auctionData.id_lelang,
+              judul: auctionData.judul,
+              status_lelang: auctionData.status_lelang,
+              tgl_mulai: daysJs(auctionData.tgl_mulai).format(
+                "DD/MM/YYYY - HH:mm"
+              ),
+              tgl_selesai: daysJs(auctionData.tgl_selesai).format(
+                "DD/MM/YYYY - HH:mm"
+              ),
+              isPaymentExp: expiredPayment,
+              ...transaction.dataValues,
+              daftar_tawaran: transformBids,
+            };
+          })
+        );
+      }
     }
 
     res.status(200).json({
@@ -443,6 +587,7 @@ export const getAuctionDetails = asyncHandler(async (req, res) => {
       auction.setDataValue("gambar", images);
       auction.setDataValue("kategori", kategori.kategori);
       auction.setDataValue("jam_mulai", timeStart);
+
       return res.status(200).json({
         status: true,
         lelang: auction,
@@ -453,6 +598,7 @@ export const getAuctionDetails = asyncHandler(async (req, res) => {
       lelang: null,
     });
   } catch (error) {
+    console.log(error);
     throw new ResponseError(error.statusCode, error.message, error.errors);
   }
 });
@@ -576,7 +722,7 @@ export const postCloseAuction = asyncHandler(async (req, res) => {
 
 export const postConfirmBid = asyncHandler(async (req, res) => {
   const bidId = req.body.id_tawaran;
-  const shippingType = req.body.jenis_pengiriman;
+  // const shippingType = req.body.jenis_pengiriman;
 
   try {
     const getBid = await ModelPenawaran.findOne({
@@ -607,9 +753,9 @@ export const postConfirmBid = asyncHandler(async (req, res) => {
 
       const invoice = await ModelTransaksi.create({
         status_bayar: 0,
-        batas_waktu_bayar: daysJs().add(1, "day").format("YYYY-MM-DD HH:mm:ss"),
         id_tawaran: getBid.id_tawaran,
-        jenis_pengiriman: JSON.stringify(shippingType),
+        status_transaksi: 0,
+        // jenis_pengiriman: JSON.stringify(shippingType),
       });
 
       // console.log(getBid);
@@ -623,6 +769,117 @@ export const postConfirmBid = asyncHandler(async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    throw new ResponseError(error.statusCode, error.message, error.errors);
+  }
+});
+
+export const getUserSoldItemDetails = asyncHandler(async (req, res) => {
+  // const memberId = req.user.id_member;
+  const invoiceId = req.params.invoiceId;
+
+  try {
+    if (!invoiceId) {
+      res.status(400);
+      throw new ResponseError(400, "Id Transkasi tidak ditemukan");
+    }
+    const invoice = await ModelTransaksi.findOne({
+      where: {
+        id_transaksi: invoiceId,
+      },
+    });
+
+    if (invoice) {
+      const bid = await ModelPenawaran.findOne({
+        where: {
+          id_tawaran: invoice.id_tawaran,
+        },
+        include: {
+          model: ModelMember,
+          as: "member",
+          attributes: ["id_member", "nama", "username", "email", "no_hp"],
+        },
+        attributes: ["id_tawaran", "id_lelang", "nilai_tawaran", "id_member"],
+      });
+
+      const auction = await ModelLelang.findOne({
+        where: {
+          id_lelang: bid.id_lelang,
+        },
+        attributes: {
+          exclude: ["ModelMemberIdMember", "ModelKategoriIdKategori"],
+        },
+      });
+
+      invoice.setDataValue("tawaran", bid);
+      invoice.setDataValue("lelang", auction);
+
+      return res.status(200).json({
+        details: invoice,
+      });
+    }
+    throw new ResponseError(400, "Data tidak ditemukan", { type: "not found" });
+  } catch (error) {
+    throw new ResponseError(error.statusCode, error.message, error.errors);
+  }
+});
+
+export const postSellerConfirmBill = asyncHandler(async (req, res) => {
+  const { id_transaksi, ongkir } = req.body;
+  try {
+    if (!id_transaksi) {
+      res.status(400);
+      throw new ResponseError(400, "Id Transkasi tidak ditemukan");
+    }
+    const invoice = await ModelTransaksi.findOne({
+      where: {
+        id_transaksi: id_transaksi,
+      },
+    });
+
+    const bid = await ModelPenawaran.findOne({
+      where: {
+        id_tawaran: invoice.id_tawaran,
+      },
+      include: {
+        model: ModelMember,
+        as: "member",
+        attributes: ["id_member", "nama", "username", "email", "no_hp"],
+      },
+      attributes: ["id_tawaran", "id_lelang", "nilai_tawaran", "id_member"],
+    });
+
+    const auction = await ModelLelang.findOne({
+      where: {
+        id_lelang: bid.id_lelang,
+      },
+      attributes: {
+        exclude: ["ModelMemberIdMember", "ModelKategoriIdKategori"],
+      },
+    });
+
+    let totalPrice = 0;
+
+    const bidPrice = +onlyNumbers(bid.nilai_tawaran);
+    const packingFee = +auction.biaya_packing;
+    const shippingCost = +ongkir;
+
+    totalPrice = bidPrice + packingFee + shippingCost;
+
+    await ModelTransaksi.update(
+      {
+        ongkir,
+        total_harga: totalPrice,
+        batas_waktu_bayar: daysJs().add(1, "day").format("YYYY-MM-DD HH:mm:ss"),
+        status_transaksi: 2,
+      },
+      { where: { id_transaksi } }
+    );
+
+    return res.status(200).json({
+      status: true,
+      message: "Berhasil mengubah tagihan",
+    });
+  } catch (error) {
     throw new ResponseError(error.statusCode, error.message, error.errors);
   }
 });
