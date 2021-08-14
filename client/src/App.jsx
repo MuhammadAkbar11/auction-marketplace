@@ -1,7 +1,5 @@
 import { Route, Switch } from "react-router";
-import Footer from "./Components/Layouts/Footer/Footer";
-import Header from "./Components/Layouts/Header/Header";
-import Layout from "./Components/Layouts/Layout";
+
 import PublicRoute from "./Components/Route/PublicRoute";
 import PrivateRoute from "./Components/Route/PrivateRoute";
 
@@ -25,6 +23,9 @@ import Users from "./Pages/Admin/Users";
 import AdminComingSoon from "./Pages/Admin/AdminComingSoon";
 import MyBid from "./Pages/User/MyBid";
 import TransactionRepot from "./Pages/Admin/TransactionRepot";
+import ConfirmWinning from "./Pages/User/ConfirmWinning";
+import UserConfirmAuctionBill from "./Pages/User/UserConfirmAuctionBill";
+import UserPayment from "./Pages/User/UserPayment";
 
 function App() {
   return (
@@ -42,8 +43,21 @@ function App() {
           component={RegisterPage}
         />
         <PrivateRoute path="/akun/dashboard" component={UserDashboard} />
+        <PrivateRoute
+          path="/akun/lelang/konfirmasi-tagihan/:invoiceId"
+          component={UserConfirmAuctionBill}
+        />
         <PrivateRoute path="/akun/lelang" component={UserAuction} />
+        <PrivateRoute
+          path="/akun/pembelian/konfirmasi/:invoiceId"
+          component={ConfirmWinning}
+        />
+        <PrivateRoute
+          path="/akun/pembayaran/:invoiceId"
+          component={UserPayment}
+        />
         <PrivateRoute path="/akun/pembelian" component={MyBid} />
+
         <PrivateRoute path="/akun/buat-lelang" component={CreateAuction} />
         <PrivateRoute
           path="/akun/edit-lelang/:idAuction"

@@ -42,11 +42,20 @@ const UpdateAuction = props => {
 
   const tabKey = new URLSearchParams(location.search).get("tab");
 
+  React.useEffect(() => {
+    if (!userInfo) {
+      history.push("/akun/masuk");
+      return;
+    } else {
+      dispatch(getUserAuctionDetailsAction(auctionId));
+    }
+  }, [userInfo, auctionId]);
+
   const imagesUploader = useImagesUploader();
 
-  const dimensionItem = JSON.parse(auction?.dimensi_brg);
-  const delivery = JSON.parse(auction?.alamat_barang);
-  const typeDel = JSON.parse(auction?.jenis_pengiriman);
+  const dimensionItem = auction ? JSON.parse(auction?.dimensi_brg) : {};
+  const delivery = auction ? JSON.parse(auction?.alamat_barang) : {};
+  const typeDel = auction ? JSON.parse(auction?.jenis_pengiriman) : {};
 
   const formik = useFormik({
     validationSchema: formikSchema(auction?.status_lelang),
@@ -77,6 +86,7 @@ const UpdateAuction = props => {
       jenis_pengiriman: typeDel || {
         pickup: false,
         courier_service: false,
+        bySeller: false,
       },
       panjang: dimensionItem?.panjang || "",
       lebar: dimensionItem?.lebar || "",
@@ -85,19 +95,11 @@ const UpdateAuction = props => {
       biaya_packing: auction?.biaya_packing || "",
     },
     onSubmit: values => {
-      dispatch(postUserUpdateAuctionAction(values));
-      history.push("/akun/lelang?tab=" + tabKey);
+      dispatch(postUserUpdateAuctionAction(values)).then(() => {
+        history.push("/akun/lelang");
+      });
     },
   });
-
-  React.useEffect(() => {
-    if (!userInfo) {
-      history.push("/akun/masuk");
-      return;
-    } else {
-      dispatch(getUserAuctionDetailsAction(auctionId));
-    }
-  }, [userInfo, auctionId]);
 
   if (loading) {
     return (

@@ -3,19 +3,21 @@ import { Col, Container, Row, Nav, Card, Tab, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
+import { userResetPurchaseMessage } from "../../actions/user.purchase.actions";
 import BreadcrumbsContainer from "../../Components/Layouts/BreadcrumbsContainer";
 import Layout from "../../Components/Layouts/Layout";
 import UserSidebarMenu from "../../Components/UserMenuLayout/UserSidebarMenu";
 import UserMyBidsTab from "../../Components/UserMyPurchaseTabs/UserMyBidsTab";
+import UserWinAuctionsTab from "../../Components/UserMyPurchaseTabs/UserWinAuctionsTab";
 
 const MyBid = props => {
   const { match, location } = props;
 
   const tabKey = new URLSearchParams(location.search).get("tab");
 
-  // const dispatch = useDispatch();
-  // const { message } = useSelector(state => state.userBid);
-  const message = null;
+  const dispatch = useDispatch();
+  const { message } = useSelector(state => state.userWinsAuction);
+  // const message = null;
   return (
     <Layout>
       <BreadcrumbsContainer
@@ -54,19 +56,23 @@ const MyBid = props => {
                   {/* </Nav.Item> */}
                 </Nav>
               </Card>
-              {message && (
+              {message.show && (
                 <div className="mt-4">
-                  <Alert variant={message.type}>{message.text}</Alert>
+                  <Alert
+                    variant={message.type}
+                    onClose={() => dispatch(userResetPurchaseMessage())}
+                    dismissible
+                  >
+                    {message.text}
+                  </Alert>
                 </div>
               )}
               <Tab.Content>
                 <Tab.Pane eventKey="default">
-                  <div>
-                    <h1>Wins</h1>
-                  </div>
+                  <UserWinAuctionsTab isActive={tabKey === null} />
                 </Tab.Pane>
                 <Tab.Pane eventKey="mybids">
-                  <UserMyBidsTab />
+                  <UserMyBidsTab isActive={tabKey === "mybids"} />
                 </Tab.Pane>
               </Tab.Content>
             </Tab.Container>

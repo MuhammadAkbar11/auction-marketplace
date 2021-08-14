@@ -10,7 +10,6 @@ import { Card, Col, Container, Row, Modal, Button } from "react-bootstrap";
 import Layout from "../../Components/Layouts/Layout";
 import Loader from "../../Components/UI/Loader";
 import DeliveryTab from "../../Components/UserCreateAuction/DeliveryTab";
-// import { Link } from "react-router-dom";
 
 const CreateAuction = props => {
   const { location, history } = props;
