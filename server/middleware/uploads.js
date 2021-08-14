@@ -10,14 +10,9 @@ const fileStorage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const filenameToArr = file.originalname.split(" ").join("").split(".");
-    // const fileName = file.originalname.split(" ").splice(0, 1).join("-");
+    const fileName = req.body.judul.split(" ").join("-");
     const ext = filenameToArr[filenameToArr.length - 1];
-    cb(
-      null,
-      `BaeBid-${dayjs().format("YYYY-MM-DD")}_${
-        req.user.id_member
-      }_${dayjs().valueOf()}.${ext}`
-    );
+    cb(null, `BaeBid-${fileName}_${dayjs().valueOf()}.${ext}`);
   },
 });
 
