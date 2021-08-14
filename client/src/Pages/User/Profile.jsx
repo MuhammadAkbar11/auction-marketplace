@@ -24,6 +24,7 @@ import {
 import Loader from "../../Components/UI/Loader";
 import { setResetAction } from "../../actions/app.actions";
 import Layout from "../../Components/Layouts/Layout";
+import UserBankAccount from "../../Components/UserBankAccount/UserBankAccount";
 
 const updateProfileSchema = Yup.object().shape({
   nama: Yup.string().required("Nama belum terisi"),
@@ -95,7 +96,7 @@ const Profile = ({ history }) => {
     },
     onSubmit: values => {
       // dispatch(authRegisterAction(values));
-      console.log(values);
+
       dispatch(updateUserProfileAction(values));
       // history.push('/payment');
     },
@@ -180,6 +181,10 @@ const Profile = ({ history }) => {
   };
 
   // Contents
+
+  const handleLoadProfile = () => {
+    dispatch(getUserDetailsAction());
+  };
 
   return (
     <Layout>
@@ -487,8 +492,8 @@ const Profile = ({ history }) => {
                         >
                           {loading ? (
                             <>
-                              <Loader size={11} />{" "}
-                              <span className="ml-2">Sending...</span>
+                              <Loader size={11} className="text-light" />{" "}
+                              <span className="ml-2">Manambah</span>
                             </>
                           ) : (
                             "Simpan"
@@ -500,6 +505,13 @@ const Profile = ({ history }) => {
                 )}
               </Card.Body>
             </Card>
+            <section className="mt-5">
+              <UserBankAccount
+                accounts={userDetails?.akun_bank}
+                onLoadProfile={handleLoadProfile}
+                loadingProfile={loading}
+              />
+            </section>
           </Col>
         </Row>
       </Container>
