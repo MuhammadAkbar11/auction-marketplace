@@ -5,7 +5,7 @@ const DataTypes = Sequelize.DataTypes;
 const foreignKeysData = {
   idMember: {
     name: "id_member",
-    type: DataTypes.STRING(20),
+    type: DataTypes.STRING(11),
   },
   idKategori: {
     name: "id_kategori",
@@ -13,15 +13,15 @@ const foreignKeysData = {
   },
   idLelang: {
     name: "id_lelang",
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING(11),
   },
   idTawaran: {
     name: "id_tawaran",
-    type: DataTypes.STRING(12),
+    type: DataTypes.STRING(7),
   },
   idTransaksi: {
     name: "id_transaksi",
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING(11),
   },
   idRuangDiskusi: {
     name: "id_ruang",

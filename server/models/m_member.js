@@ -8,11 +8,11 @@ const ModelMember = sequelize.define(
   "ModelMember",
   {
     id_member: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING(10),
       primaryKey: true,
     },
     nama: {
-      type: DataTypes.STRING(128),
+      type: DataTypes.STRING(50),
     },
     username: {
       type: DataTypes.STRING(20),

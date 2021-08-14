@@ -9,7 +9,7 @@ const ModelPenawaran = sequelize.define(
   "ModelPenawaran",
   {
     id_tawaran: {
-      type: DataTypes.STRING(12),
+      type: DataTypes.STRING(7),
       primaryKey: true,
     },
     status_tawaran: {
@@ -33,8 +33,7 @@ ModelPenawaran.beforeBulkCreate(options => {
 });
 
 ModelPenawaran.beforeCreate(async (bid, options) => {
-  const prefix = "BID" + dayjs().format("DDMMYY");
-  const id = await getAutoNumber("tbl_tawaran", "id_tawaran", prefix, 12);
+  const id = await getAutoNumber("tbl_tawaran", "id_tawaran", "BID", 7);
   bid.id_tawaran = id;
 });
 

@@ -9,8 +9,12 @@ const DataTypes = Sequelize.DataTypes;
 const ModelLelang = sequelize.define(
   "ModelLelang",
   {
-    id_lelang: {
+    _id: {
       type: DataTypes.INTEGER,
+      unique: true,
+    },
+    id_lelang: {
+      type: DataTypes.STRING(11),
       primaryKey: true,
       // autoIncrement: true,
     },
@@ -66,15 +70,10 @@ const ModelLelang = sequelize.define(
         return options;
       },
       beforeCreate: async function (lelang, options) {
-        const prefix = dayjs().format("DDMMYY");
-        const idAuction = await getAutoNumber(
-          "tbl_lelang",
-          "id_lelang",
-          prefix,
-          9
-        );
-        console.log(idAuction);
-        lelang.id_lelang = +idAuction;
+        const datePrefix = dayjs().format("DDMMYY");
+        const _id = await getAutoNumber("tbl_lelang", "_id", "", 4);
+        lelang._id = _id;
+        lelang.id_lelang = `${datePrefix}${_id}`;
       },
       beforeBulkDestroy: function (options) {
         options.individualHooks = true;

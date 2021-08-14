@@ -13,10 +13,13 @@ const ModelAkunBank = sequelize.define(
       primaryKey: true,
     },
     no_rek: {
-      type: DataTypes.STRING(128),
+      type: DataTypes.STRING(25),
     },
     nama_rek: {
-      type: DataTypes.STRING(128),
+      type: DataTypes.STRING(50),
+    },
+    nama_bank: {
+      type: DataTypes.STRING(25),
     },
   },
   { tableName: "tbl_akun_bank", timestamps: false }

@@ -7,6 +7,10 @@ const DataTypes = Sequelize.DataTypes;
 const ModelDetailTransaksi = sequelize.define(
   "ModelDetailTransaksi",
   {
+    _id: {
+      type: DataTypes.INTEGER,
+      unique: true,
+    },
     id_detail_transaksi: {
       type: DataTypes.STRING(12),
       // autoIncrement: true,
@@ -34,13 +38,9 @@ ModelDetailTransaksi.beforeBulkCreate(options => {
 
 ModelDetailTransaksi.beforeCreate(async (invoice, options) => {
   const prefix = "INV" + dayjs().format("DDMMYY");
-  const id = await getAutoNumber(
-    "tbl_detail_transaksi",
-    "id_detail_transaksi",
-    prefix,
-    12
-  );
-  invoice.id_detail_transaksi = id;
+  const _id = await getAutoNumber("tbl_detail_transaksi", "_id", "", 3);
+  invoice._id = _id;
+  invoice.id_detail_transaksi = `${prefix}${_id}`;
 });
 
 export default ModelDetailTransaksi;

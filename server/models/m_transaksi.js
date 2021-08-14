@@ -8,28 +8,26 @@ const DataTypes = Sequelize.DataTypes;
 const ModelTransaksi = sequelize.define(
   "ModelTransaksi",
   {
-    id_transaksi: {
+    _id: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
-      // autoIncrement: true,
+      unique: true,
     },
-    total_hrg: {
-      type: DataTypes.STRING(128),
+    id_transaksi: {
+      type: DataTypes.STRING(11),
+      primaryKey: true,
+      unique: true,
     },
     nama_penerima: {
-      type: DataTypes.STRING(128),
+      type: DataTypes.STRING(50),
     },
-    provinsi_tujuan: {
-      type: DataTypes.STRING(128),
-    },
-    kota_tujuan: {
-      type: DataTypes.STRING(128),
+    nohp_penerima: {
+      type: DataTypes.STRING(20),
     },
     alamat_tujuan: {
       type: DataTypes.TEXT,
     },
-    nohp_penerima: {
-      type: DataTypes.STRING(25), // 20.000
+    total_harga: {
+      type: DataTypes.STRING(20),
     },
     status_bayar: {
       type: DataTypes.INTEGER,
@@ -40,17 +38,17 @@ const ModelTransaksi = sequelize.define(
     bukti_transfer: {
       type: DataTypes.STRING,
     },
-    status_bayar: {
-      type: DataTypes.STRING(11),
-    },
     batas_waktu_bayar: {
       type: DataTypes.DATE,
     },
-    ongkir: {
-      type: DataTypes.STRING(128),
-    },
     jenis_pengiriman: {
-      type: DataTypes.STRING(128),
+      type: DataTypes.STRING(30),
+    },
+    ongkir: {
+      type: DataTypes.STRING(20),
+    },
+    status_transaksi: {
+      type: DataTypes.STRING,
     },
   },
   {
@@ -67,9 +65,10 @@ ModelTransaksi.beforeBulkCreate(options => {
 });
 
 ModelTransaksi.beforeCreate(async (transaksi, options) => {
-  const prefix = dayjs().format("DDMMYY");
-  const id = await getAutoNumber("tbl_transaksi", "id_transaksi", prefix, 9);
-  transaksi.id_transaksi = +id;
+  const datePrefix = dayjs().format("DDMMYY");
+  const _id = await getAutoNumber("tbl_transaksi", "_id", "", 4);
+  transaksi._id = +_id;
+  transaksi.id_transaksi = `${datePrefix}${_id}`;
 });
 
 export default ModelTransaksi;
