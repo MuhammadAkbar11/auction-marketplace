@@ -17,3 +17,17 @@
   // background-attachment: ;
   // }
 }
+
+.card-img-wins-auction {
+  @media #{$lg-layout} {
+    width: 100%;
+    // height: auto;
+  }
+  @media #{$md-layout} {
+    width: 170px;
+    height: auto;
+  }
+  @media #{$xs-layout} {
+    width: 100px;
+  }
+}

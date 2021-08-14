@@ -309,6 +309,8 @@
   padding-bottom: 110px;
 }
 
+// #description-tabs
+
 .dec-review-topbar {
   margin-bottom: 50px;
   border-bottom: 1px solid #ebebeb;
@@ -319,10 +321,10 @@
     overflow-x: scroll;
   }
   @media #{$xs-layout} {
+    padding-left: 1px;
     overflow-x: scroll;
   }
   a {
-    white-space: nowrap;
     display: inline-block;
     font-size: 16px;
     color: $black;
@@ -330,9 +332,9 @@
     margin: 0 14px 0 0;
     position: relative;
     text-transform: uppercase;
-    &:last-child {
-      margin: 0 0px 0 0;
-    }
+    // &:last-child {
+    //   margin: 0 0px 0 0;
+    // }
     @media #{$md-layout} {
       padding: 0 15px 22px;
       margin: 0 7px 0 0;
