@@ -27,7 +27,7 @@ const userSidebarMenu = [
   {
     id: 6,
     menu: "Logout",
-    url: "/akun/logut",
+    url: "/akun/logout",
   },
 ];
 
