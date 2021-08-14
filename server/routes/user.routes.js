@@ -11,9 +11,21 @@ import {
   postDeleteAuction,
   postCloseAuction,
   postConfirmBid,
+  getUserSoldItemDetails,
+  postSellerConfirmBill,
+  postUserCreateBankAccount,
+  deleteUserBankAccont,
 } from "../controller/user.controllers.js";
-import { getUserBids } from "../controller/user.purchase.controller.js";
+import {
+  getUserBids,
+  getUserDetailsAuctionWin,
+  getUserPaymentDetails,
+  getUserWinAuction,
+  postUserPayment,
+  postUserWinConfirmAuction,
+} from "../controller/user.purchase.controller.js";
 import { protect } from "../middleware/auth.middlerware.js";
+import { uploadPaymentProofMiddleware } from "../middleware/uploadPaymentProof.js";
 import { uploadFilesMiddleware } from "../middleware/uploads.js";
 
 const router = express.Router();
@@ -21,6 +33,8 @@ const router = express.Router();
 router.get("/profile", protect, getUserProfile);
 router.put("/update-profile", protect, postUpdateUserProfile);
 router.get("/check-valid-data", protect, getIsValidData);
+router.post("/create-account-bank", protect, postUserCreateBankAccount);
+router.post("/delete-account-bank", protect, deleteUserBankAccont);
 router.get("/auction", protect, getUserAuction);
 router.post(
   "/auction/create",
@@ -34,12 +48,20 @@ router.put(
   uploadFilesMiddleware,
   putUserUpdateAuction
 );
+
+router.get("/auction/sold-items/:invoiceId", protect, getUserSoldItemDetails);
 router.put("/auction/start", protect, postUserStartAuction);
 router.get("/auction/:auctionId", protect, getAuctionDetails);
 router.delete("/auction/:auctionId", protect, postDeleteAuction);
 router.get("/auction/close/:auctionId", protect, postCloseAuction);
 router.post("/auction/confirm-bid", protect, postConfirmBid);
+router.post("/auction/confirm-auction-bill", protect, postSellerConfirmBill);
 
 router.get("/mybids", protect, getUserBids);
+router.get("/winning-auction", protect, getUserWinAuction);
+router.get("/winning-auction/:invoiceId", protect, getUserDetailsAuctionWin);
+router.post("/winning-confirm", protect, postUserWinConfirmAuction);
+router.get("/payment/:invoiceId", protect, getUserPaymentDetails);
+router.post("/payment", protect, uploadPaymentProofMiddleware, postUserPayment);
 
 export default router;
