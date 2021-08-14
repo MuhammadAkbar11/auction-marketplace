@@ -34,9 +34,12 @@ const UserAuction = props => {
   const closeAuctionState = useSelector(state => state.userCloseAuction);
 
   React.useEffect(() => {
-    dispatch(getUserAuctionsActiveAction());
+    if (tabKey === "active") {
+      dispatch(getUserAuctionsActiveAction());
+    }
+
     dispatch(getUserAuctionAction());
-  }, []);
+  }, [tabKey]);
 
   // if
   React.useEffect(() => {
