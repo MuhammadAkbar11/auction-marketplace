@@ -14,6 +14,9 @@ import {
   USER_GET_PAYMENT_REQ,
   USER_GET_PAYMENT_SUCCESS,
   USER_GET_PAYMENT_FAIL,
+  USER_POST_PAYMENT_REQ,
+  USER_POST_PAYMENT_SUCCESS,
+  USER_POST_PAYMENT_FAIL,
 } from "../constants/user.contanst";
 
 export const userResetPurchaseMessage = () => dispatch => {
@@ -221,6 +224,8 @@ export const postUserWinConfirmAction =
         biaya_packing: values.biaya_packing,
       };
 
+      console.log(values);
+
       const { data } = await axios.post(
         "/api/user/winning-confirm",
         postData,
@@ -338,34 +343,36 @@ export const postPaymentAction = values => async (dispatch, getState) => {
     authUser: { userInfo },
   } = getState();
 
+  dispatch({
+    type: USER_POST_PAYMENT_REQ,
+  });
+
   try {
     const config = {
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
 
-    const transformValues = { ...values };
-
     let postData = new FormData();
 
-    Object.keys(values).forEach(val => {
-      postData.append(val, values[val]);
-    });
+    // Object.keys(values).forEach(val => {
 
-    const { data } = await axios.post("/api/user/payment", {}, config);
+    postData.append("bank_tujuan", JSON.stringify(values.bank_tujuan));
+    postData.append("id_transaksi", values.id_transaksi);
+    postData.append("file", values.bukti_bayar.file);
+    const { data } = await axios.post("/api/user/payment", postData, config);
 
     dispatch({
-      type: USER_PURCHASE_MESSAGE,
+      type: USER_POST_PAYMENT_SUCCESS,
       payload: {
-        show: true,
-        type: "success",
-        text: "Berhasil, Pembayaran anda sedang diproses!",
+        invoice: data.invoice,
+        success: true,
       },
     });
 
-    return {};
+    return data;
   } catch (error) {
     let errData = {
       message: error.message,
@@ -380,6 +387,11 @@ export const postPaymentAction = values => async (dispatch, getState) => {
       };
     }
 
-    return errData;
+    dispatch({
+      type: USER_POST_PAYMENT_FAIL,
+      payload: errData,
+    });
+
+    return await Promise.reject(errData);
   }
 };

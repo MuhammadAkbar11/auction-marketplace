@@ -48,9 +48,13 @@ import {
   USER_SOLD_ITEM_INFO_REQ,
   USER_SOLD_ITEM_INFO_SUCCESS,
   USER_SOLD_ITEM_INFO_FAIL,
-  USER_UPDATE_BILL_REQ,
-  USER_UPDATE_BILL_SUCCESS,
-  USER_UPDATE_BILL_FAIL,
+
+  // USER_UPDATE_BILL_REQ,
+  // USER_UPDATE_BILL_SUCCESS,
+  // USER_UPDATE_BILL_FAIL,
+  CUSTOMER_PAYMENT_DETAILS_REQ,
+  CUSTOMER_PAYMENT_DETAILS_SUCCESS,
+  CUSTOMER_PAYMENT_DETAILS_FAIL,
 } from "../constants/user.contanst";
 
 export const userDetailsReducer = (
@@ -417,6 +421,31 @@ export const userSoldItemDetailsReducer = (
         ...action.payload,
       };
     case USER_SOLD_ITEM_INFO_FAIL:
+      return {
+        ...action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+export const customerPaymentDetailsDetailsReducer = (
+  state = {
+    loading: false,
+    invoice: null,
+  },
+  action
+) => {
+  switch (action.type) {
+    case CUSTOMER_PAYMENT_DETAILS_REQ:
+      return {
+        loading: true,
+      };
+    case CUSTOMER_PAYMENT_DETAILS_SUCCESS:
+      return {
+        ...action.payload,
+      };
+    case CUSTOMER_PAYMENT_DETAILS_FAIL:
       return {
         ...action.payload,
       };

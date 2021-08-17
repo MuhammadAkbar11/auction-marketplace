@@ -31,7 +31,7 @@ const fileFilter = (req, file, cb) => {
 export const multerConfig = multer({
   storage: fileStorage,
   fileFilter: fileFilter,
-}).single("files");
+}).single("file");
 
 // const uploadMultiFiles
 
@@ -40,9 +40,9 @@ const updatePaymentProof = (req, res, next) => {
     let file = {
       type: "success",
       message: "Upload file success",
-      data: req.files,
+      data: req.file,
     };
-
+    console.log(req.file, "file here");
     if (err instanceof multer.MulterError) {
       file = {
         type: "error",
@@ -60,7 +60,7 @@ const updatePaymentProof = (req, res, next) => {
       req.fileimg = file;
       next();
     } else {
-      if (req.files === undefined) {
+      if (req.file === undefined) {
         file = {
           type: "error",
           message: "Please upload your file",

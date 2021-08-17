@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import * as Yup from "yup";
 import {
   Col,
   Container,
@@ -9,6 +10,7 @@ import {
   Button,
   ListGroup,
   Alert,
+  Image,
 } from "react-bootstrap";
 import BreadcrumbsContainer from "../../Components/Layouts/BreadcrumbsContainer";
 import Layout from "../../Components/Layouts/Layout";
@@ -27,23 +29,28 @@ import {
   getUserPaymentDetailsAction,
   postPaymentAction,
 } from "../../actions/user.purchase.actions";
+import useSingleImageUploader from "../../hooks/useSingleImageUploader";
+
+const paymentSchema = yup.object().shape({
+  bukti_bayar: Yup.object().shape({}),
+  bank_tujuan: Yup.object().shape({}),
+});
 
 const UserPayment = props => {
   const { match, history } = props;
-
   const { invoiceId } = match?.params;
 
   const dispatch = useDispatch();
+  const paymentProof = useSingleImageUploader("");
 
-  const [loadingConfirm, setLoadingConfirm] = React.useState(false);
   const [alerts, setAlerts] = React.useState({
     show: false,
     message: "",
     type: "success",
   });
-
   const [destinationBank, setDestinationBank] = React.useState(null);
 
+  const postPaymentState = useSelector(state => state.userPostPayment);
   const { loading, invoice, error } = useSelector(
     state => state.userPaymentDetails
   );
@@ -51,6 +58,17 @@ const UserPayment = props => {
   React.useEffect(() => {
     dispatch(getUserPaymentDetailsAction(invoiceId));
   }, []);
+
+  React.useEffect(() => {
+    if (invoice?.id_transaksi) {
+      if (+invoice.status_transaksi !== 2) {
+        history.push("/akun/pembelian");
+        console.log("redirect");
+      }
+    }
+  }, [invoice]);
+
+  const loadingConfirm = postPaymentState.loading;
 
   const bid = invoice?.tawaran;
   const member = bid?.member;
@@ -60,25 +78,31 @@ const UserPayment = props => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    setLoadingConfirm(true);
-    dispatch(postPaymentAction())
-      .then(result => {
-        // setTimeout(() => {
-        //   setLoadingConfirm(false);
-        // }, 4000);
 
-        setAlerts({
-          show: true,
-          message: result?.message || "Berhasil",
-          type: "success",
-        });
+    paymentSchema
+      .validate({
+        bukti_bayar: paymentProof.image,
+        bank_tujuan: destinationBank,
+      })
+      .then(values => {
+        dispatch(postPaymentAction({ id_transaksi: invoiceId, ...values }))
+          .then(result => {
+            history.push("/akun/result-pembayaran");
+          })
+          .catch(err => {
+            console.log(err);
+            history.push("/akun/result-pembayaran");
+            setAlerts({
+              show: true,
+              message: err?.message || "Opps",
+              type: "danger",
+            });
+          });
       })
       .catch(err => {
-        setLoadingConfirm(false);
-
         setAlerts({
           show: true,
-          message: err?.message || "Opps",
+          message: "Gagal melakukan pembayaran",
           type: "danger",
         });
       });
@@ -86,8 +110,6 @@ const UserPayment = props => {
 
   const handleChangeDestiBank = id => {
     const selectedBank = sellerBank.filter(item => item.id_akun === +id)[0];
-    console.log(id, selectedBank);
-
     setDestinationBank(selectedBank);
   };
 
@@ -102,8 +124,6 @@ const UserPayment = props => {
     : null;
 
   const disabledSubmit = false;
-
-  console.log(invoice?.lelang?.penjual);
 
   return (
     <>
@@ -140,10 +160,17 @@ const UserPayment = props => {
                         }
                         dismissible
                       >
-                        {alerts.text}
+                        {alerts.message}
                       </Alert>
                     </div>
                   )}
+                  <Link
+                    to="/akun/pembelian"
+                    size="sm"
+                    className="btn btn-light mb-2 "
+                  >
+                    Kembali
+                  </Link>
                   <Form className="pt-2" onSubmit={handleSubmit}>
                     <Card>
                       <Card.Header className=" d-flex justify-content-between  bg-transparent">
@@ -203,6 +230,104 @@ const UserPayment = props => {
                                 </span>
                               </p>
                             </div>
+                            <Row className="pt-3">
+                              <Col xs={12}>
+                                <Card.Title>Pembayaran</Card.Title>
+                              </Col>
+                              <Col
+                                lg={{
+                                  span: 8,
+                                }}
+                              >
+                                <Form.Group controlId="id_provinsi">
+                                  <Form.Label>Bank Tujuan</Form.Label>
+
+                                  <Form.Control
+                                    className={`  bg-transparent border`}
+                                    as="select"
+                                    onChange={e =>
+                                      handleChangeDestiBank(e.target.value)
+                                    }
+                                    value={destinationBank?.id_bank}
+                                  >
+                                    <option value={null}>
+                                      Pilih nomor rekening tujuan
+                                    </option>
+                                    {sellerBank &&
+                                      sellerBank.length !== 0 &&
+                                      sellerBank.map(bank => {
+                                        return (
+                                          <option
+                                            key={bank?.id_akun}
+                                            value={bank?.id_akun}
+                                          >
+                                            {bank?.nama_bank} - {bank?.no_rek}
+                                          </option>
+                                        );
+                                      })}
+                                  </Form.Control>
+                                </Form.Group>
+                              </Col>
+                              <Col lg={8}>
+                                <Form.Group controlId="bukti">
+                                  <Form.Label>
+                                    Upload Bukti pembayaran
+                                  </Form.Label>
+                                  <div
+                                    className="mt-2 mb-3"
+                                    style={{
+                                      width: 150,
+                                    }}
+                                  >
+                                    {paymentProof.image && (
+                                      <Image
+                                        className="w-100"
+                                        src={paymentProof.image?.url}
+                                      />
+                                    )}
+                                  </div>
+                                  <Form.File
+                                    id="bukti-file"
+                                    className="bg-transparent "
+                                    accept="image/*"
+                                    isInvalid={!paymentProof.image?.file}
+                                    // ref={fileInput}
+                                    // onClick={() => fileInput.current.click()}
+                                    onChange={e => {
+                                      paymentProof.handleFile(e.target.files);
+                                    }}
+                                    // custom
+                                  />
+                                </Form.Group>
+                                {paymentProof.image === null ? (
+                                  <Form.Control.Feedback type="invalid">
+                                    Upload
+                                  </Form.Control.Feedback>
+                                ) : null}
+                              </Col>
+                              {destinationBank !== null && (
+                                <Col lg={12}>
+                                  <Alert variant="info">
+                                    <p>
+                                      Silahkan lakukan pembayaran dengan
+                                      mengtransfer ke No Rekening Berikut :
+                                    </p>
+                                    <div>
+                                      <p className="mb-1 font-weight-bold">
+                                        Nomor Rekening :{" "}
+                                        {destinationBank.no_rek}
+                                      </p>
+                                      <p className="mb-1 font-weight-bold">
+                                        Atas Nama : {destinationBank.nama_rek}
+                                      </p>
+                                      <p className="font-weight-bold">
+                                        Bank : {destinationBank.nama_bank}
+                                      </p>
+                                    </div>
+                                  </Alert>
+                                </Col>
+                              )}
+                            </Row>
                           </Col>{" "}
                           <Col xs={12} lg={5}>
                             <Card>
@@ -236,7 +361,7 @@ const UserPayment = props => {
                                       </div>
                                     </div>
                                   </ListGroup.Item>
-                                  <ListGroup.Item className="pl-0 border-top-0 border-left-0 border-right-0 pt-0 pb-1   ">
+                                  <ListGroup.Item className="pl-0 border-top-0 border-left-0 border-right-0 pt-0 pb-2   ">
                                     <div className="d-flex flex-column flex-md-column flex-lg-row justify-content-between ">
                                       <div className=" text-gray-600    ">
                                         Biaya Packing
@@ -250,7 +375,7 @@ const UserPayment = props => {
                                     </div>
                                   </ListGroup.Item>
 
-                                  <ListGroup.Item className="pl-0 border-0 pt-1 pb-1   ">
+                                  <ListGroup.Item className="pl-0 border-0 pt-2 pb-1   ">
                                     <div className="d-flex flex-column flex-md-column flex-lg-row justify-content-between ">
                                       <div className=" text-primary    ">
                                         Total
@@ -262,111 +387,36 @@ const UserPayment = props => {
                                     </div>
                                   </ListGroup.Item>
                                 </ListGroup>
+                                <div className="mt-3 d-flex">
+                                  {loadingConfirm ? (
+                                    <>
+                                      <Button
+                                        disabled
+                                        type="submit"
+                                        className=" d-flex justify-content-center "
+                                        block
+                                      >
+                                        <div>
+                                          <Loader variant="light" size={11} />{" "}
+                                          <span className="">Mengirim</span>
+                                        </div>
+                                      </Button>
+                                    </>
+                                  ) : (
+                                    <Button
+                                      disabled={disabledSubmit}
+                                      type="submit"
+                                      block
+                                    >
+                                      {"Bayar Sekarang"}
+                                    </Button>
+                                  )}
+                                </div>
                               </Card.Body>
                             </Card>
                           </Col>{" "}
                         </Row>
-                        <Row className="pt-3">
-                          <Col xs={12}>
-                            <Card.Title>Pembayaran</Card.Title>
-                          </Col>
-                          <Col lg={6}>
-                            <Form.Group controlId="id_provinsi">
-                              <Form.Label>Bank Tujuan</Form.Label>
-
-                              <Form.Control
-                                className={`  bg-transparent border`}
-                                as="select"
-                                onChange={e =>
-                                  handleChangeDestiBank(e.target.value)
-                                }
-                                value={destinationBank?.id_bank}
-                              >
-                                <option value={null}>
-                                  Pilih nomor rekening tujuan
-                                </option>
-                                {sellerBank.length !== 0 &&
-                                  sellerBank.map(bank => {
-                                    return (
-                                      <option
-                                        key={bank?.id_akun}
-                                        value={bank?.id_akun}
-                                      >
-                                        {bank?.nama_bank} - {bank?.no_rek}
-                                      </option>
-                                    );
-                                  })}
-                              </Form.Control>
-
-                              {/* {formik.errors.id_provinsi ? (
-                  <Form.Control.Feedback type="invalid">
-                    {formik.errors.id_provinsi}
-                  </Form.Control.Feedback>
-                ) : null} */}
-                            </Form.Group>
-                          </Col>
-                          <Col lg={6}>
-                            <Form.Group controlId="id_provinsi">
-                              <Form.Label>Upload Bukti pembayaran</Form.Label>
-
-                              <Form.File
-                                id="custom-file"
-                                label="Custom file input"
-                                className={`  bg-transparent border`}
-                                custom
-                              />
-                            </Form.Group>
-                          </Col>
-                          {destinationBank !== null && (
-                            <Col lg={12}>
-                              <Alert variant="info">
-                                <p>
-                                  Silahkan lakukan pembayaran dengan
-                                  mengtransfer ke No Rekening Berikut :
-                                </p>
-                                <div>
-                                  <p className="mb-1 font-weight-bold">
-                                    Nomor Rekening : {destinationBank.no_rek}
-                                  </p>
-                                  <p className="mb-1 font-weight-bold">
-                                    Atas Nama : {destinationBank.nama_rek}
-                                  </p>
-                                  <p className="font-weight-bold">
-                                    Bank : {destinationBank.nama_bank}
-                                  </p>
-                                </div>
-                              </Alert>
-                            </Col>
-                          )}
-                        </Row>
                       </Card.Body>
-                      <Card.Footer className="bg-transparent">
-                        <div className="d-flex justify-content-between ">
-                          <Link
-                            to="/akun/pembelian"
-                            className="btn btn-outline-primary mr-2"
-                          >
-                            Batalkan
-                          </Link>
-
-                          {loadingConfirm ? (
-                            <>
-                              <Button
-                                disabled
-                                type="submit"
-                                className=" d-flex align-items-center"
-                              >
-                                <Loader variant="light" size={11} />{" "}
-                                <span className="ml-2">Mengirim</span>
-                              </Button>
-                            </>
-                          ) : (
-                            <Button disabled={disabledSubmit} type="submit">
-                              {"Bayar Sekarang"}
-                            </Button>
-                          )}
-                        </div>
-                      </Card.Footer>
                     </Card>
                   </Form>
                 </section>

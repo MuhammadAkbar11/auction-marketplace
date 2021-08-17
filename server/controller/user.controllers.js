@@ -11,6 +11,7 @@ import ModelTransaksi from "../models/m_transaksi.js";
 import ModelAkunBank from "../models/m_akun_bank.js";
 import onlyNumbers from "../utils/onlyNumber.js";
 import dayjs from "dayjs";
+import ModelDetailTransaksi from "../models/m_detail_transaksi.js";
 
 const Op = Sequelize.Op;
 
@@ -879,6 +880,119 @@ export const postSellerConfirmBill = asyncHandler(async (req, res) => {
       status: true,
       message: "Berhasil mengubah tagihan",
     });
+  } catch (error) {
+    throw new ResponseError(error.statusCode, error.message, error.errors);
+  }
+});
+
+export const getCustomerPaymentDetails = asyncHandler(async (req, res) => {
+  // const memberId = req.user.id_member;
+  const invoiceId = req.params.invoiceId;
+
+  try {
+    if (!invoiceId) {
+      res.status(400);
+      throw new ResponseError(400, "Id Transkasi tidak ditemukan");
+    }
+    const invoice = await ModelTransaksi.findOne({
+      where: {
+        id_transaksi: invoiceId,
+      },
+    });
+
+    if (invoice) {
+      const bid = await ModelPenawaran.findOne({
+        where: {
+          id_tawaran: invoice.id_tawaran,
+        },
+        include: {
+          model: ModelMember,
+          as: "member",
+          attributes: ["id_member", "nama", "username", "email", "no_hp"],
+        },
+        attributes: ["id_tawaran", "id_lelang", "nilai_tawaran", "id_member"],
+      });
+
+      const auction = await ModelLelang.findOne({
+        where: {
+          id_lelang: bid.id_lelang,
+        },
+        attributes: {
+          exclude: ["ModelMemberIdMember", "ModelKategoriIdKategori"],
+        },
+      });
+
+      const evidenceTransfer = JSON.parse(invoice.bukti_transfer);
+
+      invoice.setDataValue("tawaran", bid);
+      invoice.setDataValue("lelang", auction);
+      invoice.setDataValue(
+        "tgl_bayar",
+        daysJs(invoice.tgl_bayar).format("DD MMM YYYY ")
+      );
+      invoice.setDataValue("bank_tujuan", evidenceTransfer.bank_tujuan);
+      invoice.setDataValue("bukti_transfer", evidenceTransfer.bukti);
+      invoice.setDataValue("jenis_pembayaran", "Bank Transfer");
+
+      return res.status(200).json({
+        details: invoice,
+      });
+    }
+    throw new ResponseError(400, "Data tidak ditemukan", { type: "not found" });
+  } catch (error) {
+    throw new ResponseError(error.statusCode, error.message, error.errors);
+  }
+});
+
+export const postConfirmCustomerPayment = asyncHandler(async (req, res) => {
+  const { status, id_transaksi } = req.body;
+  try {
+    if (!id_transaksi) {
+      res.status(500);
+      throw new ResponseError(400, "Id Transkasi tidak ditemukan");
+    }
+
+    let invoice = await ModelTransaksi.findByPk(id_transaksi);
+
+    if (status === "ACCEPT") {
+      invoice.status_bayar = 2;
+      invoice.status_transaksi = 4;
+
+      const invoiceDetail = await ModelDetailTransaksi.findOne({
+        where: {
+          id_transaksi: id_transaksi,
+        },
+      });
+
+      invoiceDetail.status = 1;
+
+      await invoice.save();
+      await invoiceDetail.save();
+
+      return res.status(200).json({
+        status: true,
+        message: "Anda telah menyetujui bukti pembayaran pelanggan",
+      });
+    } else {
+      if (status === "DECLINE") {
+        invoice.status_bayar = 1;
+        invoice.status_transaksi = 2;
+
+        await invoice.save();
+        await ModelDetailTransaksi.destroy({
+          where: {
+            id_transaksi: id_transaksi,
+          },
+        });
+
+        return res.status(200).json({
+          status: true,
+          message: "Anda telah menolak bukti pembayaran pelanggan",
+        });
+      } else {
+        throw new ResponseError(400, "Tidak dapat melakukan konfirmasi");
+      }
+    }
   } catch (error) {
     throw new ResponseError(error.statusCode, error.message, error.errors);
   }

@@ -10,6 +10,7 @@ import { isEmptyObj } from "../utils/checkObj.js";
 import ModelGaleri from "../models/m_galeri_lelang.js";
 import ModelAkunBank from "../models/m_akun_bank.js";
 import onlyNumbers from "../utils/onlyNumber.js";
+import ModelDetailTransaksi from "../models/m_detail_transaksi.js";
 
 export const getUserBids = asyncHandler(async (req, res) => {
   try {
@@ -308,7 +309,7 @@ export const postUserWinConfirmAuction = asyncHandler(async (req, res) => {
     }
 
     let status_transaksi = 1;
-
+    console.log(jenis_pengiriman);
     if (jenis_pengiriman === "PICKUP") {
       const bid = await getTransaction.getModelPenawaran({
         where: {},
@@ -319,6 +320,7 @@ export const postUserWinConfirmAuction = asyncHandler(async (req, res) => {
       status_transaksi = 2;
       paymentLimit = dayjs().add(1, "day").format("YYYY-MM-DD HH:mm:ss");
       message = "Konfirmasi berhasil silahkan lakukan pembayaran";
+      console.log(bidValueToNum, +biaya_packing);
     }
 
     await ModelTransaksi.update(
@@ -439,9 +441,59 @@ export const getUserPaymentDetails = asyncHandler(async (req, res) => {
 });
 
 export const postUserPayment = asyncHandler(async (req, res) => {
+  const { id_transaksi, bank_tujuan } = req.body;
+  const imageProof = req.fileimg?.data;
   try {
+    const invoice = await ModelTransaksi.findOne({
+      where: {
+        id_transaksi,
+      },
+      attributes: {
+        exclude: ["ModelPenawaranIdTawaran"],
+      },
+    });
+
+    if (!invoice) {
+      throw new ResponseError(400, "Invoice tidak dapat ditemukan");
+    }
+
+    invoice.status_bayar = 1;
+    invoice.status_transaksi = 3;
+    invoice.tgl_bayar = dayjs().format("YYYY-MM-DD HH:mm:ss");
+    invoice.bukti_transfer = JSON.stringify({
+      bank_tujuan: JSON.parse(bank_tujuan),
+      bukti: "/" + imageProof.path,
+    });
+
+    const invoiceDetails = await ModelDetailTransaksi.findOne({
+      where: {
+        id_transaksi,
+      },
+    });
+
+    if (invoiceDetails) {
+      invoiceDetails.status = 0;
+      await invoiceDetails.save();
+    } else {
+      await ModelDetailTransaksi.create({
+        id_transaksi,
+        status: 0,
+      });
+    }
+
+    await invoice.save();
+
+    // const result
+    invoice.setDataValue(
+      "tgl_bayar",
+      dayjs(invoice.tgl_bayar).format("DD MMM YYYY ")
+    );
+
     res.status(201).json({
-      request: req.body,
+      status: true,
+      invoice,
+      message:
+        "Berhasil mengupload bukti transfer, pembayaran anda sedang di proses",
     });
   } catch (error) {
     throw new ResponseError(error.statusCode, error.message, error.errors);

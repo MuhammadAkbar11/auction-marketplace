@@ -50,6 +50,9 @@ import {
   USER_SOLD_ITEM_INFO_REQ,
   USER_SOLD_ITEM_INFO_SUCCESS,
   USER_SOLD_ITEM_INFO_FAIL,
+  CUSTOMER_PAYMENT_DETAILS_REQ,
+  CUSTOMER_PAYMENT_DETAILS_SUCCESS,
+  CUSTOMER_PAYMENT_DETAILS_FAIL,
 } from "../constants/user.contanst";
 import { axiosConfigAuth } from "../utils/axiosConfig";
 import { _dateFormat } from "../utils/date-format";
@@ -1202,5 +1205,102 @@ export const postSellerConfirmBillAction =
       }
 
       return errData;
+    }
+  };
+
+export const getCustomerPaymentDetailsAction =
+  id => async (dispatch, getState) => {
+    const {
+      authUser: { userInfo },
+    } = getState();
+
+    dispatch({
+      type: CUSTOMER_PAYMENT_DETAILS_REQ,
+      payload: {
+        loading: true,
+      },
+    });
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        "/api/user/auction/payment/" + id,
+        config
+      );
+
+      dispatch({
+        type: CUSTOMER_PAYMENT_DETAILS_SUCCESS,
+        payload: {
+          loading: false,
+          invoice: data.details,
+          error: null,
+        },
+      });
+    } catch (error) {
+      let errData = {
+        message: error.message,
+      };
+
+      if (error.response && error.response.data.message) {
+        const errorData =
+          error.response.data.errors && error.response.data.errors;
+        errData = {
+          message: error.response.data.message,
+          ...errorData,
+        };
+      }
+
+      dispatch({
+        type: CUSTOMER_PAYMENT_DETAILS_FAIL,
+        payload: {
+          error: errData,
+          loading: false,
+        },
+      });
+    }
+  };
+
+export const postConfirmCustomerPaymentAction =
+  (id, status) => async (dispatch, getState) => {
+    const {
+      authUser: { userInfo },
+    } = getState();
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const postData = {
+        id_transaksi: id,
+        status,
+      };
+
+      const { data } = await axios.post(
+        "/api/user/auction/payment/",
+        postData,
+        config
+      );
+
+      dispatch({
+        type: USER_AUCTION_MESSAGE,
+        payload: {
+          type: "success",
+          text: data?.message,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      throw new Error(error);
     }
   };

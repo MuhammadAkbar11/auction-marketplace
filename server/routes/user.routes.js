@@ -15,6 +15,8 @@ import {
   postSellerConfirmBill,
   postUserCreateBankAccount,
   deleteUserBankAccont,
+  getCustomerPaymentDetails,
+  postConfirmCustomerPayment,
 } from "../controller/user.controllers.js";
 import {
   getUserBids,
@@ -56,6 +58,8 @@ router.delete("/auction/:auctionId", protect, postDeleteAuction);
 router.get("/auction/close/:auctionId", protect, postCloseAuction);
 router.post("/auction/confirm-bid", protect, postConfirmBid);
 router.post("/auction/confirm-auction-bill", protect, postSellerConfirmBill);
+router.get("/auction/payment/:invoiceId", protect, getCustomerPaymentDetails);
+router.post("/auction/payment", protect, postConfirmCustomerPayment);
 
 router.get("/mybids", protect, getUserBids);
 router.get("/winning-auction", protect, getUserWinAuction);

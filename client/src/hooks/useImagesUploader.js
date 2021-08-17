@@ -5,7 +5,6 @@ const useImagesUploader = props => {
 
   const handleFile = files => {
     const newFiles = [...files].map(file => {
-      console.log(typeof file);
       return {
         file: file,
         url: URL.createObjectURL(file),

@@ -13,6 +13,9 @@ import {
   USER_GET_PAYMENT_REQ,
   USER_GET_PAYMENT_SUCCESS,
   USER_GET_PAYMENT_FAIL,
+  USER_POST_PAYMENT_REQ,
+  USER_POST_PAYMENT_SUCCESS,
+  USER_POST_PAYMENT_FAIL,
 } from "../constants/user.contanst";
 
 export const userWinningAuctionReducer = (
@@ -103,6 +106,21 @@ export const userPaymentDetailsReducer = (
     case USER_GET_PAYMENT_SUCCESS:
       return { ...action.payload };
     case USER_GET_PAYMENT_FAIL:
+      return { loading: false, invoice: null, error: action.payload };
+    default:
+      return state;
+  }
+};
+export const userPostPaymentReducer = (
+  state = { loading: false, invoice: null },
+  action
+) => {
+  switch (action.type) {
+    case USER_POST_PAYMENT_REQ:
+      return { loading: true, invoice: null };
+    case USER_POST_PAYMENT_SUCCESS:
+      return { ...action.payload };
+    case USER_POST_PAYMENT_FAIL:
       return { loading: false, invoice: null, error: action.payload };
     default:
       return state;
