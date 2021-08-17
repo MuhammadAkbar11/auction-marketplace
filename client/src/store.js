@@ -21,6 +21,7 @@ import {
   userDeleteAuctionReducer,
   userConfirmBidReducer,
   userSoldItemDetailsReducer,
+  customerPaymentDetailsDetailsReducer,
 } from "./reducers/user.reducer";
 import { categoriesReducer } from "./reducers/categories.reducer";
 import {
@@ -36,6 +37,7 @@ import { adminCategoriesReducer } from "./reducers/admin/adminCategories.reducer
 import {
   userMyBidsReducer,
   userPaymentDetailsReducer,
+  userPostPaymentReducer,
   userWinningAuctionReducer,
   userWinningConfirmReducer,
 } from "./reducers/user.purchase.reducer";
@@ -60,12 +62,13 @@ const reducer = combineReducers({
   userDeleteAuction: userDeleteAuctionReducer,
   userCloseAuction: userCloseAuctionReducer,
   userConfirmBid: userConfirmBidReducer,
+  customerPaymentDetails: customerPaymentDetailsDetailsReducer,
   userMyBids: userMyBidsReducer,
   userWinsAuction: userWinningAuctionReducer,
   userWinningConfirm: userWinningConfirmReducer,
   userPaymentDetails: userPaymentDetailsReducer,
+  userPostPayment: userPostPaymentReducer,
   userSoldItemDetails: userSoldItemDetailsReducer,
-  // userUpdateBill:
   menu: menuReducer,
   categories: categoriesReducer,
 });

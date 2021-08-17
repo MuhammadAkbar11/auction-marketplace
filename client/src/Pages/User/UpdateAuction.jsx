@@ -15,6 +15,7 @@ import UserUpdateAuctionDelivery from "../../Components/UserUpdateAuction/UserUp
 import { Redirect } from "react-router";
 import Loader from "../../Components/UI/Loader";
 import Layout from "../../Components/Layouts/Layout";
+// import {} from './../'
 
 const yesterday = new Date(Date.now() - 86400000);
 

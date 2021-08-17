@@ -55,7 +55,7 @@ const UserMyBidsTab = () => {
                 <tr>
                   <td colSpan={7}>
                     <Alert variant="info" className="text-center">
-                      <Info size={24} /> Belum ada lelang untuk saat ini.
+                      <Info size={24} /> Belum ada tawaran saat ini.
                     </Alert>
                   </td>
                 </tr>

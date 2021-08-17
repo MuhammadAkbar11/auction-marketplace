@@ -114,7 +114,7 @@ const UserSoldOutAuctionsTab = ({ isActive }) => {
                         if (+ac.status_transaksi === 1) {
                           return (
                             <Link
-                              to={`/akun/lelang/konfirmasi-tagihan/${ac.id_transaksi}`}
+                              to={`/akun/konfirmasi-tagihan/${ac.id_transaksi}`}
                               className="text-nowrap btn btn-blue btn-sm"
                             >
                               Konfirmasi Tagihan
@@ -132,6 +132,17 @@ const UserSoldOutAuctionsTab = ({ isActive }) => {
                             >
                               Menunggu pembayaran
                             </Button>
+                          );
+                        }
+
+                        if (+ac.status_transaksi === 3) {
+                          return (
+                            <Link
+                              to={`/akun/konfirmasi-pembayaran/${ac.id_transaksi}`}
+                              className="text-nowrap btn btn-primary btn-sm"
+                            >
+                              Sudah dibayar
+                            </Link>
                           );
                         }
 

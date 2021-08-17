@@ -26,6 +26,8 @@ import TransactionRepot from "./Pages/Admin/TransactionRepot";
 import ConfirmWinning from "./Pages/User/ConfirmWinning";
 import UserConfirmAuctionBill from "./Pages/User/UserConfirmAuctionBill";
 import UserPayment from "./Pages/User/UserPayment";
+import SellerConfirmPayment from "./Pages/User/SellerConfirmPayment";
+import UserPaymentResult from "./Pages/User/UserPaymentResult";
 
 function App() {
   return (
@@ -44,13 +46,21 @@ function App() {
         />
         <PrivateRoute path="/akun/dashboard" component={UserDashboard} />
         <PrivateRoute
-          path="/akun/lelang/konfirmasi-tagihan/:invoiceId"
+          path="/akun/konfirmasi-tagihan/:invoiceId"
           component={UserConfirmAuctionBill}
+        />
+        <PrivateRoute
+          path="/akun/konfirmasi-pembayaran/:invoiceId"
+          component={SellerConfirmPayment}
         />
         <PrivateRoute path="/akun/lelang" component={UserAuction} />
         <PrivateRoute
           path="/akun/pembelian/konfirmasi/:invoiceId"
           component={ConfirmWinning}
+        />
+        <PrivateRoute
+          path="/akun/result-pembayaran"
+          component={UserPaymentResult}
         />
         <PrivateRoute
           path="/akun/pembayaran/:invoiceId"

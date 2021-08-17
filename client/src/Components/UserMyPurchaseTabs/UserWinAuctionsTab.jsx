@@ -1,7 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, Alert, Row, Col, ListGroup, Button } from "react-bootstrap";
+import {
+  Card,
+  Alert,
+  Row,
+  Col,
+  ListGroup,
+  Button,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 import { getUserWinningAuctionAction } from "../../actions/user.purchase.actions";
 import Loader from "../UI/Loader";
 import convertRupiah from "../../utils/convertRupiah";
@@ -37,7 +46,7 @@ const UserWinAuctionsTab = ({ isActive }) => {
             </div>
           ) : winsAuction && winsAuction.length !== 0 ? (
             winsAuction.map(item => {
-              let statusContent = <Button>Selesai</Button>;
+              let statusContent = <Button>Selesai ?</Button>;
               const status = +item.status_transaksi;
               if (status === 0) {
                 statusContent = (
@@ -61,9 +70,25 @@ const UserWinAuctionsTab = ({ isActive }) => {
               if (status === 2) {
                 if (item?.isPaymentExp === true) {
                   statusContent = (
-                    <Button size="sm" disabled variant="primary">
-                      Bayar sekarang
-                    </Button>
+                    <>
+                      <OverlayTrigger
+                        overlay={
+                          <Tooltip id="tooltip-disabled">
+                            Anda telat melakukan pembayaran{" "}
+                          </Tooltip>
+                        }
+                      >
+                        <span className="d-inline-block">
+                          <Button
+                            size="sm"
+                            disabled
+                            style={{ pointerEvents: "none" }}
+                          >
+                            Pembayaran
+                          </Button>
+                        </span>
+                      </OverlayTrigger>
+                    </>
                   );
                 } else {
                   statusContent = (
@@ -72,10 +97,18 @@ const UserWinAuctionsTab = ({ isActive }) => {
                       to={`/akun/pembayaran/${item.id_transaksi}`}
                       variant="outline-primary"
                     >
-                      Bayar sekarang
+                      Pembayaran
                     </Link>
                   );
                 }
+              }
+
+              if (status === 3) {
+                statusContent = (
+                  <Button size="sm" disabled variant="outline-primary">
+                    Menunggu konfirmasi pembayaran
+                  </Button>
+                );
               }
 
               return (

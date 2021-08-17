@@ -52,7 +52,7 @@ const UserConfirmWinForm = ({ user, invoiceId, loading, data }) => {
       alamat: "",
       kode_pos: "",
       jenis_pengiriman: "",
-      biaya_packing: data?.biaya_packing || 0,
+      biaya_packing: data?.lelang?.biaya_packing || 0,
     },
     onSubmit: values => {
       dispatch(

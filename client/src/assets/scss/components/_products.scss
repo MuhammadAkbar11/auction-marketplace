@@ -144,6 +144,7 @@
     width: 100%;
 
     &.product-img-categories {
+      height: 161px;
       @include media-breakpoint-up(md) {
         height: 161px;
         a {
@@ -168,6 +169,7 @@
       }
     }
     a {
+      height: 210px;
       @include media-breakpoint-up(lg) {
         height: 210px;
         a {
