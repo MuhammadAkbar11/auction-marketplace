@@ -30,7 +30,7 @@ const AdminHeader = ({ toggle }) => {
               id="dropdown-basic"
               // as=a
             >
-              Hi, {adminInfo.username}
+              Hi, {adminInfo?.username}
             </Dropdown.Toggle>
 
             <Dropdown.Menu className=" shadow-sm  ">
