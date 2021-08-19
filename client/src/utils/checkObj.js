@@ -8,3 +8,17 @@ export const checkProperties = obj => {
 export const isEmptyObj = obj => {
   return !Object.values(obj).some(element => element === null);
 };
+
+export const convertYupErrorsToObject = array => {
+  return array
+    .map(item => ({
+      path: item.path,
+      type: item.type,
+      message: item.message,
+    }))
+    .reduce((acc, curr) => {
+      console.log(acc, curr);
+      acc[curr["path"]] = curr.message;
+      return acc;
+    }, {});
+};
