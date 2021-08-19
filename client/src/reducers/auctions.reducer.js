@@ -73,14 +73,25 @@ export const auctionsLatestReducer = (
 };
 
 export const auctionListReducer = (
-  state = { loading: false, auctions: [] },
+  state = {
+    loading: false,
+    loadingMore: false,
+    auctions: [],
+    categoryId: [],
+    order: "ASC",
+    sort: "_id",
+    skip: 0,
+    result: 8,
+    totalItem: 0,
+    totalShowing: 0,
+  },
   action
 ) => {
   switch (action.type) {
     case AUCTION_LIST_REQ:
       return {
         ...state,
-        loading: true,
+        ...action.payload,
       };
     case AUCTION_LIST_SUCCESS:
       return {
@@ -89,7 +100,9 @@ export const auctionListReducer = (
       };
     case AUCTION_LIST_FAIL:
       return {
+        ...state,
         loading: false,
+        loadingMore: false,
         error: action.payload,
       };
     // case AUCTION_LIST_RESET:

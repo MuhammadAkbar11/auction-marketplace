@@ -6,7 +6,7 @@ import {
 
 const router = express.Router();
 
-router.get("/", getListAuction);
+router.post("/", getListAuction);
 router.get("/:auctionId", getAuction);
 
 export default router;

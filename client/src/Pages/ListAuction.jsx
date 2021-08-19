@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Col, Container, Row, Form } from "react-bootstrap";
+import { Col, Container, Row, Form, Button } from "react-bootstrap";
 import BreadcrumbsContainer from "../Components/Layouts/BreadcrumbsContainer";
 import ListAuctionSidebar from "../Components/ListAuctionSidebar";
 import ProductCard from "../Components/ProductCard";
@@ -11,12 +11,92 @@ import Layout from "../Components/Layouts/Layout";
 
 const ListAuction = () => {
   const dispatch = useDispatch();
-  const { loading, auctions } = useSelector(state => state.auctionList);
+  const {
+    loading,
+    loadingMore,
+    auctions,
+    result,
+    skip,
+    totalItem,
+    categoryId,
+    totalShowing,
+  } = useSelector(state => state.auctionList);
   const { categories } = useSelector(state => state.categories);
 
+  const [SortBy, setSortBy] = React.useState("_id");
+
+  const loadAuctions = ({
+    isLoadMore = false,
+    order = "ASC",
+    sort = "_id",
+    skip = 0,
+    result = 8,
+    categoryId = null,
+  }) => {
+    dispatch(
+      getListAuctionAction(isLoadMore, {
+        order,
+        sort,
+        skip,
+        result,
+        categoryId,
+      })
+    );
+  };
+
   React.useEffect(() => {
-    dispatch(getListAuctionAction());
+    loadAuctions({ isLoadMore: false });
   }, []);
+
+  const onLoadMore = () => {
+    let orderBy = "ASC";
+    if (SortBy === "tgl_mulai") {
+      orderBy = "DESC";
+    }
+    const variables = {
+      result: 8,
+      skip: +skip + +result,
+      categoryId: categoryId,
+      sort: SortBy,
+      order: orderBy,
+    };
+    dispatch(getListAuctionAction(true, variables));
+  };
+  const onChangSortBy = e => {
+    const value = e.target.value;
+    let bySort = value;
+    let byOrder = "ASC";
+
+    if (value === "tgl_mulai") {
+      byOrder = "DESC";
+      // bySort = "tgl_selesai";
+    }
+    setSortBy(value);
+    loadAuctions({
+      isLoadMore: false,
+      result: 8,
+      skip: 0,
+      categoryId: categoryId,
+      sort: bySort,
+      order: byOrder,
+    });
+  };
+
+  const onSortByCategory = id => {
+    if (id === "ALL") {
+      loadAuctions({ isLoadMore: false });
+    } else {
+      loadAuctions({
+        isLoadMore: false,
+        result: 8,
+        skip: 0,
+        categoryId: [id],
+        order: "ASC",
+        sort: SortBy,
+      });
+    }
+  };
+
   return (
     <Layout>
       <BreadcrumbsContainer
@@ -33,18 +113,20 @@ const ListAuction = () => {
               <Row className="shop-topbar-wrapper">
                 <Col className=" d-flex align-items-center">
                   <div className="shop-topbar-left">
-                    <div className="view-mode d-flex">
+                    {/* <div className="view-mode d-flex">
                       <a className="active">
                         <SquaresFourIcon />
                       </a>
                       <a href="#shop-2">
                         <ListIcon />
                       </a>
-                    </div>
-                    <p className="text-nowrap">Showing 1 - 20 of 30 results </p>
+                    </div> */}
+                    <p className="text-nowrap">
+                      Showing {totalShowing} of {totalItem} results{" "}
+                    </p>
                   </div>
                 </Col>
-                <Col className="h-10  py-0 d-flex align-items-center flex-nowrap ">
+                {/* <Col className="h-10  py-0 d-flex align-items-center flex-nowrap ">
                   {" "}
                   <Form.Group className="d-flex h-100  w-100 align-items-center flex-nowrap my-0">
                     <Form.Label className=" text-nowrap my-auto">
@@ -55,12 +137,13 @@ const ListAuction = () => {
                       as="select"
                       className="bg-transparent border ml-2"
                     >
-                      <option value=""> 20</option>
-                      <option value=""> 23</option>
-                      <option value=""> 30</option>
+                      <option value=""> A - Z</option>
+                      <option value=""> Z - A</option>
+
                     </Form.Control>
                   </Form.Group>
-                </Col>
+                </Col> */}
+
                 <Col className="h-10  py-0 d-flex align-items-center flex-nowrap ">
                   {" "}
                   <Form.Group className="d-flex h-100  w-100 align-items-center flex-nowrap my-0">
@@ -70,11 +153,13 @@ const ListAuction = () => {
                     <Form.Control
                       size="sm"
                       as="select"
+                      value={SortBy}
                       className="bg-transparent border ml-2"
+                      onChange={onChangSortBy}
                     >
-                      <option value=""> 20</option>
-                      <option value=""> 23</option>
-                      <option value=""> 30</option>
+                      <option value="judul">Judul</option>
+                      <option value="tgl_mulai">Terbaru</option>
+                      <option value="tgl_selesai">Segera Berakhir</option>
                     </Form.Control>
                   </Form.Group>
                 </Col>
@@ -83,10 +168,10 @@ const ListAuction = () => {
                 {loading ? (
                   <Col
                     xs={12}
-                    className=" d-flex w-100 justify-content-center "
+                    className=" mt-4 d-flex w-100 justify-content-center "
                   >
                     {" "}
-                    <Loader variant="primary" />
+                    <Loader variant="primary" size={50} />
                   </Col>
                 ) : auctions.length === 0 ? (
                   <Col xs={12} className="mt-4 d-flex justify-content-center  ">
@@ -110,12 +195,36 @@ const ListAuction = () => {
                         </Col>
                       );
                     })}
+                    {loadingMore ? (
+                      <Col
+                        xs={12}
+                        className=" d-flex w-100 justify-content-center "
+                      >
+                        {" "}
+                        <Loader variant="primary" size={15} />
+                      </Col>
+                    ) : (
+                      totalShowing < totalItem && (
+                        <Col xs={12} className="text-center ">
+                          <Button
+                            onClick={onLoadMore}
+                            size={"sm"}
+                            variant="outline-primary"
+                          >
+                            Load More
+                          </Button>
+                        </Col>
+                      )
+                    )}
                   </>
                 )}
               </Row>
             </Col>
             <Col lg={3}>
-              <ListAuctionSidebar categories={categories} />
+              <ListAuctionSidebar
+                categories={categories}
+                onSortByCategory={onSortByCategory}
+              />
             </Col>
           </Row>
         </Container>

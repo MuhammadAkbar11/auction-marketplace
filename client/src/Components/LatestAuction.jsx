@@ -82,7 +82,7 @@ const LatestAuction = () => {
             {" "}
             <Loader variant="light" />
           </div>
-        ) : latestAuction.length === 0 ? (
+        ) : latestAuction?.length === 0 ? (
           <div className="d-flex justify-content-center w-100">
             <h5 className=" text-black-50 text-capitalize text-spacing-0 ">
               Belum ada lelang terbaru

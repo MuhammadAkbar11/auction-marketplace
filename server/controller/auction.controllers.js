@@ -11,31 +11,52 @@ import ModelMember from "../models/m_member.js";
 const Op = sequelize.Op;
 
 export const getListAuction = asyncHandler(async (req, res) => {
-  const latest = req.query.latest;
+  let latest = req.body.latest;
+  let sortBy = req.body.sort || "_id";
+  let orderBy = req.body.order || "DESC";
+  let skip = +req.body.skip || 0;
+  let limit = +req.body.result || 8;
+  let categoryId = req.body.categoryId || [];
+
+  const where = {
+    tgl_mulai: {
+      [Op.lte]: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+    },
+    status_lelang: {
+      [Op.in]: [1],
+    },
+  };
+
+  if (categoryId) {
+    if (categoryId.length !== 0) {
+      where.id_kategori = {
+        [Op.in]: categoryId,
+      };
+    }
+  }
 
   let order = [];
 
-  if (latest === "true") {
-    order.push(["tgl_mulai", "ASC"]);
+  if (latest) {
+    order.push(["tgl_mulai", "DESC"]);
+    limit = 10;
   } else {
-    order.push(["judul", "ASC"]);
+    order.push([sortBy, orderBy]);
   }
 
   try {
     const listAuction = await ModelLelang.findAll({
-      where: {
-        tgl_mulai: {
-          [Op.lte]: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-        },
-        status_lelang: {
-          [Op.in]: [1],
-        },
-      },
+      where,
       attributes: {
         exclude: ["ModelMemberIdMember", "ModelKategoriIdKategori"],
       },
       order: order,
+      sortBy,
+      limit,
+      offset: skip,
     });
+
+    const totalAuction = await ModelLelang.count({ where });
 
     // clg
 
@@ -99,7 +120,9 @@ export const getListAuction = asyncHandler(async (req, res) => {
 
     res.status(200).json({
       status: true,
+      totalItem: totalAuction,
       lelang: listAuction,
+      filter: req.body,
     });
   } catch (error) {
     throw new ResponseError(error.statusCode, error.message, error.errors);

@@ -66,7 +66,10 @@ export const getLatestAuctionAction = () => async (dispatch, getState) => {
   });
 
   try {
-    const { data } = await axios.get("/api/auction?latest=true");
+    const { data } = await axios.post("/api/auction", {
+      latest: true,
+      categoryId: null,
+    });
     dispatch({
       type: AUCTION_LATEST_SUCCESS,
       payload: {
@@ -98,40 +101,74 @@ export const getLatestAuctionAction = () => async (dispatch, getState) => {
   }
 };
 
-export const getListAuctionAction = () => async (dispatch, getState) => {
-  dispatch({
-    type: AUCTION_LIST_REQ,
-  });
-
-  try {
-    const { data } = await axios.get("/api/auction");
+export const getListAuctionAction =
+  (isLoadMore = false, variables) =>
+  async (dispatch, getState) => {
     dispatch({
-      type: AUCTION_LIST_SUCCESS,
+      type: AUCTION_LIST_REQ,
       payload: {
-        loading: false,
-        auctions: data.lelang,
+        loading: !isLoadMore ? true : false,
+        loadingMore: isLoadMore,
       },
     });
-  } catch (error) {
-    let errData = {
-      message: error.message,
-    };
 
-    if (error.response && error.response.data.message) {
-      const errorData =
-        error.response.data.errors && error.response.data.errors;
-      errData = {
-        message: error.response.data.message,
-        ...errorData,
+    // const { auctionList } = getState();
+
+    try {
+      const {
+        auctionList: { auctions, skip, order, sort, result },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
       };
-    }
 
-    dispatch({
-      type: AUCTION_LIST_FAIL,
-      payload: {
-        error: errData,
-        loading: false,
-      },
-    });
-  }
-};
+      const { data } = await axios.post("/api/auction", variables, config);
+      let auctionList = [];
+
+      if (isLoadMore) {
+        auctionList = [...auctions, ...data.lelang];
+      } else {
+        auctionList = data.lelang;
+      }
+
+      dispatch({
+        type: AUCTION_LIST_SUCCESS,
+        payload: {
+          loading: false,
+          loadingMore: false,
+          auctions: auctionList,
+          totalItem: data.totalItem,
+          totalShowing: auctionList.length,
+          categoryId: variables?.categoryId,
+          skip: variables?.skip,
+          order: variables?.order,
+          sort: variables?.sort,
+          result: variables?.result,
+        },
+      });
+    } catch (error) {
+      let errData = {
+        message: error.message,
+      };
+
+      if (error.response && error.response.data.message) {
+        const errorData =
+          error.response.data.errors && error.response.data.errors;
+        errData = {
+          message: error.response.data.message,
+          ...errorData,
+        };
+      }
+
+      dispatch({
+        type: AUCTION_LIST_FAIL,
+        payload: {
+          error: errData,
+          loading: false,
+        },
+      });
+    }
+  };

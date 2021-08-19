@@ -67,7 +67,7 @@ const ProductCard = ({ auction }) => {
         <Link to={`/item/${auction.id_lelang}`}>
           <motion.img
             variants={productImgVariants}
-            src={auction.gambar[0].url}
+            src={auction?.gambar[0]?.url}
             alt="test"
           />
         </Link>

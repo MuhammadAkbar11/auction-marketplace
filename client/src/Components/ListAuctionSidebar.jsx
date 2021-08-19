@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 import { MagnifyingGlassIcon } from "../Components/UI/Icons/Index";
 import { Button, Form } from "react-bootstrap";
 
-const ListAuctionSidebar = ({ categories }) => {
+const ListAuctionSidebar = ({ categories, onSortByCategory }) => {
+  const handleSortByCategory = id => {
+    onSortByCategory(id);
+  };
+
   return (
     <>
       <div className="sidebar-wrapper sidebar-wrapper-mrg-right">
@@ -22,13 +26,30 @@ const ListAuctionSidebar = ({ categories }) => {
           <h4 className="sidebar-widget-title">Kategori</h4>
           <div className="shop-catigory">
             <ul>
+              <li>
+                <a
+                  href="#/"
+                  onClick={e => {
+                    e.preventDefault();
+                    handleSortByCategory("ALL");
+                  }}
+                >
+                  Semua Kategori
+                </a>
+              </li>
               {categories &&
                 categories.map(item => {
                   return (
                     <li key={item.id_kategori}>
-                      <Link to={`/kategori/${item.id_kategori}`}>
+                      <a
+                        href={"#/"}
+                        onClick={e => {
+                          e.preventDefault();
+                          handleSortByCategory(item.id_kategori);
+                        }}
+                      >
                         {item.kategori}
-                      </Link>
+                      </a>
                     </li>
                   );
                 })}
