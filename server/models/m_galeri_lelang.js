@@ -26,7 +26,9 @@ const ModelGaleri = sequelize.define(
       },
       beforeDestroy: async function (galeri) {
         const url = galeri.url;
-        deleteFile(url);
+        if (url !== "/uploads/auctions/default.jpg") {
+          deleteFile(url);
+        }
       },
     },
   }

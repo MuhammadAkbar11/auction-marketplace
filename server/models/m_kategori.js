@@ -12,8 +12,11 @@ const ModelKategori = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
+    slug: {
+      type: DataTypes.STRING(128),
+    },
     kategori: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(128),
     },
   },
   { tableName: "tbl_kategori", timestamps: false }
