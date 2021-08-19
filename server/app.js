@@ -20,6 +20,7 @@ import userRoutes from "./routes/user.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import auctionRoutes from "./routes/auction.routes.js";
 import categoriesRoutes from "./routes/category.routes.js";
+import dumbRoutes from "./routes/dumb.routes.js";
 import ModelGaleri from "./models/m_galeri_lelang.js";
 import ModelAdmin from "./models/m_admin.js";
 import ModelTransaksi from "./models/m_transaksi.js";
@@ -73,6 +74,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/auction", auctionRoutes);
 app.use("/api/categories", categoriesRoutes);
+app.use("/api/dumb", dumbRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
