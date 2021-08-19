@@ -6,4 +6,10 @@ const generateToken = id => {
   });
 };
 
+export const generateAdminToken = id => {
+  return jwt.sign({ id_admin: id }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
+};
+
 export default generateToken;
