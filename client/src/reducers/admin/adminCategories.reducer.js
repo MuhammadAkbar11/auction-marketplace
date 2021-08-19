@@ -8,14 +8,17 @@ import {
 
 const initState = {
   categories: [],
+  alert: null,
 };
 
 export const adminCategoriesReducer = (state = initState, action) => {
   switch (action.type) {
     case ADMIN_CATEGORY_REQ:
       return {
+        ...state,
         loading: true,
         categories: [],
+        error: null,
       };
 
     case ADMIN_CATEGORY_SUCCESS:
@@ -23,6 +26,7 @@ export const adminCategoriesReducer = (state = initState, action) => {
         ...state,
         loading: false,
         categories: action.payload,
+        error: null,
       };
 
     case ADMIN_CATEGORY_FAIL:
@@ -30,6 +34,7 @@ export const adminCategoriesReducer = (state = initState, action) => {
 
     case ADMIN_CATEGORY_ALERT:
       return {
+        ...state,
         loading: false,
         categories: state.categories,
         alert: action.payload,
@@ -38,6 +43,7 @@ export const adminCategoriesReducer = (state = initState, action) => {
       return {
         loading: false,
         categories: state.categories,
+        alert: null,
       };
     default:
       return state;

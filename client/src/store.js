@@ -34,6 +34,11 @@ import {
   authAdminReducer,
 } from "./reducers/admin/adminAuth.reducer";
 import { adminCategoriesReducer } from "./reducers/admin/adminCategories.reducer";
+
+import {
+  adminMembersReducer,
+  adminMembersPageAlertReducer,
+} from "./reducers/admin/masterData.reducer";
 import {
   userMyBidsReducer,
   userPaymentDetailsReducer,
@@ -46,6 +51,8 @@ const reducer = combineReducers({
   adminLogin: adminLoginReducer,
   adminAuth: authAdminReducer,
   adminCategories: adminCategoriesReducer,
+  adminListMember: adminMembersReducer,
+  adminMembersAlert: adminMembersPageAlertReducer,
   productList: productListReducer,
   auctionDetails: AuctionDetailsReducer,
   auctionsLatest: auctionsLatestReducer,

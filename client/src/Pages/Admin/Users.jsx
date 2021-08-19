@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import {
   Container,
@@ -13,27 +14,22 @@ import {
 import { Trash, Info, SquaresFour } from "phosphor-react";
 // import { useDispatch, useSelector } from "react-redux";
 import AdminLayout from "../../Components/AdmnLayouts/AdminLayout";
+import { adminGetMembersAction } from "../../actions/admin/member.actions";
 // import { getCategoriesAction } from "../../actions/categories.actions";
 
 const Users = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  const members = [];
+  const { members, loading, errors } = useSelector(
+    state => state.adminListMember
+  );
 
-  for (let i = 1; i < 10; i++) {
-    members.push({
-      id_member: "MBR00" + i,
-      nama: "unit00" + i,
-      username: "im.unit" + i,
-      auction: Math.floor(Math.random() * i),
-      email: `unit00${i}@gmail.com`,
-    });
-  }
+  React.useEffect(() => {
+    dispatch(adminGetMembersAction());
+  }, []);
 
-  // React.useEffect(() => {
-  //   dispatch(getCategoriesAction());
-  // }, []);
   let no = 1;
+
   return (
     <AdminLayout>
       <Container fluid className=" ">
@@ -61,7 +57,13 @@ const Users = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {members.length !== 0 ? (
+                    {loading ? (
+                      <tr>
+                        <td colSpan={6} className="text-center">
+                          Tunggu sebentar..
+                        </td>
+                      </tr>
+                    ) : members?.length !== 0 ? (
                       members.map(mbr => {
                         return (
                           <tr key={mbr?.id_member}>
@@ -70,7 +72,7 @@ const Users = () => {
                             <td>{mbr?.nama}</td>
                             <td>{mbr?.username}</td>
                             <td>{mbr?.email}</td>
-                            <td>{mbr?.auction}</td>
+                            <td>{mbr?.total_lelang?.count}</td>
                             <td>
                               <Dropdown>
                                 <Dropdown.Toggle
@@ -105,7 +107,6 @@ const Users = () => {
                       })
                     ) : (
                       <tr>
-                        {" "}
                         <td colSpan={6}>Null</td>
                       </tr>
                     )}
