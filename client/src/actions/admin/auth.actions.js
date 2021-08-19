@@ -66,8 +66,9 @@ export const authAdminResetErrorAction = () => dispatch => {
   });
 };
 
-export const authAdminLogoutAuction = history => dispatch => {
+export const authAdminLogoutAuction = () => dispatch => {
   setAdminLogout();
   dispatch({ type: ADMIN_REMOVE_AUTH, payload: null });
-  history.push("/administrator/login");
+  // history.push("/administrator/login");
+  document.location.href = "/administrator/login";
 };
