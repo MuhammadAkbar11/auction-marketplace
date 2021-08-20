@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -25,6 +26,7 @@ import Loader from "../../Components/UI/Loader";
 import { setResetAction } from "../../actions/app.actions";
 import Layout from "../../Components/Layouts/Layout";
 import UserBankAccount from "../../Components/UserBankAccount/UserBankAccount";
+import UserProfilePicture from "../../Components/UserProfilePicture";
 
 const updateProfileSchema = Yup.object().shape({
   nama: Yup.string().required("Nama belum terisi"),
@@ -201,8 +203,14 @@ const Profile = ({ history }) => {
           </Col>
           <Col md={9}>
             <Card>
-              <Card.Header className="bg-transparent text-dark text-uppercase font-weight-bold">
-                Informasi Akun
+              <Card.Header className="bg-transparent text-dark text-uppercase font-weight-bold d-flex justify-content-between">
+                Informasi Akun{" "}
+                <Link
+                  to="/akun/ubah-password"
+                  className="text-spacing-0 text-capitalize  font-weight-normal "
+                >
+                  Ubah password
+                </Link>
               </Card.Header>
               <Card.Body>
                 {" "}
@@ -232,13 +240,23 @@ const Profile = ({ history }) => {
                     )}
                     {success && (
                       <div className="mb-2">
-                        <Alert variant="success" className="px-1">
+                        <Alert
+                          variant="success"
+                          className="px-1"
+                          dismissible
+                          onClose={() => dispatch(userResetUpdateProfile())}
+                        >
                           {" "}
                           <CheckCircle size={28} className="ml-3" />{" "}
                           {success.message}
                         </Alert>
                       </div>
                     )}
+                    <UserProfilePicture
+                      image={userDetails.foto}
+                      username={userDetails?.username}
+                      dateJoin={userDetails?.tgl_dibuat}
+                    />
                     <Form onSubmit={updateProfileFormik.handleSubmit}>
                       <InputGroupRow
                         labelClass="text-dark font-weight-bold "

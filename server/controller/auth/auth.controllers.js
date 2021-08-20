@@ -36,6 +36,7 @@ export const authRegister = asyncHandler(async (req, res) => {
         nama: result.nama,
         email: result.email,
         no_hp: result.no_hp,
+        foto: "uploads/members/guest.png",
         token: generateToken(result.id_member),
         tgl_dibuat: daysJs(result.tgl_dibuat).format("DD MMM, YYYY - HH.mm"),
         tgl_diubah: daysJs(result.tgl_diubah).format("DD MMM, YYYY - HH.mm"),

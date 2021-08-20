@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Sequelize from "sequelize";
+import bcrypt from "bcryptjs";
 import daysJs from "dayjs";
 import ResponseError from "../utils/responseError.js";
 import ModelMember from "../models/m_member.js";
@@ -36,7 +37,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
       message: "success",
       details: {
         ...user.dataValues,
-        foto: "/uploads/member/guest.png",
+        foto: "/" + user.foto || "/uploads/members/guest.png",
         tgl_dibuat: daysJs(user.tgl_dibuat).format("DD MMM, YYYY - HH.mm"),
         tgl_diubah: daysJs(user.tgl_diubah).format("DD MMM, YYYY - HH.mm"),
         akun_bank: bankAccounts,
@@ -115,7 +116,85 @@ export const postUpdateUserProfile = asyncHandler(async (req, res) => {
       throw new ResponseError(400, "Gagal mengubah data");
     }
   } catch (error) {
-    console.log(error);
+    res.status(error.statusCode || 500);
+    throw new ResponseError(error.statusCode, error.message, error.errors);
+  }
+});
+
+export const postUserUploadPhoto = asyncHandler(async (req, res, next) => {
+  try {
+    const user = await ModelMember.findByPk(req.user.id_member, {
+      attributes: {
+        exclude: ["password"],
+      },
+    });
+    const newPhoto = req.fileimg.data;
+    const oldPhoto = user.foto;
+
+    const bankAccounts = await ModelAkunBank.findAll({
+      where: {
+        id_member: user.id_member,
+      },
+      attributes: {
+        exclude: ["ModelMemberIdMember"],
+      },
+    });
+
+    if (req.fileimg?.data) {
+      if (user.foto !== "uploads/members/guest.png") {
+        user.foto = newPhoto.path;
+        deleteFile("/" + oldPhoto);
+      }
+    }
+
+    await user.save();
+
+    res.status(201).json({
+      status: true,
+      message: "Upload gambar berhasil",
+      details: {
+        ...user.dataValues,
+        foto: "/" + user.foto || "/uploads/members/guest.png",
+        tgl_dibuat: daysJs(user.tgl_dibuat).format("DD MMM, YYYY - HH.mm"),
+        tgl_diubah: daysJs(user.tgl_diubah).format("DD MMM, YYYY - HH.mm"),
+        akun_bank: bankAccounts,
+      },
+      file: req.fileimg,
+      body: req.body,
+    });
+  } catch (error) {
+    res.status(error.statusCode || 500);
+    throw new ResponseError(error.statusCode, error.message, error.errors);
+  }
+});
+
+export const postUserChagePassword = asyncHandler(async (req, res, next) => {
+  const userId = req.user.id_member;
+  const { password_lama, password } = req.body;
+
+  try {
+    const member = await ModelMember.findOne({
+      where: {
+        id_member: userId,
+      },
+    });
+
+    const doMatchPw = await bcrypt.compare(password_lama, member.password);
+
+    if (!doMatchPw) {
+      res.status(400);
+      throw new ResponseError(400, "Password saat ini salah!");
+    }
+
+    member.password = await bcrypt.hash(password, 12);
+
+    await member.save();
+
+    res.status(201).json({
+      message: "Password berhasil di ubah!",
+      status: true,
+    });
+  } catch (error) {
     res.status(error.statusCode || 500);
     throw new ResponseError(error.statusCode, error.message, error.errors);
   }

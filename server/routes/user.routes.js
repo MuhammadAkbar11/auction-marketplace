@@ -17,6 +17,8 @@ import {
   deleteUserBankAccont,
   getCustomerPaymentDetails,
   postConfirmCustomerPayment,
+  postUserChagePassword,
+  postUserUploadPhoto,
 } from "../controller/user.controllers.js";
 import {
   getUserBids,
@@ -27,6 +29,7 @@ import {
   postUserWinConfirmAuction,
 } from "../controller/user.purchase.controller.js";
 import { protect } from "../middleware/auth.middlerware.js";
+import { uploadMemberPhotoMiddleware } from "../middleware/uploadMemberPhoto.js";
 import { uploadPaymentProofMiddleware } from "../middleware/uploadPaymentProof.js";
 import { uploadFilesMiddleware } from "../middleware/uploads.js";
 
@@ -34,6 +37,13 @@ const router = express.Router();
 
 router.get("/profile", protect, getUserProfile);
 router.put("/update-profile", protect, postUpdateUserProfile);
+router.post("/change-password", protect, postUserChagePassword);
+router.post(
+  "/upload-photo",
+  protect,
+  uploadMemberPhotoMiddleware,
+  postUserUploadPhoto
+);
 router.get("/check-valid-data", protect, getIsValidData);
 router.post("/create-account-bank", protect, postUserCreateBankAccount);
 router.post("/delete-account-bank", protect, deleteUserBankAccont);

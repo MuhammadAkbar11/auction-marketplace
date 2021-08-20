@@ -14,7 +14,9 @@ const useSingleImageUploader = ({ defaultImage }) => {
     setImage(newFiles[0]);
   };
 
-  return { image, handleFile };
+  const handleReset = () => setImage(null);
+
+  return { image, handleFile, handleReset };
 };
 
 useSingleImageUploader.defaultProps = {

@@ -11,21 +11,16 @@ const userSidebarMenu = [
   },
   {
     id: 3,
-    menu: "Ubah Password",
-    url: "/akun/ubah-password",
-  },
-  {
-    id: 4,
     menu: "Lelang Saya",
     url: "/akun/lelang",
   },
   {
-    id: 5,
+    id: 4,
     menu: "Pembelian Saya",
     url: "/akun/pembelian",
   },
   {
-    id: 6,
+    id: 5,
     menu: "Logout",
     url: "/akun/logout",
   },
