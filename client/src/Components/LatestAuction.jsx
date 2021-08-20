@@ -6,8 +6,8 @@ import { Col, Container, Row } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { CaretLeftIcon, CaretRightIcon } from "./UI/Icons/Index";
 import SectionTitle from "./SectionTitle";
-import { useDispatch, useSelector } from "react-redux";
-import { getLatestAuctionAction } from "../actions/auctions.actions";
+import { useDispatch } from "react-redux";
+import { getSliderLatestAuctionAction } from "../actions/auctions.actions";
 import Loader from "./UI/Loader";
 
 SwiperCore.use([Navigation]);
@@ -31,46 +31,26 @@ const productImgVariants = {
   },
 };
 
-// const productActionWrapVariants = {
-//   hover: {
-//     opacity: 1,
-//     transition: {
-//       when: "beforeChildren",
-//       duration: 0.2,
-//       staggerChildren: 0.07,
-//       // delayChildren: 0.2,
-//     },
-//   },
-// };
-
-// const productActionVariants = {
-//   open: {
-//     opacity: 0,
-//     y: -10,
-//     transition: {
-//       type: "linear",
-//       duration: 0.1,
-//     },
-//   },
-//   hover: {
-//     opacity: 1,
-//     y: 0,
-//     transition: {
-//       type: "linear",
-//       duration: 0.1,
-//     },
-//   },
-// };
-
 const LatestAuction = () => {
   const navigationNextRef = React.useRef(null);
   const navigationPrevRef = React.useRef(null);
 
   const dispatch = useDispatch();
-  const { loading, latestAuction } = useSelector(state => state.auctionsLatest);
+  const [loading, setLoading] = React.useState(false);
+  const [latestAuction, setLatestAuction] = React.useState([]);
 
   React.useEffect(() => {
-    dispatch(getLatestAuctionAction());
+    setLoading(true);
+    dispatch(
+      getSliderLatestAuctionAction({
+        filter: "latest",
+        result: 12,
+        categoryId: null,
+      })
+    ).then(auction => {
+      setLoading(false);
+      setLatestAuction(auction);
+    });
   }, [dispatch]);
 
   return (
@@ -80,7 +60,7 @@ const LatestAuction = () => {
         {loading ? (
           <div className=" d-flex w-100 justify-content-center ">
             {" "}
-            <Loader variant="light" />
+            <Loader variant="primary" size={28} />
           </div>
         ) : latestAuction?.length === 0 ? (
           <div className="d-flex justify-content-center w-100">
@@ -111,43 +91,16 @@ const LatestAuction = () => {
                                 alt="test"
                               />
                             </Link>
-
-                            {/* <motion.div
-                        variants={productActionWrapVariants}
-                        className="product-action-2 "
-                      >
-                        <Button
-                          as={motion.button}
-                          variants={productActionVariants}
-                          size="sm"
-                          title="Wishlist"
-                        >
-                          <WishListIcon size="100%" />
-                        </Button>
-                        <Button
-                          as={motion.button}
-                          variants={productActionVariants}
-                          size="sm"
-                          title="Wishlist"
-                        >
-                          <WishListIcon size="100%" />
-                        </Button>
-                        <Button
-                          as={motion.button}
-                          variants={productActionVariants}
-                          size="sm"
-                          title="Wishlist"
-                        >
-                          <WishListIcon size="100%" />
-                        </Button>
-                      </motion.div> */}
                           </div>
                           <div
                             className="product-content-wrap-3 "
                             style={{ width: "100%" }}
                           >
                             <div className="product-content-categories">
-                              <Link className="purple" to="shop.html">
+                              <Link
+                                className="purple"
+                                to={`/kategori/${item?.kategori?.slug}`}
+                              >
                                 {item.kategori?.kategori}
                               </Link>
                             </div>
@@ -178,7 +131,7 @@ const LatestAuction = () => {
                             <div className="product-content-categories">
                               <Link
                                 className="purple"
-                                to={`/kategori/${item.id_kategori}`}
+                                to={`/kategori/${item?.kategori?.slug}`}
                               >
                                 {item.kategori?.kategori}
                               </Link>
@@ -271,43 +224,16 @@ const LatestAuction = () => {
                               alt="test"
                             />
                           </Link>
-
-                          {/* <motion.div
-                        variants={productActionWrapVariants}
-                        className="product-action-2 "
-                      >
-                        <Button
-                          as={motion.button}
-                          variants={productActionVariants}
-                          size="sm"
-                          title="Wishlist"
-                        >
-                          <WishListIcon size="100%" />
-                        </Button>
-                        <Button
-                          as={motion.button}
-                          variants={productActionVariants}
-                          size="sm"
-                          title="Wishlist"
-                        >
-                          <WishListIcon size="100%" />
-                        </Button>
-                        <Button
-                          as={motion.button}
-                          variants={productActionVariants}
-                          size="sm"
-                          title="Wishlist"
-                        >
-                          <WishListIcon size="100%" />
-                        </Button>
-                      </motion.div> */}
                         </div>
                         <div
                           className="product-content-wrap-3 "
                           style={{ width: "100%" }}
                         >
                           <div className="product-content-categories">
-                            <Link className="purple" to="shop.html">
+                            <Link
+                              className="purple"
+                              to={`/kategori/${item?.kategori?.slug}`}
+                            >
                               {item.kategori?.kategori}
                             </Link>
                           </div>
@@ -337,7 +263,7 @@ const LatestAuction = () => {
                           <div className="product-content-categories">
                             <Link
                               className="purple"
-                              to={`/kategori/${item.id_kategori}`}
+                              to={`/kategori/${item?.kategori?.slug}`}
                             >
                               {item.kategori?.kategori}
                             </Link>
