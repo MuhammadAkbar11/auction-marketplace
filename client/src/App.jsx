@@ -28,6 +28,10 @@ import UserConfirmAuctionBill from "./Pages/User/UserConfirmAuctionBill";
 import UserPayment from "./Pages/User/UserPayment";
 import SellerConfirmPayment from "./Pages/User/SellerConfirmPayment";
 import UserPaymentResult from "./Pages/User/UserPaymentResult";
+import UserEmptyPage from "./Pages/User/UserEmptyPage";
+import UserChangPassword from "./Pages/User/UserChangPassword";
+import ListAuctionByCategory from "./Pages/ListAuctionByCategory";
+import ListLatestAuctionPage from "./Pages/ListLatestAuction";
 
 function App() {
   return (
@@ -73,7 +77,14 @@ function App() {
           path="/akun/edit-lelang/:idAuction"
           component={UpdateAuction}
         />
+        <PrivateRoute path="/akun/empty" component={UserEmptyPage} />
+        <PrivateRoute
+          path="/akun/ubah-password"
+          component={UserChangPassword}
+        />
         <PrivateRoute path="/akun/info" component={Profile} />
+        <Route path="/kategori/:slug" component={ListAuctionByCategory} />
+        <Route path="/lelang-terbaru" component={ListLatestAuctionPage} />
         <Route path="/lelang" component={ListAuction} />
         <Route path="/item/:itemId" component={DetailsAuction} />
         {/* Admin */}

@@ -25,6 +25,7 @@ import {
 } from "./reducers/user.reducer";
 import { categoriesReducer } from "./reducers/categories.reducer";
 import {
+  auctionByCategoryReducer,
   AuctionDetailsReducer,
   auctionListReducer,
   auctionsLatestReducer,
@@ -57,6 +58,7 @@ const reducer = combineReducers({
   auctionDetails: AuctionDetailsReducer,
   auctionsLatest: auctionsLatestReducer,
   auctionList: auctionListReducer,
+  auctionListByCategory: auctionByCategoryReducer,
   authLogin: authLoginReducer,
   authRegister: authRegisterReducer,
   authUser: authUserReducer,

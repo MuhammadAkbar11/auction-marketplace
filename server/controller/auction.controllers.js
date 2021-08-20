@@ -7,25 +7,94 @@ import ModelGaleri from "../models/m_galeri_lelang.js";
 import sequelize from "sequelize";
 import ModelPenawaran from "../models/m_penawaran.js";
 import ModelMember from "../models/m_member.js";
+import ModelKategori from "../models/m_kategori.js";
 
 const Op = sequelize.Op;
 
 export const getListAuction = asyncHandler(async (req, res) => {
-  let latest = req.body.latest;
+  let filterBy = req.body.filter; // all, active, latest, endSoon,
   let sortBy = req.body.sort || "_id";
   let orderBy = req.body.order || "DESC";
   let skip = +req.body.skip || 0;
   let limit = +req.body.result || 8;
-  let categoryId = req.body.categoryId || [];
 
-  const where = {
+  // for category
+  let categoryId = req.body.categoryId || [];
+  let slug = req.body.slug || null;
+
+  let order = [];
+
+  let where = {
     tgl_mulai: {
       [Op.lte]: dayjs().format("YYYY-MM-DD HH:mm:ss"),
     },
     status_lelang: {
-      [Op.in]: [1],
+      [Op.in]: [1, 2, 3],
     },
   };
+
+  let categoryData = null;
+
+  switch (filterBy) {
+    case "all":
+      where = {
+        tgl_mulai: {
+          [Op.lte]: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+        },
+        status_lelang: {
+          [Op.in]: [1, 2, 3],
+        },
+      };
+      order.push([sortBy, orderBy]);
+      break;
+    case "active":
+      where = {
+        tgl_mulai: {
+          [Op.lte]: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+        },
+        status_lelang: {
+          [Op.in]: [1],
+        },
+      };
+      order.push(["tgl_mulai", "ASC"]);
+      break;
+    case "latest":
+      where = {
+        tgl_mulai: {
+          [Op.lte]: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+          [Op.gte]: dayjs().subtract(2, "days").format("YYYY-MM-DD HH:mm:ss"),
+        },
+        status_lelang: {
+          [Op.in]: [1, 2, 3],
+        },
+      };
+      order.push(["tgl_mulai", "DESC"]);
+      break;
+    case "endSoon":
+      where = {
+        tgl_mulai: {
+          [Op.lte]: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+        },
+        status_lelang: {
+          [Op.in]: [1],
+        },
+      };
+      order.push(["tgl_selesai", "ASC"]);
+      break;
+    default:
+      order.push([sortBy, orderBy]);
+      break;
+  }
+
+  if (slug) {
+    const getCategory = await ModelKategori.findOne({
+      where: {
+        slug: slug,
+      },
+    });
+    categoryData = getCategory;
+    categoryId = [getCategory.id_kategori];
+  }
 
   if (categoryId) {
     if (categoryId.length !== 0) {
@@ -33,15 +102,6 @@ export const getListAuction = asyncHandler(async (req, res) => {
         [Op.in]: categoryId,
       };
     }
-  }
-
-  let order = [];
-
-  if (latest) {
-    order.push(["tgl_mulai", "DESC"]);
-    limit = 10;
-  } else {
-    order.push([sortBy, orderBy]);
   }
 
   try {
@@ -57,8 +117,6 @@ export const getListAuction = asyncHandler(async (req, res) => {
     });
 
     const totalAuction = await ModelLelang.count({ where });
-
-    // clg
 
     await Promise.all(
       listAuction.map(async auction => {
@@ -90,6 +148,9 @@ export const getListAuction = asyncHandler(async (req, res) => {
           },
         });
 
+        auctionData.telah_selesai =
+          dayjs(auctionData.tgl_selesai).valueOf() <= dayjs().valueOf();
+
         auctionData.tgl_mulai = dayjs(auctionData.tgl_mulai).format(
           "D MMM, YYYY - HH:mm"
         );
@@ -118,10 +179,20 @@ export const getListAuction = asyncHandler(async (req, res) => {
 
     // const transformList = { ...listAuction };
 
+    const filterConfig = {
+      filterBy: req.body.filter,
+      order: order,
+      limit,
+      categoryId,
+      offset: skip,
+    };
+
     res.status(200).json({
       status: true,
+      config: filterConfig,
       totalItem: totalAuction,
       lelang: listAuction,
+      kategori: categoryData,
       filter: req.body,
     });
   } catch (error) {
@@ -202,3 +273,5 @@ export const getAuction = asyncHandler(async (req, res) => {
     throw new ResponseError(error.statusCode, error.message, error.errors);
   }
 });
+
+export const getAuctionByCategory = asyncHandler(async (req, res) => {});

@@ -9,6 +9,9 @@ import {
   AUCTION_LIST_REQ,
   AUCTION_LIST_SUCCESS,
   AUCTION_LIST_FAIL,
+  AUCTION_BY_CATEGORY_REQ,
+  AUCTION_BY_CATEGORY_SUCCESS,
+  AUCTION_BY_CATEGORY_FAIL,
   // AUCTION_LIST_RESET,
 } from "../constants/auctions.constants";
 // import auctionsData from "../data/product";
@@ -44,7 +47,20 @@ export const AuctionDetailsReducer = (state = auctionDetailsInit, action) => {
 };
 
 export const auctionsLatestReducer = (
-  state = { loading: false, latestAuction: [] },
+  state = {
+    loading: false,
+    loadingMore: false,
+    auctions: [],
+    categoryId: [],
+    category: null,
+    order: "ASC",
+    filter: "all",
+    sort: "_id",
+    skip: 0,
+    result: 8,
+    totalItem: 0,
+    totalShowing: 0,
+  },
   action
 ) => {
   switch (action.type) {
@@ -60,13 +76,11 @@ export const auctionsLatestReducer = (
       };
     case AUCTION_LATEST_FAIL:
       return {
+        ...state,
         loading: false,
+        loadingMore: false,
         error: action.payload,
       };
-    // case AUCTION_LATEST_RESET:
-    //   return {
-    //     loading: false,
-    //   };
     default:
       return state;
   }
@@ -81,6 +95,7 @@ export const auctionListReducer = (
     order: "ASC",
     sort: "_id",
     skip: 0,
+    filter: "all",
     result: 8,
     totalItem: 0,
     totalShowing: 0,
@@ -105,10 +120,46 @@ export const auctionListReducer = (
         loadingMore: false,
         error: action.payload,
       };
-    // case AUCTION_LIST_RESET:
-    //   return {
-    //     loading: false,
-    //   };
+    default:
+      return state;
+  }
+};
+
+export const auctionByCategoryReducer = (
+  state = {
+    loading: false,
+    loadingMore: false,
+    auctions: [],
+    categoryId: [],
+    category: null,
+    order: "ASC",
+    filter: "all",
+    sort: "_id",
+    skip: 0,
+    result: 8,
+    totalItem: 0,
+    totalShowing: 0,
+  },
+  action
+) => {
+  switch (action.type) {
+    case AUCTION_BY_CATEGORY_REQ:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case AUCTION_BY_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case AUCTION_BY_CATEGORY_FAIL:
+      return {
+        ...state,
+        loading: false,
+        loadingMore: false,
+        error: action.payload,
+      };
     default:
       return state;
   }

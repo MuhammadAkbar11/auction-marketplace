@@ -32,7 +32,7 @@ const Footer = () => {
       ? categories.map(item => {
           return {
             id: item.id_kategori,
-            url: "/kategori/" + item.id_kategori,
+            url: "/kategori/" + item.slug,
             name: item.kategori,
           };
         })

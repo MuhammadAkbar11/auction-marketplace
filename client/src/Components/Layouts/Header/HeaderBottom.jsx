@@ -37,7 +37,7 @@ const HeaderBottom = () => {
                         key={item.id_kategori}
                         className="mainCategoriListItem"
                       >
-                        <Link to={`/kategori/${item.id_kategori}`}>
+                        <Link to={`/kategori/${item.slug}`}>
                           {item.kategori}
                         </Link>
                       </ListGroup.Item>

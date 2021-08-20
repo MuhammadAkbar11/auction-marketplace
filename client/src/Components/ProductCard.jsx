@@ -87,7 +87,7 @@ const ProductCard = ({ auction }) => {
       </div>
       <div className="product-content-wrap-2 text-center">
         <div className="product-content-categories">
-          <Link to={`/kategori/${auction.id_kategori}`}>
+          <Link to={`/kategori/${auction.kategori?.slug}`}>
             {auction.kategori?.kategori}
           </Link>
         </div>
@@ -107,7 +107,7 @@ const ProductCard = ({ auction }) => {
       </div>
       <div className="product-content-wrap-2 product-content-position text-center">
         <div className="product-content-categories text-gray-800">
-          <Link to={`/kategori/${auction.id_kategori}`}>
+          <Link to={`/kategori/${auction.kategori?.slug}`}>
             {auction.kategori?.kategori}
           </Link>
         </div>
@@ -126,7 +126,11 @@ const ProductCard = ({ auction }) => {
         </div>
         <div className="d-flex flex-column justify-content-between align-items-center">
           <small className="">Berakhir pada</small>
-          <small className="">{auction.tgl_selesai}</small>
+          {auction?.telah_selesai ? (
+            <small className="text-primary">Ditutup</small>
+          ) : (
+            <small>{auction.tgl_selesai}</small>
+          )}
         </div>
       </div>
     </motion.div>

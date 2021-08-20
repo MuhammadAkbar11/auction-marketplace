@@ -42,7 +42,7 @@ const HeaderMiddle = () => {
                 <Nav.Link>Lelang</Nav.Link>
               </LinkContainer>
               <LinkContainer
-                to="/cart"
+                to="/lelang-terbaru"
                 className="headerMiddleNavLink  text-uppercase"
               >
                 <Nav.Link>Terbaru</Nav.Link>

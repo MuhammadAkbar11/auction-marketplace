@@ -4,7 +4,7 @@ import { Col, Container, Row, Form, Button } from "react-bootstrap";
 import BreadcrumbsContainer from "../Components/Layouts/BreadcrumbsContainer";
 import ListAuctionSidebar from "../Components/ListAuctionSidebar";
 import ProductCard from "../Components/ProductCard";
-import { ListIcon, SquaresFourIcon } from "../Components/UI/Icons/Index";
+// import { ListIcon, SquaresFourIcon } from "../Components/UI/Icons/Index";
 import { getListAuctionAction } from "../actions/auctions.actions";
 import Loader from "../Components/UI/Loader";
 import Layout from "../Components/Layouts/Layout";
@@ -16,6 +16,7 @@ const ListAuction = () => {
     loadingMore,
     auctions,
     result,
+    filter,
     skip,
     totalItem,
     categoryId,
@@ -23,13 +24,14 @@ const ListAuction = () => {
   } = useSelector(state => state.auctionList);
   const { categories } = useSelector(state => state.categories);
 
-  const [SortBy, setSortBy] = React.useState("_id");
+  const [filterValue, setFilterValue] = React.useState("all");
 
   const loadAuctions = ({
     isLoadMore = false,
     order = "ASC",
     sort = "_id",
     skip = 0,
+    filterBy = "all",
     result = 8,
     categoryId = null,
   }) => {
@@ -38,6 +40,7 @@ const ListAuction = () => {
         order,
         sort,
         skip,
+        filter: filterBy,
         result,
         categoryId,
       })
@@ -49,36 +52,23 @@ const ListAuction = () => {
   }, []);
 
   const onLoadMore = () => {
-    let orderBy = "ASC";
-    if (SortBy === "tgl_mulai") {
-      orderBy = "DESC";
-    }
     const variables = {
       result: 8,
       skip: +skip + +result,
       categoryId: categoryId,
-      sort: SortBy,
-      order: orderBy,
+      filter: filterValue,
     };
     dispatch(getListAuctionAction(true, variables));
   };
-  const onChangSortBy = e => {
+  const onChangeFilter = e => {
     const value = e.target.value;
-    let bySort = value;
-    let byOrder = "ASC";
-
-    if (value === "tgl_mulai") {
-      byOrder = "DESC";
-      // bySort = "tgl_selesai";
-    }
-    setSortBy(value);
+    setFilterValue(value);
     loadAuctions({
       isLoadMore: false,
       result: 8,
       skip: 0,
       categoryId: categoryId,
-      sort: bySort,
-      order: byOrder,
+      filterBy: value,
     });
   };
 
@@ -91,8 +81,7 @@ const ListAuction = () => {
         result: 8,
         skip: 0,
         categoryId: [id],
-        order: "ASC",
-        sort: SortBy,
+        filterBy: filterValue,
       });
     }
   };
@@ -148,18 +137,19 @@ const ListAuction = () => {
                   {" "}
                   <Form.Group className="d-flex h-100  w-100 align-items-center flex-nowrap my-0">
                     <Form.Label className=" text-nowrap my-auto ">
-                      Sort By :
+                      Filter by :
                     </Form.Label>
                     <Form.Control
                       size="sm"
                       as="select"
-                      value={SortBy}
+                      value={filterValue}
                       className="bg-transparent border ml-2"
-                      onChange={onChangSortBy}
+                      onChange={onChangeFilter}
                     >
-                      <option value="judul">Judul</option>
-                      <option value="tgl_mulai">Terbaru</option>
-                      <option value="tgl_selesai">Segera Berakhir</option>
+                      <option value="all">Semua</option>
+                      <option value="active">Lelang Aktif</option>
+                      <option value="latest">Terbaru</option>
+                      <option value="endSoon">Segera Berakhir</option>
                     </Form.Control>
                   </Form.Group>
                 </Col>

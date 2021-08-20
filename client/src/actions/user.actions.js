@@ -56,6 +56,7 @@ import {
 } from "../constants/user.contanst";
 import { axiosConfigAuth } from "../utils/axiosConfig";
 import { _dateFormat } from "../utils/date-format";
+import { transformErrorResponse } from "../utils/errors";
 import { authLogoutAuction } from "./auth.actions";
 
 export const getUserDetailsAction = id => async (dispatch, getState) => {
@@ -329,6 +330,91 @@ export const updateUserProfileAction = values => async (dispatch, getState) => {
     });
   }
 };
+
+export const userUploadPictureAction = values => async (dispatch, getState) => {
+  const {
+    authUser: { userInfo },
+  } = getState();
+
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    let postData = new FormData();
+
+    postData.append("file", values.image.file);
+    postData.append("username", values.username);
+
+    const { data } = await axios.post(
+      `/api/user/upload-photo`,
+      postData,
+      config
+    );
+
+    dispatch({
+      type: USER_DETAILS_SUCCESS,
+      payload: {
+        loading: false,
+        details: data.details,
+      },
+    });
+
+    dispatch({
+      type: USER_UPDATE_PROFILE_SUCCESS,
+      payload: {
+        success: {
+          message: data.message,
+        },
+        loading: false,
+      },
+    });
+  } catch (err) {
+    const errRespon = transformErrorResponse(err);
+    dispatch({
+      type: USER_UPDATE_PROFILE_FAIL,
+      payload: {
+        error: errRespon,
+        loading: false,
+      },
+    });
+    throw errRespon;
+  }
+};
+
+export const userChangePasswordAction =
+  values => async (dispatch, getState) => {
+    const {
+      authUser: { userInfo },
+    } = getState();
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        "/api/user/change-password",
+        {
+          password_lama: values.currPassword,
+          password: values.newPassword,
+        },
+        config
+      );
+
+      return data;
+    } catch (err) {
+      const errRespon = transformErrorResponse(err);
+
+      throw errRespon;
+    }
+  };
 
 export const userResetUpdateProfile = type => dispatch => {
   dispatch({
