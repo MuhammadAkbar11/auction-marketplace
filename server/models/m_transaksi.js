@@ -36,7 +36,7 @@ const ModelTransaksi = sequelize.define(
       type: DataTypes.DATE,
     },
     bukti_transfer: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(128), // 128
     },
     batas_waktu_bayar: {
       type: DataTypes.DATE,
@@ -48,7 +48,7 @@ const ModelTransaksi = sequelize.define(
       type: DataTypes.STRING(20),
     },
     status_transaksi: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(11),
     },
   },
   {

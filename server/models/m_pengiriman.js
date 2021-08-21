@@ -12,7 +12,7 @@ const ModelPengiriman = sequelize.define(
       primaryKey: true,
     },
     status: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(25),
     },
     tgl_dikirim: {
       type: DataTypes.DATE,
@@ -21,7 +21,7 @@ const ModelPengiriman = sequelize.define(
       type: DataTypes.DATE,
     },
     no_resi: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(128),
     },
   },
   {

@@ -12,7 +12,7 @@ const ModelPesanDiskusi = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
     },
     isi_pesan: {
-      type: DataTypes.STRING(24),
+      type: DataTypes.TEXT,
     },
     id_parent: {
       type: DataTypes.UUID,

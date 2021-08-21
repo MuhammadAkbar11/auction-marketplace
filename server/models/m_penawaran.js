@@ -16,7 +16,7 @@ const ModelPenawaran = sequelize.define(
       type: DataTypes.INTEGER,
     },
     nilai_tawaran: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING, // (50)
     },
   },
   {

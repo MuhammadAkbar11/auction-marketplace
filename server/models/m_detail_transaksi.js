@@ -18,7 +18,7 @@ const ModelDetailTransaksi = sequelize.define(
       primaryKey: true,
     },
     status: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(20),
     },
     waktu_update: {
       type: DataTypes.DATE,

@@ -12,7 +12,7 @@ const ModelAdmin = sequelize.define(
       primaryKey: true,
     },
     nama_admin: {
-      type: DataTypes.STRING(128),
+      type: DataTypes.STRING(50),
     },
     username: {
       type: DataTypes.STRING(20),

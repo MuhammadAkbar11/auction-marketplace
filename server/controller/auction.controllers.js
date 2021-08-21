@@ -45,7 +45,7 @@ export const getListAuction = asyncHandler(async (req, res) => {
           [Op.in]: [1, 2, 3],
         },
       };
-      order.push([sortBy, orderBy]);
+      order.push(["_id", "ASC"]);
       break;
     case "active":
       where = {

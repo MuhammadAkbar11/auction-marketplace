@@ -13,7 +13,7 @@ const ModelGaleri = sequelize.define(
       autoIncrement: true,
     },
     url: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(128),
     },
   },
   {
