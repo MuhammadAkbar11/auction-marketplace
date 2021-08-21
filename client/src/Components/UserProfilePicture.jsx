@@ -11,9 +11,10 @@ import { Camera, Upload } from "phosphor-react";
 import useSingleImageUploader from "../hooks/useSingleImageUploader";
 import { useDispatch } from "react-redux";
 import Loader from "./UI/Loader";
+// import defaultImg from ""
 import { userUploadPictureAction } from "../actions/user.actions";
 
-const UserProfilePicture = ({ image, username, dateJoin }) => {
+const UserProfilePicture = ({ loadingProfile, image, username, dateJoin }) => {
   // useDispatch
   const dispatch = useDispatch();
 
@@ -59,7 +60,7 @@ const UserProfilePicture = ({ image, username, dateJoin }) => {
           className=" rounded-circle "
           width={160}
           height={160}
-          src={image}
+          src={loadingProfile ? "/gifs/loading.gif" : image}
           alt=""
           onClick={() => setShowOverLay(!showOverLay)}
         />
