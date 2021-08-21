@@ -1,0 +1,12 @@
+.page-404-main {
+  height: 100vh;
+  overflow: hidden;
+  width: 100%;
+
+  .page-404-title {
+    font-size: 12vw;
+    @include media-breakpoint-down(md) {
+      font-size: 15vw;
+    }
+  }
+}

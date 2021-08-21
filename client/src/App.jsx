@@ -32,6 +32,7 @@ import UserEmptyPage from "./Pages/User/UserEmptyPage";
 import UserChangPassword from "./Pages/User/UserChangPassword";
 import ListAuctionByCategory from "./Pages/ListAuctionByCategory";
 import ListLatestAuctionPage from "./Pages/ListLatestAuction";
+import PageNotFound from "./Pages/404";
 
 function App() {
   return (
@@ -111,6 +112,7 @@ function App() {
           path="/administrator/laporan-transaksi"
           component={TransactionRepot}
         />
+        <Route component={PageNotFound} />
       </Switch>
     </>
   );
