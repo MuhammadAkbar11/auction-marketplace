@@ -33,7 +33,9 @@ const registerSchema = Yup.object().shape({
   noHp: Yup.number()
     .typeError("Yang diisi harus angka")
     .required("Nomor telepon belum terisi"),
-  password: Yup.string().required("Password belum tersisi"),
+  password: Yup.string()
+    .min(6, "Password harus lebih dari 6 karakter")
+    .required("Password belum tersisi"),
   password2: Yup.string()
     .required("Ulangi password anda")
     .oneOf([Yup.ref("password"), null], "Password tidak sama"),

@@ -73,6 +73,7 @@ const AdminKategori = () => {
       setCategoryInput("");
       setSlugInput("");
       setLoadingAction(false);
+      setCategoryFormErrors(null);
     } catch (error) {
       // console.lo;
       const errMsg = convertYupErrorsToObject(error.inner);
@@ -123,7 +124,16 @@ const AdminKategori = () => {
                     placeholder="Kategori"
                     name="category"
                     value={categoryInput}
-                    onChange={e => setCategoryInput(e.target.value)}
+                    onChange={e => {
+                      const value = e.target.value;
+                      const slugValues = value
+                        .split(" ")
+                        .join("-")
+                        .toLowerCase();
+                      setCategoryInput(value);
+
+                      setSlugInput(slugValues);
+                    }}
                     isInvalid={!!categoryFormErrors?.category}
                   />
 
