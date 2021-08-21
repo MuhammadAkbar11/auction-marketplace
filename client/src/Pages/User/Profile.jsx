@@ -253,6 +253,7 @@ const Profile = ({ history }) => {
                       </div>
                     )}
                     <UserProfilePicture
+                      loadingProfile={userDetailsLoading}
                       image={userDetails.foto}
                       username={userDetails?.username}
                       dateJoin={userDetails?.tgl_dibuat}
