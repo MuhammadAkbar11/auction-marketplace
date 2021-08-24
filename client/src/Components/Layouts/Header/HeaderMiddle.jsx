@@ -80,14 +80,14 @@ const HeaderMiddle = () => {
                       .
                     </span>
                   </div>
-                  <div className="headerMiddleActionItem">
+                  {/* <div className="headerMiddleActionItem">
                     <Link to="/favorit">
                       <Heart size="32" />
                       <Badge variant="primary" className="actionBadge ">
                         3
                       </Badge>
                     </Link>
-                  </div>
+                  </div> */}
                   <Dropdown>
                     <Dropdown.Toggle
                       className="headerMiddleActionItem userDropdownToggle"
@@ -96,6 +96,9 @@ const HeaderMiddle = () => {
                       as="a"
                     >
                       <User size="32" />
+                      <small className="my-auto ml-1">
+                        {userInfo?.username}
+                      </small>
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu className=" shadow-sm ">

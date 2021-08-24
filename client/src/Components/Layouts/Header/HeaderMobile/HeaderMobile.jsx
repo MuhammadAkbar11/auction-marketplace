@@ -23,14 +23,6 @@ const HeaderMobile = ({ toggle }) => {
           <div className="d-flex flex-nowrap  justify-content-end align-items-center headerMiddleAction ">
             {userInfo ? (
               <>
-                <div className="headerMiddleActionItem">
-                  <Link to="/favorit">
-                    <Heart size="32" />
-                    <Badge variant="primary" className="actionBadge ">
-                      3
-                    </Badge>
-                  </Link>
-                </div>
                 <div className="headerMiddleActionItem mr-1">
                   {/* <Link to="/akun/profile">
                     <User size="32" />
@@ -43,6 +35,9 @@ const HeaderMobile = ({ toggle }) => {
                       as="a"
                     >
                       <User size="32" />
+                      <small className="my-auto ml-1">
+                        {userInfo?.username}
+                      </small>
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu className=" shadow-sm ">

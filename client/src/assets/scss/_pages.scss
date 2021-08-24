@@ -9,3 +9,17 @@
 @import "./pages/404";
 
 @import "./pages/admin/admin";
+
+.coming-soon-wrapper {
+  height: 70vh;
+  overflow: hidden;
+  width: 100%;
+
+  .coming-soon-title {
+    font-weight: 900 !important;
+    font-size: 8vw;
+    @include media-breakpoint-down(md) {
+      font-size: 9vw;
+    }
+  }
+}

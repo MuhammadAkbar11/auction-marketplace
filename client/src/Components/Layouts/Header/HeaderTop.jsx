@@ -20,7 +20,7 @@ const HeaderTop = () => {
               <Link to="/kontak" className="my-0 text-dark mr-2">
                 <small>Kontak kami</small>
               </Link>
-              <Link to="/tenteng-kami" className="my-0 text-dark ">
+              <Link to="/tentang-kami" className="my-0 text-dark ">
                 <small> Tentang</small>
               </Link>
             </div>

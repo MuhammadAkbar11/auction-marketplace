@@ -102,7 +102,7 @@ const MobileMenuCategori = ({ open, toggle, categories }) => {
             return (
               <LinkContainer
                 key={item.id_kategori}
-                to={`/kategori/${item.id_kategori}`}
+                to={`/kategori/${item.slug}`}
                 className="mobileMenuNavLink"
               >
                 <Nav.Link as={motion.a} variants={navItemVariants}>

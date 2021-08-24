@@ -14,7 +14,7 @@ const Footer = () => {
     },
     {
       id: 3,
-      url: "/term-conditions",
+      url: "/syarat-dan-ketentuan",
       name: "Syarat & Ketentuan",
     },
   ];

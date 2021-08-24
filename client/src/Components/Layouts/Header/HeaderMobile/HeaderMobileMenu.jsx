@@ -47,22 +47,28 @@ const HeaderMobileMenu = ({ show, toggle }) => {
               defaultActiveKey="/home"
               className="flex-column mobileMenuNav px-0 "
             >
-              <LinkContainer to="/cart" className="mobileMenuNavLink ">
+              <LinkContainer to="/" className="mobileMenuNavLink ">
                 <Nav.Link> Home</Nav.Link>
               </LinkContainer>
-              <LinkContainer to="/cart" className="mobileMenuNavLink ">
+              <LinkContainer to="/lelang" className="mobileMenuNavLink ">
                 <Nav.Link> Lelang</Nav.Link>
               </LinkContainer>
-              <LinkContainer to="/cart" className="mobileMenuNavLink ">
+              <LinkContainer
+                to="/lelang-terbaru"
+                className="mobileMenuNavLink "
+              >
                 <Nav.Link> Terbaru</Nav.Link>
               </LinkContainer>
-              <LinkContainer to="/cart" className="mobileMenuNavLink ">
+              <LinkContainer to="/tentang-kami" className="mobileMenuNavLink ">
                 <Nav.Link> Tentang Kami</Nav.Link>
               </LinkContainer>
-              <LinkContainer to="/cart" className="mobileMenuNavLink ">
+              <LinkContainer to="/kontak" className="mobileMenuNavLink ">
                 <Nav.Link> Kontak</Nav.Link>
               </LinkContainer>
-              <LinkContainer to="/cart" className="mobileMenuNavLink ">
+              <LinkContainer
+                to="/syarat-dan-ketentuan"
+                className="mobileMenuNavLink "
+              >
                 <Nav.Link> Syarat dan Kententuan</Nav.Link>
               </LinkContainer>
             </Nav>
