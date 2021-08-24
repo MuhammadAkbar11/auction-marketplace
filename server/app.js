@@ -66,15 +66,27 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/api", (req, res) => {
-  res.send("API is Running dude!! ");
-});
+// app.use()
+
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/auction", auctionRoutes);
 app.use("/api/categories", categoriesRoutes);
 app.use("/api/dumb", dumbRoutes);
+
+if (MODE === "production") {
+  app.use(express.static(path.join(__dirname, "/client/build")));
+
+  app.use("*", (req, res) =>
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"))
+  );
+} else {
+  app.get("/api", (req, res) => {
+    res.send("API is Running dude!! ");
+  });
+}
+
 app.use(notFound);
 app.use(errorHandler);
 

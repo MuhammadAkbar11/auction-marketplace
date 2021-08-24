@@ -37,7 +37,8 @@ export const getUserProfile = asyncHandler(async (req, res) => {
       message: "success",
       details: {
         ...user.dataValues,
-        foto: "/" + user.foto || "/uploads/members/guest.png",
+        foto:
+          user.foto !== null ? "/" + user.foto : "/uploads/members/guest.jpeg",
         tgl_dibuat: daysJs(user.tgl_dibuat).format("DD MMM, YYYY - HH.mm"),
         tgl_diubah: daysJs(user.tgl_diubah).format("DD MMM, YYYY - HH.mm"),
         akun_bank: bankAccounts,
@@ -142,8 +143,10 @@ export const postUserUploadPhoto = asyncHandler(async (req, res, next) => {
 
     if (req.fileimg?.data) {
       user.foto = newPhoto.path;
-      if (oldPhoto !== "uploads/members/guest.png") {
-        deleteFile("/" + oldPhoto);
+      if (oldPhoto) {
+        if (oldPhoto !== "uploads/members/guest.png") {
+          deleteFile("/" + oldPhoto);
+        }
       }
     }
 

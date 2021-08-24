@@ -106,11 +106,11 @@ const UserAuction = props => {
                       Selesai
                     </Nav.Link>
                   </LinkContainer>
-                  <LinkContainer to={`${match.path}?tab=payment`}>
-                    <Nav.Link eventKey="payment" className="text-center">
-                      Bukti Pembayaran
+                  {/* <LinkContainer to={`${match.path}?tab=shipping`}>
+                    <Nav.Link eventKey="pengiriman" className="text-center">
+                      Pengirimain
                     </Nav.Link>
-                  </LinkContainer>
+                  </LinkContainer> */}
                   <LinkContainer to={`${match.path}?tab=sold`}>
                     <Nav.Link eventKey="sold" className="text-center">
                       Barang Terjual
@@ -159,9 +159,9 @@ const UserAuction = props => {
                     isActive={tabKey === "complete"}
                   />
                 </Tab.Pane>
-                <Tab.Pane eventKey="payment">
+                <Tab.Pane eventKey="shipping">
                   <UserPaymentProofTab
-                    isActive={tabKey === "payment"}
+                    isActive={tabKey === "shipping"}
                     closeLoading={closeAuctionState.loading}
                     handleClose={handleClose}
                   />

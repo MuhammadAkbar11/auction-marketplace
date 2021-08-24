@@ -7,7 +7,7 @@
   "author": "MuhammadAkbar11 <muhammadakbarletlet@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node server/app.js",
+    "start": "nodemon server/app.js",
     "server": "nodemon server/app.js --dev",
     "debug": "nodemon server/app.js --dev-debug",
     "client": "",

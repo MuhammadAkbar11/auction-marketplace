@@ -62,7 +62,7 @@ export const getListAuction = asyncHandler(async (req, res) => {
       where = {
         tgl_mulai: {
           [Op.lte]: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-          [Op.gte]: dayjs().subtract(2, "days").format("YYYY-MM-DD HH:mm:ss"),
+          [Op.gte]: dayjs().subtract(7, "days").format("YYYY-MM-DD HH:mm:ss"),
         },
         status_lelang: {
           [Op.in]: [1, 2, 3],
