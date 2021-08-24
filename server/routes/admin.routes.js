@@ -6,6 +6,7 @@ import {
 import {
   getMembers,
   getMemberDetails,
+  adminGetAuctions,
 } from "../controller/admin/master.controller.js";
 import {
   getCategories,
@@ -23,5 +24,6 @@ router.post("/kategori", adminProtect, postCategory);
 router.delete("/kategori/:categoryId", adminProtect, deleteCategory);
 router.get("/members", adminProtect, getMembers);
 router.get("/members/:memberId", adminProtect, getMemberDetails);
+router.get("/auctions", adminProtect, adminGetAuctions);
 
 export default router;

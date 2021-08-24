@@ -12,7 +12,11 @@ const fileStorage = multer.diskStorage({
     const filenameToArr = file.originalname.split(" ").join("").split(".");
     const fileName = req.body.id_transaksi;
     const ext = filenameToArr[filenameToArr.length - 1];
-    cb(null, `BaeBid-${fileName}_${dayjs().format("YYYY-MM-DD")}.${ext}`);
+    const resultFileName = `BaeBid-${fileName}_${dayjs().format(
+      "YYYY-MM-DD"
+    )}.${ext}`;
+    // const resultFileName = `BaeBid-${fileName}_}.${ext}`;
+    cb(null, resultFileName);
   },
 });
 

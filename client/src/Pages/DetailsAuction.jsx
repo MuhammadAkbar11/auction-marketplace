@@ -10,8 +10,6 @@ import ProductDetailImage from "../Components/ProductDetailImage";
 import Loader from "../Components/UI/Loader";
 import { io } from "socket.io-client";
 import { SERVER_ENDPOINT } from "../constants/socket.constants";
-import { onlyNumbers } from "../utils/replace";
-import { isEmptyObj } from "../utils/checkObj";
 import { authLoginErrorMessageAction } from "../actions/auth.actions";
 import BidForm from "../Components/BidForm";
 let socket;

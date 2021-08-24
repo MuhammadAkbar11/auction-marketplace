@@ -141,8 +141,8 @@ export const postUserUploadPhoto = asyncHandler(async (req, res, next) => {
     });
 
     if (req.fileimg?.data) {
-      if (user.foto !== "uploads/members/guest.png") {
-        user.foto = newPhoto.path;
+      user.foto = newPhoto.path;
+      if (oldPhoto !== "uploads/members/guest.png") {
         deleteFile("/" + oldPhoto);
       }
     }
