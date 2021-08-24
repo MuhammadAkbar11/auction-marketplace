@@ -17,7 +17,7 @@ const UserMyBidsTab = () => {
 
   React.useEffect(() => {
     dispatch(getUserBidsAction());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>

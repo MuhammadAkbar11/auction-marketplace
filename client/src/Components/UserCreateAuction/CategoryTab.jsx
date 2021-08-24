@@ -28,7 +28,7 @@ const CategoryTab = () => {
   React.useEffect(() => {
     dispatch(getCategoriesAction());
     // setCategories(categoriesState);
-  }, []);
+  }, [dispatch]);
 
   const searchHandler = e => {
     const value = e.target.value;

@@ -9,23 +9,20 @@ import {
   Row,
   Card,
   Button,
-  InputGroup,
   ButtonGroup,
   ToggleButton,
-  ToggleButtonGroup,
 } from "react-bootstrap";
 import { Check } from "phosphor-react";
 import { useDispatch, useSelector } from "react-redux";
 import CreateAuctionSteps from "./CreateAuctionSteps";
 
-import { _dateFormat } from "../../utils/date-format";
-import convertRupiah from "../../utils/convertRupiah";
+// import { _dateFormat } from "../../utils/date-format";
+// import convertRupiah from "../../utils/convertRupiah";
 
 import {
   getUserDetailsAction,
   postUserCreateAuctionAction,
   userAddAuctionDelivery,
-  userAddAuctionRegularData,
   userResetCreateAuction,
 } from "../../actions/user.actions";
 import Loader from "../UI/Loader";
@@ -76,11 +73,11 @@ const DeliveryTab = () => {
         dispatch(userResetCreateAuction());
       }
     };
-  }, [success]);
+  }, [success, dispatch]);
 
   React.useEffect(() => {
     dispatch(getUserDetailsAction());
-  }, []);
+  }, [dispatch]);
 
   const formik = useFormik({
     validationSchema: formikSchema,

@@ -62,7 +62,7 @@ const DescProductTab = () => {
     if (!category) {
       history.push("/akun/buat-lelang?tab=category");
     }
-  }, [category]);
+  }, [category, history]);
 
   return (
     <Container fluid className=" px-md-8">
@@ -134,7 +134,9 @@ const DescProductTab = () => {
                         "Bekas Dengan kondisi cacat",
                         "Rusak",
                       ].map((kondisi, idx) => {
-                        const key = idx;
+                        {
+                          /* const key = idx; */
+                        }
                         return (
                           <option key={idx} value={kondisi}>
                             {kondisi}

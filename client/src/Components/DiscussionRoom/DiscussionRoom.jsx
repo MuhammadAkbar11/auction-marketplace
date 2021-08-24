@@ -47,7 +47,7 @@ const DiscussionRoom = ({ auctionId }) => {
       socket.on("disconnect");
       socket.off();
     };
-  }, [SERVER_ENDPOINT]);
+  }, [auctionId]);
 
   React.useEffect(() => {
     // get-room-newmessage

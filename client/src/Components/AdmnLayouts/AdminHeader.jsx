@@ -14,7 +14,7 @@ const AdminHeader = ({ toggle }) => {
   return (
     <header className="adm-header">
       <div className="adm--header adm--header-left">
-        <a href="#" onClick={toggle} className=" text-primary">
+        <a href="/#" onClick={toggle} className=" text-primary">
           <List size={30} />
         </a>
       </div>

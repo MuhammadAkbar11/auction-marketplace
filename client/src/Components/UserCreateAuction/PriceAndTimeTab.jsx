@@ -16,12 +16,7 @@ import { Redirect, useHistory } from "react-router-dom";
 import { _dateFormat } from "../../utils/date-format";
 import convertRupiah from "../../utils/convertRupiah";
 
-import {
-  postUserCreateAuctionAction,
-  userAddAuctionRegularData,
-  userResetCreateAuction,
-} from "../../actions/user.actions";
-import Loader from "../UI/Loader";
+import { userAddAuctionRegularData } from "../../actions/user.actions";
 
 const yesterday = new Date(Date.now() - 86400000);
 
@@ -41,7 +36,7 @@ const PriceAndTimeTab = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const success = createAuctionState.success;
+  // const success = createAuctionState.success;
   const timePriceState = createAuctionState?.regular;
   const descriptionState = createAuctionState?.description;
   const formik = useFormik({
@@ -201,7 +196,9 @@ const PriceAndTimeTab = () => {
                           name: "1 Minggu",
                         },
                       ].map((kondisi, idx) => {
-                        const key = idx;
+                        {
+                          /* const key = idx; */
+                        }
                         return (
                           <option key={idx} value={kondisi.value}>
                             {kondisi.name}

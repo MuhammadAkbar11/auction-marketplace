@@ -1,9 +1,9 @@
 import React from "react";
-import { ListGroup, Nav, Dropdown } from "react-bootstrap";
+import { ListGroup, Dropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { List } from "phosphor-react";
 import { useSelector } from "react-redux";
-import ListGroupItemDropdown from "../UI/ListGroupItemDropdown";
+// import ListGroupItemDropdown from "../UI/ListGroupItemDropdown";
 import { Link } from "react-router-dom";
 
 const UserSidebarMenu = () => {

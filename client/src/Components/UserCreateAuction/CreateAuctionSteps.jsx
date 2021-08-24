@@ -7,12 +7,14 @@ const defaultProps = {
   step1: false,
   step2: false,
   step3: false,
+  step4: false,
 };
 
 const proptypes = {
   step1: PropTypes.bool,
   step2: PropTypes.bool,
   step3: PropTypes.bool,
+  step4: PropTypes.bool,
   currentStep: PropTypes.string.isRequired,
 };
 

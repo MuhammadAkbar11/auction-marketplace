@@ -20,7 +20,7 @@ import AdminPrivateRoute from "./Components/Route/AdminPrivateRoute";
 import Dashboard from "./Pages/Admin/Dashboard";
 import AdminKategori from "./Pages/Admin/Kategori";
 import Users from "./Pages/Admin/Users";
-import AdminComingSoon from "./Pages/Admin/AdminComingSoon";
+// import AdminComingSoon from "./Pages/Admin/AdminComingSoon";
 import MyBid from "./Pages/User/MyBid";
 import TransactionRepot from "./Pages/Admin/TransactionRepot";
 import ConfirmWinning from "./Pages/User/ConfirmWinning";

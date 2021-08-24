@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Badge, Nav } from "react-bootstrap";
+import { Badge, Nav } from "react-bootstrap";
 import { Check } from "phosphor-react";
 import { LinkContainer } from "react-router-bootstrap";
 const CreateAuctionStepItem = ({ active, isPrev, text, number, to }) => {
