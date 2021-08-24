@@ -124,6 +124,7 @@ ModelAkunBank.belongsTo(ModelMember, { foreignKey: foreignKeysData.idMember });
 ModelMember.hasMany(ModelPesanDiskusi);
 ModelPesanDiskusi.belongsTo(ModelMember, {
   foreignKey: foreignKeysData.idMember,
+  as: "member",
 });
 ModelRuangDiskusi.hasMany(ModelPesanDiskusi);
 ModelPesanDiskusi.belongsTo(ModelRuangDiskusi, {

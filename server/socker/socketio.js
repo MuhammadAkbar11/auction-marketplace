@@ -11,7 +11,7 @@ const SocketApp = server => {
     origins: ["http://localhost:3000"],
   });
 
-  const { checkNewAuction, sendBid, getBids, countdownItem } =
+  const { getRoomMessages, checkNewAuction, sendBid, getBids, postMessage } =
     registerAuctionHandler(io);
 
   const onConnection = socket => {
@@ -89,6 +89,12 @@ const SocketApp = server => {
           callback && callback("Gagal");
         });
     });
+
+    socket.on("get-room-messages", ({ id_lelang }, callback) => {
+      return getRoomMessages({ id_lelang }, socket, callback);
+    });
+
+    socket.on("post-room-message", postMessage);
   };
 
   io.on("connection", onConnection);

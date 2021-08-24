@@ -1,11 +1,14 @@
 import Sequelize from "sequelize";
 import ModelLelang from "../models/m_lelang.js";
 import dayjs from "dayjs";
+import dayjsRelativeTime from "dayjs/plugin/relativeTime.js";
 import verifyToken from "../utils/verifyToken.js";
 import ResponseError from "../utils/responseError.js";
 import ModelPenawaran from "../models/m_penawaran.js";
 import convertRupiah from "../utils/convertRupiah.js";
 import ModelMember from "../models/m_member.js";
+import ModelRuangDiskusi from "../models/m_ruang_diskusi.js";
+import ModelPesanDiskusi from "../models/m_pesan_diskusi.js";
 
 const _second = 1000;
 const _minute = _second * 60;
@@ -13,6 +16,8 @@ const _hour = _minute * 60;
 const _day = _hour * 24;
 
 const Op = Sequelize.Op;
+
+dayjs.extend(dayjsRelativeTime);
 
 export default io => {
   // check lelang yang aktif
@@ -206,16 +211,6 @@ export default io => {
     }
   };
 
-  /*
-
-      // const diff = dateEnded.diff(dayjs());
-      // // console.log(dateEnded.diff(dayjs(), "day"), "<=== dayjs");
-      // // console.log(dateEnded.diff(dayjs(), "minute"), "<=== dayjs");
-      // console.log(dayjs(diff).format("DD HH:mm:ss"));
-
-
-  */
-
   const countdownItem = ({ id }) => {
     // try {
     return ModelLelang.findOne({
@@ -268,5 +263,137 @@ export default io => {
     });
   };
 
-  return { checkNewAuction, sendBid, getBids, countdownItem };
+  const postMessage = async (values, callback) => {
+    const data = {
+      id_ruang: values.id_ruang,
+      id_lelang: values.id_lelang,
+      id_member: values.id_member,
+      id_parent: values.id_parent,
+      isi_pesan: values.isi_pesan,
+    };
+
+    try {
+      const decoded = await verifyToken(values.token);
+      if (decoded) {
+        const newMessage = await ModelPesanDiskusi.create(data);
+
+        // io
+
+        const message = await ModelPesanDiskusi.findOne({
+          where: {
+            id_pesan: newMessage.id_pesan,
+          },
+          include: {
+            model: ModelMember,
+            as: "member",
+            attributes: ["id_member", "nama", "username", "email", "foto"],
+          },
+          attributes: {
+            exclude: ["ModelMemberIdMember", "ModelRuangDiskusiIdRuang"],
+          },
+        });
+
+        message.setDataValue(
+          "waktu_kirim",
+          dayjs(message.tgl_dibuat).fromNow()
+        );
+
+        io.to("room-" + values.id_ruang).emit("get-room-new-message", message);
+
+        callback && callback({ status: true, message: newMessage }, null);
+        return;
+      } else {
+        throw new ResponseError(401, "Not Authorized, token failed", {
+          type: "Authorized",
+        });
+      }
+    } catch (error) {
+      const err = {
+        statusCode: error.statusCode,
+        message: error.message,
+        errors: error.errors,
+      };
+
+      callback && callback({ status: false }, err);
+    }
+  };
+
+  const getRoomMessages = async ({ id_lelang }, socket, callback) => {
+    try {
+      const getRoom = await ModelRuangDiskusi.findOne({
+        where: {
+          id_lelang,
+        },
+        attributes: {
+          exclude: ["ModelLelangIdLelang"],
+        },
+      });
+
+      if (getRoom) {
+        socket.join("room-" + getRoom.id_ruang);
+
+        const messages = await ModelPesanDiskusi.findAll({
+          where: {
+            id_ruang: getRoom.id_ruang,
+          },
+          include: {
+            model: ModelMember,
+            as: "member",
+            attributes: ["id_member", "nama", "username", "email", "foto"],
+          },
+          attributes: {
+            exclude: ["ModelMemberIdMember", "ModelRuangDiskusiIdRuang"],
+          },
+          order: [["tgl_dibuat", "DESC"]],
+        });
+
+        const transforMessages = messages.map(m => {
+          return {
+            ...m.dataValues,
+            waktu_kirim: dayjs(m.tgl_dibuat).fromNow(),
+          };
+        });
+
+        callback &&
+          callback(
+            {
+              messages: transforMessages,
+              id_ruang: getRoom.id_ruang,
+            },
+            null
+          );
+
+        return;
+      } else {
+        const result = await ModelRuangDiskusi.create({
+          id_lelang,
+        });
+        callback &&
+          callback(
+            {
+              messages: [],
+              id_ruang: result.id_ruang,
+            },
+            null
+          );
+      }
+    } catch (error) {
+      const err = {
+        statusCode: error.statusCode,
+        message: error.message,
+        errors: error.errors,
+      };
+
+      callback && callback({ status: false }, err);
+    }
+  };
+
+  return {
+    checkNewAuction,
+    sendBid,
+    getBids,
+    countdownItem,
+    getRoomMessages,
+    postMessage,
+  };
 };

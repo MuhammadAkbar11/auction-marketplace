@@ -20,7 +20,7 @@ const ModelPesanDiskusi = sequelize.define(
   },
   {
     tableName: "tbl_pesan_diskusi",
-    timestamps: false,
+    timestamps: true,
     createdAt: "tgl_dibuat",
     updatedAt: "tgl_diubah",
   }

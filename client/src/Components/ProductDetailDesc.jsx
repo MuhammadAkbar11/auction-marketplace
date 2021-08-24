@@ -1,5 +1,6 @@
 import React from "react";
 import { Col, Container, Row, Tab, Nav, Table } from "react-bootstrap";
+import DiscussionRoom from "./DiscussionRoom/DiscussionRoom";
 
 const ProductDetailDesc = ({ loading, auction, listBid }) => {
   const [key, setKey] = React.useState("home");
@@ -64,7 +65,7 @@ const ProductDetailDesc = ({ loading, auction, listBid }) => {
                   </Table>
                 </Tab.Pane>
                 <Tab.Pane eventKey="des-details3">
-                  <h4 className=" font-weight-light ">Diskusi produk</h4>
+                  <DiscussionRoom auctionId={auction?.id_lelang} />
                 </Tab.Pane>
                 <Tab.Pane eventKey="des-details4">
                   <h5 className=" font-weight-light ">Aturan Main</h5>
