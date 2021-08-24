@@ -33,12 +33,19 @@ import UserChangPassword from "./Pages/User/UserChangPassword";
 import ListAuctionByCategory from "./Pages/ListAuctionByCategory";
 import ListLatestAuctionPage from "./Pages/ListLatestAuction";
 import PageNotFound from "./Pages/404";
+import AboutUs from "./Pages/AboutUs";
+import ComingSoon from "./Pages/ComingSoon";
+import Contacts from "./Pages/Contact";
+import AdminAuctions from "./Pages/Admin/Auctions";
 
 function App() {
   return (
     <>
       <Switch>
         <Route exact path="/" component={Home} />
+        <Route path="/tentang-kami" component={AboutUs} />
+        <Route path="/kontak" component={Contacts} />
+        <Route path="/syarat-dan-ketentuan" component={ComingSoon} />
         <PublicRoute
           restricted={true}
           path="/akun/masuk"
@@ -106,7 +113,7 @@ function App() {
         <AdminPrivateRoute path="/administrator/anggota" component={Users} />
         <AdminPrivateRoute
           path="/administrator/lelang"
-          component={AdminComingSoon}
+          component={AdminAuctions}
         />
         <AdminPrivateRoute
           path="/administrator/laporan-transaksi"
