@@ -1,10 +1,9 @@
 import React from "react";
-import { Col, Container, Row, Tab, Nav, Table } from "react-bootstrap";
+import { Col, Container, Row, Tab, Tabs, Nav, Table } from "react-bootstrap";
 import DiscussionRoom from "./DiscussionRoom/DiscussionRoom";
 
-const ProductDetailDesc = ({ loading, auction, listBid }) => {
+const ProductDetailDesc = ({ auction, listBid }) => {
   const [key, setKey] = React.useState("home");
-
   const seen = new Set();
   return (
     <section className="description-review-wrapper ">
@@ -16,10 +15,18 @@ const ProductDetailDesc = ({ loading, auction, listBid }) => {
               defaultActiveKey="des-details1"
             >
               <Nav className="dec-review-topbar   ">
-                <Nav.Link eventKey="des-details1">Informasi Produk</Nav.Link>
-                <Nav.Link eventKey="des-details2">Riwayat Penawaran</Nav.Link>
-                <Nav.Link eventKey="des-details3">Diskusi produk </Nav.Link>
-                <Nav.Link eventKey="des-details4">Aturan Main </Nav.Link>
+                <Nav.Link onSelect={k => setKey(k)} eventKey="des-details1">
+                  Informasi Produk
+                </Nav.Link>
+                <Nav.Link onSelect={k => setKey(k)} eventKey="des-details2">
+                  Riwayat Penawaran
+                </Nav.Link>
+                <Nav.Link onSelect={k => setKey(k)} eventKey="des-details3">
+                  Diskusi produk{" "}
+                </Nav.Link>
+                <Nav.Link onSelect={k => setKey(k)} eventKey="des-details4">
+                  Aturan Main{" "}
+                </Nav.Link>
               </Nav>
               <Tab.Content className="dec-review-bottom">
                 <Tab.Pane eventKey="des-details1">
@@ -65,7 +72,13 @@ const ProductDetailDesc = ({ loading, auction, listBid }) => {
                   </Table>
                 </Tab.Pane>
                 <Tab.Pane eventKey="des-details3">
-                  <DiscussionRoom auctionId={auction?.id_lelang} />
+                  {key === "des-details3" && (
+                    <DiscussionRoom
+                      auctionId={auction?.id_lelang}
+                      auction={auction}
+                      isActive={key === "des-details3"}
+                    />
+                  )}
                 </Tab.Pane>
                 <Tab.Pane eventKey="des-details4">
                   <h5 className=" font-weight-light ">Aturan Main</h5>
