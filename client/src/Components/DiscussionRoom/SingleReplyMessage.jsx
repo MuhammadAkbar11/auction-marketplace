@@ -2,7 +2,7 @@ import React from "react";
 import { Card, Button, Form } from "react-bootstrap";
 // import guestImg from "";
 
-const SingleReplyMessage = ({ message, onShowReplyInput }) => {
+const SingleReplyMessage = ({ message, onShowReplyInput, isSeller }) => {
   return (
     <Card className=" border-0 ml50   ">
       <Card.Body className="text-dark pl-0 py-2 ">
@@ -19,8 +19,14 @@ const SingleReplyMessage = ({ message, onShowReplyInput }) => {
           <div>
             <div className="d-flex align-items-center ">
               <span className="mr-1 text-black font-weight-bold">
-                {message?.member?.username}
+                {message?.member?.username}{" "}
+                {isSeller && (
+                  <small className="text-danger font-italic text-spacing-0 ">
+                    {"[ Penjual ]"}
+                  </small>
+                )}
               </span>
+
               <small className="text-gray-600 text-spacing-0 ">
                 {message?.waktu_kirim}
               </small>

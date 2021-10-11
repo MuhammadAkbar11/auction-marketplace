@@ -1,9 +1,10 @@
+import { m } from "framer-motion";
 import React from "react";
 import { Card, Button, Form } from "react-bootstrap";
 import SingleReplyMessage from "./SingleReplyMessage";
 // import guestImg from "";
 
-const SingleMessage = ({ messages, message, user, onPostReply }) => {
+const SingleMessage = ({ messages, message, user, onPostReply, sellerId }) => {
   const [replyInput, setReplyInput] = React.useState(false);
   const [reply, setReply] = React.useState("");
 
@@ -21,6 +22,8 @@ const SingleMessage = ({ messages, message, user, onPostReply }) => {
     setReplyInput(false);
   };
 
+  const isSeller = sellerId === message.id_member;
+
   return (
     <Card className="border-0 mb-1">
       <Card.Body className="  py-2 pl-0 ">
@@ -37,7 +40,12 @@ const SingleMessage = ({ messages, message, user, onPostReply }) => {
           <div>
             <div className="d-flex align-items-center ">
               <span className="mr-1 text-black font-weight-bold">
-                {message?.member?.username}
+                {message?.member?.username}{" "}
+                {isSeller && (
+                  <small className="text-danger font-italic text-spacing-0 ">
+                    {"[ Penjual ]"}
+                  </small>
+                )}
               </span>
               <small className="text-gray-600 text-spacing-0 ">
                 {message?.waktu_kirim}
@@ -62,6 +70,7 @@ const SingleMessage = ({ messages, message, user, onPostReply }) => {
               <SingleReplyMessage
                 key={msg.id_pesan}
                 message={msg}
+                isSeller={msg.id_member === sellerId}
                 onShowReplyInput={showReplyInputHandler}
               />
             );

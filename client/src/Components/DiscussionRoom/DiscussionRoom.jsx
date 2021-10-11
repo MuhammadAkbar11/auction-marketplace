@@ -17,15 +17,16 @@ import { authLoginErrorMessageAction } from "../../actions/auth.actions";
 
 let socket;
 
-const DiscussionRoom = ({ auctionId }) => {
+const DiscussionRoom = () => {
   const [roomId, setRoomId] = React.useState("");
   const [text, setText] = React.useState("");
   const [listMessage, setListMessage] = React.useState([]);
 
   const dispatch = useDispatch();
 
+  const { auction } = useSelector(state => state.auctionDetails);
   const { userInfo } = useSelector(state => state.authUser);
-  // const {}
+  const auctionId = auction?.id_lelang;
 
   const history = useHistory();
 
@@ -132,9 +133,9 @@ const DiscussionRoom = ({ auctionId }) => {
 
             <section className="mt-4">
               {listMessage.map(msg => {
-                const messages = listMessage.filter(
-                  item => item.id_parent === msg.id_pesan
-                );
+                const messages = listMessage
+                  .filter(item => item.id_parent === msg.id_pesan)
+                  .reverse();
                 return (
                   msg.id_parent === null && (
                     <SingleMessage
@@ -142,6 +143,7 @@ const DiscussionRoom = ({ auctionId }) => {
                       onPostReply={postReplyHandler}
                       message={msg}
                       user={userInfo}
+                      sellerId={auction.id_member}
                       messages={messages}
                     />
                   )
