@@ -299,7 +299,7 @@ export default io => {
         );
 
         io.to("room-" + values.id_ruang).emit("get-room-new-message", message);
-
+        console.log("room-" + values.id_ruang);
         callback && callback({ status: true, message: newMessage }, null);
         return;
       } else {

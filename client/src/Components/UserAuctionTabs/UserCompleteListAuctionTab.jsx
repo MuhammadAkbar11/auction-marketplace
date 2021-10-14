@@ -15,6 +15,7 @@ const UserCompleteListAuctionTab = ({ isActive }) => {
 
   const userAuctionState = useSelector(state => state.userAuction);
   const userConfirmBidState = useSelector(state => state.userConfirmBid);
+  const { details } = useSelector(state => state.userDetails);
 
   const [modalConfirm, setModalConfirm] = React.useState(false);
   const [modalConfirmData, setModalConfirmData] = React.useState({
@@ -56,7 +57,13 @@ const UserCompleteListAuctionTab = ({ isActive }) => {
 
   return (
     <>
-      <Card className="mt-4">
+      {details?.akun_bank?.length === 0 && (
+        <Alert className="my-4" variant="warning">
+          Silahkan tambahkan akun rekening anda di halaman info akun, agar dapat
+          melakukan konfirmasi pemenang
+        </Alert>
+      )}
+      <Card className={`${details?.akun_bank?.length !== 0 && "mt-4"}`}>
         <Card.Header className="bg-transparent pt-4 text-dark text-uppercase font-weight-bold">
           <Card.Title>Lelang Selesai</Card.Title>
         </Card.Header>
