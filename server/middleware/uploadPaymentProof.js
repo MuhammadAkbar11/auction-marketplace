@@ -10,7 +10,7 @@ const fileStorage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const filenameToArr = file.originalname.split(" ").join("").split(".");
-    const fileName = req.body.id_transaksi;
+    const fileName = req.body.id_transaksi || "";
     const ext = filenameToArr[filenameToArr.length - 1];
     const resultFileName = `BaeBid-${fileName}_${dayjs().format(
       "YYYY-MM-DD"
