@@ -7,7 +7,9 @@ import BreadcrumbsContainer from "../../Components/Layouts/BreadcrumbsContainer"
 import UserActiveAuctionsTab from "../../Components/UserAuctionTabs/UserActiveAuctionsTab";
 import UserPlanningAuctionsTab from "../../Components/UserAuctionTabs/UserPlanningAuctionsTab";
 import UserSidebarMenu from "../../Components/UserMenuLayout/UserSidebarMenu";
-
+import Layout from "../../Components/Layouts/Layout";
+import UserSoldOutTab from "../../Components/UserAuctionTabs/UserSoldOutAuctionsTab";
+import UserPaymentProofTab from "../../Components/UserAuctionTabs/UserPaymentProofTab";
 import {
   getUserAuctionAction,
   getUserAuctionsActiveAction,
@@ -15,9 +17,6 @@ import {
   userAuctionDeleteAction,
   userAuctionResetMessageAction,
 } from "../../actions/user.actions";
-import Layout from "../../Components/Layouts/Layout";
-import UserSoldOutTab from "../../Components/UserAuctionTabs/UserSoldOutAuctionsTab";
-import UserPaymentProofTab from "../../Components/UserAuctionTabs/UserPaymentProofTab";
 import UserCompleteListAuctionTab from "../../Components/UserAuctionTabs/UserCompleteListAuctionTab";
 
 const UserAuction = props => {

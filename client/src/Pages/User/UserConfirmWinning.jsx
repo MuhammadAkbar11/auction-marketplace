@@ -11,7 +11,7 @@ import UserConfirmWinForm from "../../Components/UserConfirmWinForm/UserConfirmW
 import { getUserWinningAuctionDetailsAction } from "../../actions/user.purchase.actions";
 import useIsValidData from "../../hooks/useIsValidData";
 
-const ConfirmWinning = props => {
+const UserConfirmWinning = props => {
   const { match } = props;
 
   const { invoiceId } = match?.params;
@@ -147,4 +147,4 @@ const ConfirmWinning = props => {
   );
 };
 
-export default ConfirmWinning;
+export default UserConfirmWinning;

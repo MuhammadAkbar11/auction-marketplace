@@ -8,10 +8,10 @@ import ListAuction from "./Pages/ListAuction";
 import LoginPage from "./Pages/LoginPage";
 import RegisterPage from "./Pages/RegisterPage";
 import UserDashboard from "./Pages/User/UserDashboard";
-import UserAuction from "./Pages/User/UserAuction";
-import Profile from "./Pages/User/Profile";
-import CreateAuction from "./Pages/User/CreateAuction";
-import UpdateAuction from "./Pages/User/UpdateAuction";
+import SellerUserAuction from "./Pages/User/SellerUserAuction";
+import UserProfile from "./Pages/User/UserProfile";
+import SellerCreateAuction from "./Pages/User/SellerCreateAuction";
+import SellerUpdateAuction from "./Pages/User/SellerUpdateAuction";
 import DetailsAuction from "./Pages/DetailsAuction";
 
 import AdminPublicRoute from "./Components/Route/AdminPublicRoute";
@@ -21,10 +21,10 @@ import Dashboard from "./Pages/Admin/Dashboard";
 import AdminKategori from "./Pages/Admin/Kategori";
 import Users from "./Pages/Admin/Users";
 // import AdminComingSoon from "./Pages/Admin/AdminComingSoon";
-import MyBid from "./Pages/User/MyBid";
+import UserBids from "./Pages/User/UserBids";
 import TransactionRepot from "./Pages/Admin/TransactionRepot";
-import ConfirmWinning from "./Pages/User/ConfirmWinning";
-import UserConfirmAuctionBill from "./Pages/User/UserConfirmAuctionBill";
+import UserConfirmWinning from "./Pages/User/UserConfirmWinning";
+import SellerConfirmAuctionBill from "./Pages/User/SellerConfirmAuctionBill";
 import UserPayment from "./Pages/User/UserPayment";
 import SellerConfirmPayment from "./Pages/User/SellerConfirmPayment";
 import UserPaymentResult from "./Pages/User/UserPaymentResult";
@@ -37,7 +37,7 @@ import AboutUs from "./Pages/AboutUs";
 import ComingSoon from "./Pages/ComingSoon";
 import Contacts from "./Pages/Contact";
 import AdminAuctions from "./Pages/Admin/Auctions";
-import ConfirmShipping from "./Pages/User/ConfirmShipping";
+import SellerConfirmShipping from "./Pages/User/SellerConfirmShipping";
 
 function App() {
   return (
@@ -57,10 +57,11 @@ function App() {
           restricted={true}
           component={RegisterPage}
         />
-        <PrivateRoute path="/akun/dashboard" component={UserDashboard} />
+
+        {/* Seller */}
         <PrivateRoute
           path="/akun/konfirmasi-tagihan/:invoiceId"
-          component={UserConfirmAuctionBill}
+          component={SellerConfirmAuctionBill}
         />
         <PrivateRoute
           path="/akun/konfirmasi-pembayaran/:invoiceId"
@@ -68,34 +69,39 @@ function App() {
         />
         <PrivateRoute
           path="/akun/konfirmasi-pengiriman/:invoiceId"
-          component={ConfirmShipping}
+          component={SellerConfirmShipping}
         />
-        <PrivateRoute path="/akun/lelang" component={UserAuction} />
+        <PrivateRoute path="/akun/lelang" component={SellerUserAuction} />
         <PrivateRoute
-          path="/akun/pembelian/konfirmasi/:invoiceId"
-          component={ConfirmWinning}
+          path="/akun/buat-lelang"
+          component={SellerCreateAuction}
+        />
+        <PrivateRoute
+          path="/akun/edit-lelang/:idAuction"
+          component={SellerUpdateAuction}
+        />
+        {/* User */}
+        <PrivateRoute
+          path="/akun/pembayaran/:invoiceId"
+          component={UserPayment}
         />
         <PrivateRoute
           path="/akun/result-pembayaran"
           component={UserPaymentResult}
         />
         <PrivateRoute
-          path="/akun/pembayaran/:invoiceId"
-          component={UserPayment}
+          path="/akun/pembelian/konfirmasi/:invoiceId"
+          component={UserConfirmWinning}
         />
-        <PrivateRoute path="/akun/pembelian" component={MyBid} />
-
-        <PrivateRoute path="/akun/buat-lelang" component={CreateAuction} />
-        <PrivateRoute
-          path="/akun/edit-lelang/:idAuction"
-          component={UpdateAuction}
-        />
-        <PrivateRoute path="/akun/empty" component={UserEmptyPage} />
+        <PrivateRoute path="/akun/pembelian" component={UserBids} />
         <PrivateRoute
           path="/akun/ubah-password"
           component={UserChangPassword}
         />
-        <PrivateRoute path="/akun/info" component={Profile} />
+        <PrivateRoute path="/akun/info" component={UserProfile} />
+        <PrivateRoute path="/akun/dashboard" component={UserDashboard} />
+        <PrivateRoute path="/akun/empty" component={UserEmptyPage} />
+
         <Route path="/kategori/:slug" component={ListAuctionByCategory} />
         <Route path="/lelang-terbaru" component={ListLatestAuctionPage} />
         <Route path="/lelang" component={ListAuction} />

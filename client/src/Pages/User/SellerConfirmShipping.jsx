@@ -15,7 +15,7 @@ import {
 } from "../../actions/user.actions";
 import ConfirmShippingContent from "../../Components/UserShipping/ConfirmShippingContent";
 
-const ConfirmShipping = props => {
+const SellerConfirmShipping = props => {
   const { match, history } = props;
 
   const { invoiceId } = match?.params;
@@ -99,4 +99,4 @@ const ConfirmShipping = props => {
   );
 };
 
-export default ConfirmShipping;
+export default SellerConfirmShipping;

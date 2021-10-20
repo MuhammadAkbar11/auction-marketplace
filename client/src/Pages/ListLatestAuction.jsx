@@ -63,7 +63,6 @@ const ListLatestAuctionPage = props => {
       <BreadcrumbsContainer
         items={[
           { title: "Home", url: "/" },
-          { title: "Kategori", active: true },
           { title: "Lelang Terbaru", active: true },
         ]}
       />

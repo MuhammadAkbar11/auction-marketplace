@@ -111,11 +111,28 @@ const UserWinAuctionsTab = ({ isActive }) => {
                 );
               }
 
+              if (status === 4) {
+                if (item.jenis_pengiriman === "PICKUP") {
+                  statusContent = (
+                    <Button size="sm" disabled variant="outline-primary">
+                      {" "}
+                      Menunggu penjemputan{" "}
+                    </Button>
+                  );
+                } else {
+                  statusContent = (
+                    <Button size="sm" disabled variant="outline-primary">
+                      Sedang dikirim
+                    </Button>
+                  );
+                }
+              }
+
               return (
                 <Card className=" mb15" key={item.id_transaksi}>
                   <Card.Header className=" bg-transparent d-flex justify-content-between ">
                     <p>Berakhir pada : {item?.lelang?.tgl_selesai}</p>
-                    <Link to="/track-order">Tracking Order</Link>
+                    <Link to="/track-order">Lihat pengiriman</Link>{" "}
                   </Card.Header>
                   <Card.Body>
                     <Row>
