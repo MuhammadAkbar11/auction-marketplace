@@ -215,7 +215,7 @@ const UserConfirmAuctionBill = props => {
                             <Form.Control
                               type="text"
                               className={`border `}
-                              defaultValue={bid?.nilai_tawaran}
+                              defaultValue={convertRupiah(+bid?.nilai_tawaran)}
                               disabled
                             />
                           </Form.Group>
@@ -278,7 +278,7 @@ const UserConfirmAuctionBill = props => {
                           </div>
                           <div className="row pt-2 ">
                             <div className="text-left col-sm-6 text-gray-700">
-                              Kecamata / Kelurahan
+                              Kecamatan / Kelurahan
                             </div>
                             <div className="text-left  col-sm-6 text-black ">
                               : Kec. {destinationAddress?.kecamatan} / Kel.{" "}

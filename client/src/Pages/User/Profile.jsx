@@ -524,7 +524,7 @@ const Profile = ({ history }) => {
                 )}
               </Card.Body>
             </Card>
-            <section className="mt-5">
+            <section className="mt-5" id="bank-accounts">
               <UserBankAccount
                 accounts={userDetails?.akun_bank}
                 onLoadProfile={handleLoadProfile}
