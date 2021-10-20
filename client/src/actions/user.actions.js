@@ -51,6 +51,9 @@ import {
   CUSTOMER_PAYMENT_DETAILS_REQ,
   CUSTOMER_PAYMENT_DETAILS_SUCCESS,
   CUSTOMER_PAYMENT_DETAILS_FAIL,
+  USER_CSTMR_SHIPPING_DETAILS_REQ,
+  USER_CSTMR_SHIPPING_DETAILS_SUCCESS,
+  USER_CSTMR_SHIPPING_DETAILS_FAIL,
 } from "../constants/user.contanst";
 import { axiosConfigAuth } from "../utils/axiosConfig";
 import { _dateFormat } from "../utils/date-format";
@@ -1386,5 +1389,85 @@ export const postConfirmCustomerPaymentAction =
       return data;
     } catch (error) {
       throw new Error(error);
+    }
+  };
+
+export const getShippingDetailsAction = id => async (dispatch, getState) => {
+  const {
+    authUser: { userInfo },
+  } = getState();
+
+  dispatch({
+    type: USER_CSTMR_SHIPPING_DETAILS_REQ,
+    payload: {
+      loading: true,
+    },
+  });
+
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      "/api/user/auction/shipping/" + id,
+      config
+    );
+
+    dispatch({
+      type: USER_CSTMR_SHIPPING_DETAILS_SUCCESS,
+      payload: {
+        loading: false,
+        shippingDetails: data.shipping_details,
+        error: null,
+      },
+    });
+  } catch (error) {
+    let errData = transformErrorResponse(error);
+
+    dispatch({
+      type: USER_CSTMR_SHIPPING_DETAILS_FAIL,
+      payload: {
+        error: errData,
+        loading: false,
+      },
+    });
+  }
+};
+
+export const postConfirmShippingAction =
+  postData => async (dispatch, getState) => {
+    const {
+      authUser: { userInfo },
+    } = getState();
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        "/api/user/auction/shipping/",
+        postData,
+        config
+      );
+
+      dispatch({
+        type: USER_AUCTION_MESSAGE,
+        payload: {
+          type: "success",
+          text: data?.message,
+        },
+      });
+    } catch (err) {
+      const errors = transformErrorResponse(err);
+
+      throw errors;
     }
   };

@@ -5,6 +5,7 @@ import { Info, PencilLine, Trash, SquaresFour } from "phosphor-react";
 import Loader from "../UI/Loader";
 import { Link } from "react-router-dom";
 import { getUserSoldItemsAction } from "../../actions/user.actions";
+import convertRupiah from "../../utils/convertRupiah";
 
 const UserSoldOutAuctionsTab = ({ isActive }) => {
   const dispatch = useDispatch();
@@ -38,11 +39,12 @@ const UserSoldOutAuctionsTab = ({ isActive }) => {
           <thead>
             <tr className="text-nowrap">
               <th>#</th>
+              <th>No Transaksi</th>
               <th>Judul Lelang</th>
-              <th>Dimulai</th>
-              <th>Berakhir</th>
-              <th>Total Bids</th>
-              <th>Tawaran tertinggi</th>
+
+              <th>Berakhir Pada</th>
+              <th>Pemenang</th>
+              <th>Harga</th>
               <th>Status</th>
               {/* <th>Cek alamat</th> */}
             </tr>
@@ -75,34 +77,36 @@ const UserSoldOutAuctionsTab = ({ isActive }) => {
                 return (
                   <tr key={ac.id_lelang}>
                     <td>{no++}</td>
+                    <td className="text-nowrap">{ac.id_transaksi}</td>
                     <td>
                       <Link to={`/item/${ac.id_lelang}`}>{ac.judul}</Link>
                     </td>
-                    <td className="text-nowrap">{ac.tgl_mulai}</td>
                     <td className="text-nowrap">{ac.tgl_selesai}</td>
                     <td className="text-success">
-                      {ac?.daftar_tawaran.length} Tawaran
+                      {ac?.daftar_tawaran[0]?.member?.username}
                     </td>
                     <td className="  font-weight-normal text-black-50 ">
                       {ac?.daftar_tawaran.length !== 0 ? (
                         <>
-                          <span className="text-primary">
-                            Rp. {ac?.daftar_tawaran[0].nilai_tawaran}
+                          <span className="text-primary text-nowrap">
+                            Rp.{" "}
+                            {convertRupiah(
+                              +ac?.daftar_tawaran[0].nilai_tawaran
+                            )}
                           </span>{" "}
                           <br />
-                          (By {ac?.daftar_tawaran[0]?.member?.username})
                         </>
                       ) : (
                         "-"
                       )}
                     </td>
-                    <td>
+                    <td className="text-nowrap">
                       {(() => {
                         if (+ac.status_transaksi === 0) {
                           return (
                             <Button
                               size="sm"
-                              variant="dark"
+                              variant="outline-danger"
                               // disabled
                               className="text-nowrap cursor-default shadow-none "
                             >
@@ -115,7 +119,7 @@ const UserSoldOutAuctionsTab = ({ isActive }) => {
                           return (
                             <Link
                               to={`/akun/konfirmasi-tagihan/${ac.id_transaksi}`}
-                              className="text-nowrap btn btn-blue btn-sm"
+                              className="text-nowrap btn btn-primary btn-sm"
                             >
                               Konfirmasi Tagihan
                             </Link>
@@ -126,7 +130,7 @@ const UserSoldOutAuctionsTab = ({ isActive }) => {
                           return (
                             <Button
                               size="sm"
-                              variant="warning"
+                              variant="outline-danger"
                               // disabled
                               className="text-nowrap text-spacing-0 cursor-default shadow-none "
                             >
@@ -141,9 +145,41 @@ const UserSoldOutAuctionsTab = ({ isActive }) => {
                               to={`/akun/konfirmasi-pembayaran/${ac.id_transaksi}`}
                               className="text-nowrap btn btn-primary btn-sm"
                             >
-                              Sudah dibayar
+                              Konfirmasi pembayaran
                             </Link>
                           );
+                        }
+
+                        if (+ac.status_transaksi === 4) {
+                          if (ac.jenis_pengiriman === "PICKUP") {
+                            return (
+                              <Link className=" btn btn-sm btn-danger text-nowrap text-spacing-0  ">
+                                Menunggu penjemputan
+                              </Link>
+                            );
+                          } else {
+                            if (ac.pengiriman) {
+                              return (
+                                <Button
+                                  size="sm"
+                                  // disabled
+                                  variant="blue"
+                                  className="text-nowrap text-spacing-0 cursor-default shadow-none  "
+                                >
+                                  {" "}
+                                  Sedang Dikirim
+                                </Button>
+                              );
+                            }
+                            return (
+                              <Link
+                                to={`/akun/konfirmasi-pengiriman/${ac.id_transaksi}`}
+                                className="text-nowrap btn btn-primary btn-sm text-spacing-0"
+                              >
+                                Konfirmasi pengiriman
+                              </Link>
+                            );
+                          }
                         }
 
                         return (

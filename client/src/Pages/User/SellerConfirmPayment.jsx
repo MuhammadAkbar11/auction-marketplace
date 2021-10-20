@@ -13,7 +13,6 @@ import {
   ListGroup,
   Button,
 } from "react-bootstrap";
-import { Question } from "phosphor-react";
 import BreadcrumbsContainer from "../../Components/Layouts/BreadcrumbsContainer";
 import Loader from "../../Components/UI/Loader";
 import convertRupiah from "../../utils/convertRupiah";
@@ -89,8 +88,7 @@ const SellerConfirmPayment = props => {
         items={[
           { title: "Home", url: "/" },
           { title: "Akun", active: true },
-          { title: "Pembelian Saya", url: "/akun/pembelian" },
-          { title: "Konfirmasi Lelang Dimenangkan", active: true },
+          { title: "Konfirmasi Pembayaran", active: true },
         ]}
       />
 
@@ -218,7 +216,7 @@ const SellerConfirmPayment = props => {
                               </ListGroup.Item>
                               <ListGroup.Item className="pl-0 border-0 pt-0 pb-1   ">
                                 <div className="d-flex flex-column flex-md-column flex-lg-row justify-content-between ">
-                                  <div className=" text-gray-600    ">
+                                  <div className=" text-gray-600">
                                     Harga barang
                                   </div>
                                   <div className=" text-primary ">
@@ -298,7 +296,7 @@ const SellerConfirmPayment = props => {
                 </main>
               )
             ) : !loadingValidData ? (
-              <Modal show={showModalInfo} className="bg-gray-100  " centered>
+              <Modal show={showModalInfo} className="bg-gray-100" centered>
                 <Modal.Header>
                   <Modal.Title className="text-dark">
                     Tidak dapat melakukan konfirmasi!
@@ -311,9 +309,6 @@ const SellerConfirmPayment = props => {
                   <Link to="/akun/info" className="btn btn-outline-primary">
                     Lengkapi data diri
                   </Link>
-                  {/* <Button variant="primary" onClick={handleClose}>
-                  Save Changes
-                </Button> */}
                 </Modal.Footer>
               </Modal>
             ) : (
@@ -333,6 +328,7 @@ const SellerConfirmPayment = props => {
         show={modalPaymentProof}
         scrollable
         centered
+        size="xl"
         onHide={() => setModalConfirm({ show: false, type: "ACCEPT" })}
       >
         <Modal.Header>
@@ -362,7 +358,7 @@ const SellerConfirmPayment = props => {
               <p>Anda yakin untuk menyetujui pembayaran ini?</p>
               <div className="pt-3">
                 <Button
-                  variant="dark"
+                  variant="outline-success"
                   onClick={() =>
                     setModalConfirm({ show: false, type: "ACCEPT" })
                   }
@@ -387,7 +383,7 @@ const SellerConfirmPayment = props => {
               <p>Anda yakin untuk menolak pembayaran ini?</p>
               <div className="pt-3">
                 <Button
-                  variant="dark"
+                  variant="outline-danger"
                   onClick={() =>
                     setModalConfirm({ show: false, type: "ACCEPT" })
                   }

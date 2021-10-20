@@ -13,6 +13,7 @@ import ModelAkunBank from "../models/m_akun_bank.js";
 import onlyNumbers from "../utils/onlyNumber.js";
 import dayjs from "dayjs";
 import ModelDetailTransaksi from "../models/m_detail_transaksi.js";
+import ModelPengiriman from "../models/m_pengiriman.js";
 
 const Op = Sequelize.Op;
 
@@ -579,7 +580,21 @@ export const getUserAuction = asyncHandler(async (req, res, next) => {
               where: {
                 id_tawaran: tawaran[0]?.id_tawaran,
               },
-              attributes: ["id_transaksi", "status_transaksi", "id_tawaran"],
+              attributes: [
+                "id_transaksi",
+                "status_transaksi",
+                "id_tawaran",
+                "jenis_pengiriman",
+              ],
+            });
+
+            const pengiriman = await ModelPengiriman.findOne({
+              where: {
+                id_transaksi: transaction.id_transaksi,
+              },
+              attributes: {
+                exclude: ["ModelTransaksiIdTransaksi"],
+              },
             });
 
             if (transaction.batas_waktu_bayar) {
@@ -619,8 +634,9 @@ export const getUserAuction = asyncHandler(async (req, res, next) => {
                 "DD/MM/YYYY - HH:mm"
               ),
               isPaymentExp: expiredPayment,
-              ...transaction.dataValues,
+              pengiriman: pengiriman,
               daftar_tawaran: transformBids,
+              ...transaction.dataValues,
             };
           })
         );
@@ -1026,6 +1042,56 @@ export const getCustomerPaymentDetails = asyncHandler(async (req, res) => {
   }
 });
 
+export const getCustomerShippingDetails = asyncHandler(async (req, res) => {
+  const invoiceId = req.params.id;
+
+  try {
+    if (!invoiceId) {
+      res.status(400);
+      throw new ResponseError(400, "Id Transkasi tidak ditemukan");
+    }
+    const invoice = await ModelTransaksi.findOne({
+      where: {
+        id_transaksi: invoiceId,
+      },
+      attributes: {
+        exclude: ["ModelPenawaranIdTawaran"],
+      },
+    });
+
+    const shipping = await ModelPengiriman.findOne({
+      where: {
+        id_transaksi: invoiceId,
+      },
+      attributes: {
+        exclude: ["ModelTransaksiIdTransaksi"],
+      },
+    });
+
+    if (shipping) {
+      shipping.setDataValue(
+        "tgl_dikirim",
+        daysJs(shipping.tgl_dikirim).format("DD/MM/YYYY")
+      );
+      shipping.setDataValue(
+        "tgl_diterima",
+        shipping.tgl_diterima
+          ? daysJs(shipping.tgl_diterima).format("DD/MM/YYYY")
+          : ""
+      );
+    }
+
+    invoice.setDataValue("pengiriman", shipping);
+
+    return res.status(200).json({
+      status: true,
+      shipping_details: invoice,
+    });
+  } catch (error) {
+    throw new ResponseError(error.statusCode, error.message, error.errors);
+  }
+});
+
 export const postConfirmCustomerPayment = asyncHandler(async (req, res) => {
   const { status, id_transaksi } = req.body;
   try {
@@ -1075,6 +1141,40 @@ export const postConfirmCustomerPayment = asyncHandler(async (req, res) => {
         throw new ResponseError(400, "Tidak dapat melakukan konfirmasi");
       }
     }
+  } catch (error) {
+    throw new ResponseError(error.statusCode, error.message, error.errors);
+  }
+});
+
+export const postConfirmShipping = asyncHandler(async (req, res) => {
+  const { id_transaksi, no_resi } = req.body;
+  try {
+    const shipping = await ModelPengiriman.findOne({
+      where: {
+        id_transaksi,
+      },
+    });
+
+    if (shipping) {
+      shipping.status = 0;
+      shipping.no_resi = no_resi;
+      shipping.tgl_dikirim = daysJs().format("YYYY-MM-DD HH:mm:ss");
+      // throw new ResponseError(400, "Konfirmasi telah dilakukan sebelumnya");
+    } else {
+      await ModelPengiriman.create({
+        status: 0,
+        id_transaksi,
+        no_resi,
+        tgl_dikirim: daysJs().format("YYYY-MM-DD HH:mm:ss"),
+      });
+    }
+
+    res.status(201).json({
+      status: true,
+      body: req.body,
+      shipping,
+      message: "Berhasil mengkonfirmasi pengiriman",
+    });
   } catch (error) {
     throw new ResponseError(error.statusCode, error.message, error.errors);
   }

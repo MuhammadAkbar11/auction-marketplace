@@ -55,6 +55,9 @@ import {
   CUSTOMER_PAYMENT_DETAILS_REQ,
   CUSTOMER_PAYMENT_DETAILS_SUCCESS,
   CUSTOMER_PAYMENT_DETAILS_FAIL,
+  USER_CSTMR_SHIPPING_DETAILS_REQ,
+  USER_CSTMR_SHIPPING_DETAILS_SUCCESS,
+  USER_CSTMR_SHIPPING_DETAILS_FAIL,
 } from "../constants/user.contanst";
 
 export const userDetailsReducer = (
@@ -446,6 +449,32 @@ export const customerPaymentDetailsDetailsReducer = (
         ...action.payload,
       };
     case CUSTOMER_PAYMENT_DETAILS_FAIL:
+      return {
+        ...action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+export const customerShippingDetailsReducer = (
+  state = {
+    loading: false,
+    shippingDetails: null,
+  },
+  action
+) => {
+  switch (action.type) {
+    case USER_CSTMR_SHIPPING_DETAILS_REQ:
+      return {
+        loading: true,
+        shippingDetails: null,
+      };
+    case USER_CSTMR_SHIPPING_DETAILS_SUCCESS:
+      return {
+        ...action.payload,
+      };
+    case USER_CSTMR_SHIPPING_DETAILS_FAIL:
       return {
         ...action.payload,
       };
