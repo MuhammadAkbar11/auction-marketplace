@@ -29,7 +29,7 @@ export const getListAuction = asyncHandler(async (req, res) => {
       [Op.lte]: dayjs().format("YYYY-MM-DD HH:mm:ss"),
     },
     status_lelang: {
-      [Op.in]: [1, 2, 3],
+      [Op.in]: [1],
     },
   };
 
@@ -42,7 +42,7 @@ export const getListAuction = asyncHandler(async (req, res) => {
           [Op.lte]: dayjs().format("YYYY-MM-DD HH:mm:ss"),
         },
         status_lelang: {
-          [Op.in]: [1, 2, 3],
+          [Op.in]: [1],
         },
       };
       order.push(["_id", "ASC"]);
@@ -65,7 +65,7 @@ export const getListAuction = asyncHandler(async (req, res) => {
           [Op.gte]: dayjs().subtract(7, "days").format("YYYY-MM-DD HH:mm:ss"),
         },
         status_lelang: {
-          [Op.in]: [1, 2, 3],
+          [Op.in]: [1],
         },
       };
       order.push(["tgl_mulai", "DESC"]);
