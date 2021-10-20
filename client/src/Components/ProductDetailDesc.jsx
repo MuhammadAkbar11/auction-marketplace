@@ -1,5 +1,6 @@
 import React from "react";
 import { Col, Container, Row, Tab, Tabs, Nav, Table } from "react-bootstrap";
+import convertRupiah from "../utils/convertRupiah";
 import DiscussionRoom from "./DiscussionRoom/DiscussionRoom";
 
 const ProductDetailDesc = ({ auction, listBid }) => {
@@ -61,9 +62,15 @@ const ProductDetailDesc = ({ auction, listBid }) => {
                             return (
                               <tr key={bid.id_tawaran}>
                                 {/* <td>1</td> */}
-                                <td>Rp. {bid.nilai_tawaran}</td>
+                                <td>Rp. {convertRupiah(+bid.nilai_tawaran)}</td>
                                 <td>{bid.tgl_tawaran}</td>
-                                <td>{bid?.member?.username}</td>
+                                <td>
+                                  {bid?.member?.username || (
+                                    <small className="text-danger font-italic">
+                                      user deleted!
+                                    </small>
+                                  )}
+                                </td>
                               </tr>
                             );
                           })}

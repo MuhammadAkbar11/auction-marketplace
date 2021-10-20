@@ -6,13 +6,20 @@ import { onlyNumbers } from "../utils/replace";
 import convertRupiah from "../utils/convertRupiah";
 import useKeepDigits from "../hooks/useKeepDigits";
 
-const BidForm = ({ loading, defaultValue, auction, handleBid }) => {
+const BidForm = ({
+  loading,
+  defaultValue,
+  auction,
+  handleBid,
+  errorBidding,
+}) => {
   const { userInfo } = useSelector(state => state.authUser);
   const [bidValue, setBidValue] = React.useState(defaultValue);
+  const [bidValErr, setBidValErr] = React.useState(null);
 
   React.useEffect(() => {
     // if (!loading) {
-    setBidValue(defaultValue);
+    setBidValue(onlyNumbers(defaultValue));
     // }
 
     return () => {
@@ -20,49 +27,80 @@ const BidForm = ({ loading, defaultValue, auction, handleBid }) => {
     };
   }, [defaultValue]);
 
-  const [defValueNum] = useKeepDigits(defaultValue);
-  const [bidValueNum] = useKeepDigits(bidValue);
+  React.useEffect(() => {
+    if (errorBidding) {
+      setBidValue(onlyNumbers(defaultValue));
+    }
+  }, [errorBidding]);
 
-  console.log(defaultValue);
+  const [defValueNum] = useKeepDigits(defaultValue);
 
   const handleInc = () => {
     const multiple = onlyNumbers(auction?.kelipatan_hrg);
-    const oldValue = bidValueNum;
-    const result = convertRupiah(+oldValue + +multiple);
-    setBidValue(result.trim());
+    const oldValue = bidValue;
+    const result = +oldValue + +multiple;
+    setBidValue(result);
   };
 
   const handleDec = () => {
     const multiple = onlyNumbers(auction?.kelipatan_hrg);
-    const oldValue = bidValueNum;
-    const result = convertRupiah(+oldValue - +multiple);
-    if (bidValueNum > defValueNum) {
-      setBidValue(result.trim());
+    const oldValue = bidValue;
+    const result = +oldValue - +multiple;
+    if (bidValue > defValueNum) {
+      setBidValue(result);
       return;
+    }
+  };
+
+  const handleOnChange = e => {
+    const value = e.target.value;
+
+    setBidValue(+value);
+
+    if (+value <= defValueNum) {
+      setBidValErr("Bid anda rendah dari bid saat ini!");
     }
   };
 
   const handleOnSubmit = e => {
     e.preventDefault();
     handleBid(bidValue);
+    setBidValErr(null);
   };
+
+  console.log(errorBidding);
 
   return (
     <>
       {userInfo ? (
         auction?.id_member !== userInfo.id_member ? (
           <>
-            <p>Masukan Bid Anda </p>
+            {errorBidding && (
+              <Alert variant="danger">
+                <small>{errorBidding}</small>
+              </Alert>
+            )}
+            <div className="d-flex justify-content-between">
+              {" "}
+              <p>Masukan Bid Anda </p>{" "}
+              {/* {bidValue !== defValueNum && (
+                <p>Tawaran anda : Rp. {convertRupiah(+bidValue)}</p>
+              )} */}
+            </div>
             <Form onSubmit={handleOnSubmit}>
-              <div className="d-flex py-3" style={{ gap: 10 }}>
+              <div className="d-flex pt-3" style={{ gap: 10 }}>
                 <Button
                   variant="danger"
-                  disabled={bidValueNum <= defValueNum || loading}
+                  disabled={bidValue <= defValueNum || loading}
                   onClick={handleDec}
                 >
                   -
                 </Button>
-                <Form.Control readOnly value={loading ? "0" : bidValue || ""} />
+                <Form.Control
+                  type="number"
+                  onChange={handleOnChange}
+                  value={loading ? "0" : bidValue || ""}
+                />
                 <Button
                   variant="success"
                   disabled={loading}
@@ -71,7 +109,12 @@ const BidForm = ({ loading, defaultValue, auction, handleBid }) => {
                   +
                 </Button>
               </div>
-              <small>
+              {bidValErr && (
+                <>
+                  <small className="text-danger mt-2">{bidValErr}</small> <br />
+                </>
+              )}
+              <small className="mt-3">
                 * Kelipatan Bid
                 <span className="text-success">
                   {" "}
@@ -80,7 +123,7 @@ const BidForm = ({ loading, defaultValue, auction, handleBid }) => {
               </small>
               <br />
               <Button
-                disabled={bidValueNum <= defValueNum || loading}
+                disabled={bidValue <= defValueNum || loading}
                 type="submit"
                 className="mt-3"
               >

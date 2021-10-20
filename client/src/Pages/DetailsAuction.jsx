@@ -12,6 +12,7 @@ import { io } from "socket.io-client";
 import { SERVER_ENDPOINT } from "../constants/socket.constants";
 import { authLoginErrorMessageAction } from "../actions/auth.actions";
 import BidForm from "../Components/BidForm";
+import convertRupiah from "../utils/convertRupiah";
 let socket;
 
 const DetailsAuction = props => {
@@ -25,6 +26,7 @@ const DetailsAuction = props => {
   const [currentBid, setCurrentBid] = React.useState(null);
   const [listBid, setListBid] = React.useState([]);
   const [loadingBid, setLoadingBid] = React.useState(false);
+  const [bidErr, setBidErr] = React.useState(null);
 
   React.useEffect(() => {
     socket = io(SERVER_ENDPOINT);
@@ -78,21 +80,33 @@ const DetailsAuction = props => {
     }
   }, [loading, auction]);
 
+  React.useEffect(() => {
+    if (bidErr) {
+      setTimeout(() => {
+        setBidErr(null);
+      }, 8000);
+    }
+  }, [bidErr]);
+
   const handleBid = bidValue => {
     setLoadingBid(true);
-
+    setBidErr(null);
     if (userInfo) {
       socket.emit(
         "send-bid",
         {
           id_lelang: auction.id_lelang,
           id_member: userInfo.id_member,
-          nilai: bidValue,
+          nilai: +bidValue,
           token: userInfo.token,
         },
         (res, err) => {
           if (err) {
             console.log(err);
+            if (err?.errors?.type === "BID") {
+              setBidErr(err.message);
+            }
+            // if(er)
             setLoadingBid(false);
             return;
           }
@@ -221,7 +235,7 @@ const DetailsAuction = props => {
                                   {loadingBid
                                     ? "..."
                                     : currentBid
-                                    ? currentBid?.nilai_tawaran
+                                    ? convertRupiah(+currentBid?.nilai_tawaran)
                                     : auction?.hrg_awal || "-"}
                                 </h3>
                               </div>
@@ -249,6 +263,7 @@ const DetailsAuction = props => {
                                 </div>
                               ) : (
                                 <BidForm
+                                  errorBidding={bidErr}
                                   loading={loadingBid}
                                   defaultValue={
                                     auction?.tawaran.length !== 0
