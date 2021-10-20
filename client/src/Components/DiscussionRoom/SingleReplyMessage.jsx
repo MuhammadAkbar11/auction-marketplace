@@ -1,6 +1,6 @@
 import React from "react";
-import { Card, Button, Form } from "react-bootstrap";
-// import guestImg from "";
+import { Card } from "react-bootstrap";
+import guestImg from "../../assets/images/guest.jpeg";
 
 const SingleReplyMessage = ({ message, onShowReplyInput, isSeller }) => {
   return (
@@ -9,7 +9,9 @@ const SingleReplyMessage = ({ message, onShowReplyInput, isSeller }) => {
         <div className="d-flex">
           <div className="mr-3">
             <img
-              src={"/" + message?.member?.foto}
+              src={
+                message?.member?.foto ? "/" + message?.member?.foto : guestImg
+              }
               className="rounded-circle"
               height={40}
               width={40}

@@ -137,6 +137,7 @@ const DiscussionRoom = () => {
                   .filter(item => item.id_parent === msg.id_pesan)
                   .reverse();
                 return (
+                  msg.member !== null &&
                   msg.id_parent === null && (
                     <SingleMessage
                       key={msg.id_pesan}

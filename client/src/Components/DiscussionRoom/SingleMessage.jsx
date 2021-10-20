@@ -67,12 +67,14 @@ const SingleMessage = ({ messages, message, user, onPostReply, sellerId }) => {
         {messages.length !== 0 &&
           messages.map(msg => {
             return (
-              <SingleReplyMessage
-                key={msg.id_pesan}
-                message={msg}
-                isSeller={msg.id_member === sellerId}
-                onShowReplyInput={showReplyInputHandler}
-              />
+              msg.member !== null && (
+                <SingleReplyMessage
+                  key={msg.id_pesan}
+                  message={msg}
+                  isSeller={msg.id_member === sellerId}
+                  onShowReplyInput={showReplyInputHandler}
+                />
+              )
             );
           })}
         {replyInput && (
