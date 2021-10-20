@@ -19,7 +19,10 @@ import {
   postConfirmCustomerPayment,
   postUserChagePassword,
   postUserUploadPhoto,
+  getCustomerShippingDetails,
+  postConfirmShipping,
 } from "../controller/user.controllers.js";
+import { getUserDashAuctions } from "../controller/user.dash.controller.js";
 import {
   getUserBids,
   getUserDetailsAuctionWin,
@@ -34,6 +37,8 @@ import { uploadPaymentProofMiddleware } from "../middleware/uploadPaymentProof.j
 import { uploadFilesMiddleware } from "../middleware/uploads.js";
 
 const router = express.Router();
+
+router.get("/dashboard/auctions", protect, getUserDashAuctions);
 
 router.get("/profile", protect, getUserProfile);
 router.put("/update-profile", protect, postUpdateUserProfile);
@@ -70,6 +75,8 @@ router.post("/auction/confirm-bid", protect, postConfirmBid);
 router.post("/auction/confirm-auction-bill", protect, postSellerConfirmBill);
 router.get("/auction/payment/:invoiceId", protect, getCustomerPaymentDetails);
 router.post("/auction/payment", protect, postConfirmCustomerPayment);
+router.get("/auction/shipping/:id", protect, getCustomerShippingDetails);
+router.post("/auction/shipping", protect, postConfirmShipping);
 
 router.get("/mybids", protect, getUserBids);
 router.get("/winning-auction", protect, getUserWinAuction);
