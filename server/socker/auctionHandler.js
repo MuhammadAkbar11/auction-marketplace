@@ -9,6 +9,7 @@ import convertRupiah from "../utils/convertRupiah.js";
 import ModelMember from "../models/m_member.js";
 import ModelRuangDiskusi from "../models/m_ruang_diskusi.js";
 import ModelPesanDiskusi from "../models/m_pesan_diskusi.js";
+import onlyNumbers from "../utils/onlyNumber.js";
 
 const _second = 1000;
 const _minute = _second * 60;
@@ -68,6 +69,7 @@ export default io => {
     let err = null;
     let isLastBid = false;
     const { token, id_lelang, id_member, nilai } = data;
+
     try {
       const decoded = await verifyToken(token);
 
@@ -91,10 +93,40 @@ export default io => {
           },
         });
 
+        if (existBids.rows.length === 0) {
+          const startPrice = onlyNumbers(auction?.harga_awal);
+          if (+nilai <= +startPrice) {
+            throw new ResponseError(401, "Low bid value", {
+              type: "BID",
+            });
+          }
+        } else {
+          const highestBid = existBids.rows[0];
+          if (highestBid.id_member === id_member) {
+            throw new ResponseError(
+              401,
+              "Anda saat ini merupakan bidder tertinggi",
+              {
+                type: "BID",
+              }
+            );
+          }
+
+          if (+nilai <= highestBid.nilai_tawaran) {
+            throw new ResponseError(
+              401,
+              "Bid anda rendah dengan bid tertinggi",
+              {
+                type: "BID",
+              }
+            );
+          }
+        }
+
         const newBid = {
           id_lelang,
           id_member,
-          nilai_tawaran: nilai,
+          nilai_tawaran: nilai.toString(),
           status_tawaran: 0,
         };
 
