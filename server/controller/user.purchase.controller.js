@@ -3,10 +3,9 @@ import ModelLelang from "../models/m_lelang.js";
 import ModelMember from "../models/m_member.js";
 import ModelPenawaran from "../models/m_penawaran.js";
 import ResponseError from "../utils/responseError.js";
-import Sequelize from "sequelize";
 import dayjs from "dayjs";
 import ModelTransaksi from "../models/m_transaksi.js";
-import { isEmptyObj } from "../utils/checkObj.js";
+import ModelPengiriman from "../models/m_pengiriman.js";
 import ModelGaleri from "../models/m_galeri_lelang.js";
 import ModelAkunBank from "../models/m_akun_bank.js";
 import onlyNumbers from "../utils/onlyNumber.js";
@@ -483,7 +482,6 @@ export const postUserPayment = asyncHandler(async (req, res) => {
 
     await invoice.save();
 
-    // const result
     invoice.setDataValue(
       "tgl_bayar",
       dayjs(invoice.tgl_bayar).format("DD MMM YYYY ")
@@ -496,6 +494,91 @@ export const postUserPayment = asyncHandler(async (req, res) => {
         "Berhasil mengupload bukti transfer, pembayaran anda sedang di proses",
     });
   } catch (error) {
+    throw new ResponseError(error.statusCode, error.message, error.errors);
+  }
+});
+
+export const getTrackShipping = asyncHandler(async (req, res) => {
+  const invoiceId = req.params.id;
+  console.log(req.params);
+  try {
+    if (!invoiceId) {
+      res.status(400);
+      throw new ResponseError(400, "Id transkasi tidak ditemukan");
+    }
+
+    console.log(invoiceId);
+
+    const invoice = await ModelTransaksi.findOne({
+      where: {
+        id_transaksi: invoiceId,
+      },
+      attributes: {
+        exclude: ["ModelPenawaranIdTawaran"],
+      },
+    });
+
+    console.log(invoice);
+
+    // const shipping  =
+    const highestBid = await ModelPenawaran.findOne({
+      where: {
+        id_tawaran: invoice.id_tawaran,
+      },
+      attributes: {
+        exclude: ["ModelLelangIdLelang", "ModelMemberIdMember"],
+      },
+    });
+
+    const auction = await ModelLelang.findOne({
+      where: {
+        id_lelang: highestBid.id_lelang,
+      },
+      attributes: {
+        exclude: ["ModelMemberIdMember", "ModelKategoriIdKategori"],
+      },
+    });
+
+    const auctionImages = await ModelGaleri.findAll({
+      where: {
+        id_lelang: auction.id_lelang,
+      },
+    });
+
+    auction.setDataValue("gambar", auctionImages);
+
+    const shipping = await ModelPengiriman.findOne({
+      where: {
+        id_transaksi: invoiceId,
+      },
+      attributes: {
+        exclude: ["ModelTransaksiIdTransaksi"],
+      },
+    });
+
+    if (shipping) {
+      shipping.setDataValue(
+        "tgl_dikirim",
+        dayjs(shipping.tgl_dikirim).format("DD/MM/YYYY")
+      );
+      shipping.setDataValue(
+        "tgl_diterima",
+        shipping.tgl_diterima
+          ? dayjs(shipping.tgl_diterima).format("DD/MM/YYYY")
+          : ""
+      );
+    }
+
+    invoice.setDataValue("tawaran", highestBid);
+    invoice.setDataValue("lelang", auction);
+    invoice.setDataValue("pengiriman", shipping);
+
+    res.status(200).json({
+      status: true,
+      shipping: invoice,
+    });
+  } catch (error) {
+    console.log(error);
     throw new ResponseError(error.statusCode, error.message, error.errors);
   }
 });

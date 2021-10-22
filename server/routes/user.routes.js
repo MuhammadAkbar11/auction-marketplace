@@ -24,6 +24,7 @@ import {
 } from "../controller/user.controllers.js";
 import { getUserDashAuctions } from "../controller/user.dash.controller.js";
 import {
+  getTrackShipping,
   getUserBids,
   getUserDetailsAuctionWin,
   getUserPaymentDetails,
@@ -84,5 +85,6 @@ router.get("/winning-auction/:invoiceId", protect, getUserDetailsAuctionWin);
 router.post("/winning-confirm", protect, postUserWinConfirmAuction);
 router.get("/payment/:invoiceId", protect, getUserPaymentDetails);
 router.post("/payment", protect, uploadPaymentProofMiddleware, postUserPayment);
+router.get("/track-shipping/:id", protect, getTrackShipping);
 
 export default router;
