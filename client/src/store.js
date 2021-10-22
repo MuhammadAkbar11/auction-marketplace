@@ -14,7 +14,6 @@ import {
   userCreateNewAuction,
   userDetailsReducer,
   userUpdateProfileReducer,
-  // userPostStartAuctionReducer,
   userUpdateAuctionReducer,
   userAuctionDetailsReducer,
   userCloseAuctionReducer,
@@ -46,6 +45,7 @@ import {
   userMyBidsReducer,
   userPaymentDetailsReducer,
   userPostPaymentReducer,
+  userTrackShippingReducer,
   userWinningAuctionReducer,
   userWinningConfirmReducer,
 } from "./reducers/user.purchase.reducer";
@@ -79,6 +79,7 @@ const reducer = combineReducers({
   customerPaymentDetails: customerPaymentDetailsDetailsReducer,
   customerShippingDetails: customerShippingDetailsReducer,
   userMyBids: userMyBidsReducer,
+  userTrackShipping: userTrackShippingReducer,
   userWinsAuction: userWinningAuctionReducer,
   userWinningConfirm: userWinningConfirmReducer,
   userPaymentDetails: userPaymentDetailsReducer,

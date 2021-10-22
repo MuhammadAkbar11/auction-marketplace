@@ -17,7 +17,11 @@ import {
   USER_POST_PAYMENT_REQ,
   USER_POST_PAYMENT_SUCCESS,
   USER_POST_PAYMENT_FAIL,
+  USER_TRACK_SHIPPING_REQ,
+  USER_TRACK_SHIPPING_SUCCESS,
+  USER_TRACK_SHIPPING_FAIL,
 } from "../constants/user.contanst";
+import { transformErrorResponse } from "../utils/errors";
 
 export const userResetPurchaseMessage = () => dispatch => {
   dispatch({
@@ -395,3 +399,48 @@ export const postPaymentAction = values => async (dispatch, getState) => {
     return await Promise.reject(errData);
   }
 };
+
+export const getUserTrackShippingAction =
+  invoiceId => async (dispatch, getState) => {
+    dispatch({
+      type: USER_TRACK_SHIPPING_REQ,
+    });
+
+    const {
+      authUser: { userInfo },
+    } = getState();
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+      console.log(invoiceId);
+      const { data } = await axios.get(
+        "/api/user/track-shipping/" + invoiceId,
+        config
+      );
+
+      // console.log(de)
+
+      dispatch({
+        type: USER_TRACK_SHIPPING_SUCCESS,
+        payload: {
+          details: data.shipping,
+          error: null,
+          loading: false,
+        },
+      });
+    } catch (error) {
+      let errData = transformErrorResponse(error);
+
+      dispatch({
+        type: USER_TRACK_SHIPPING_FAIL,
+        payload: {
+          error: errData,
+        },
+      });
+    }
+  };

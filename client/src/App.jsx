@@ -38,6 +38,7 @@ import ComingSoon from "./Pages/ComingSoon";
 import Contacts from "./Pages/Contact";
 import AdminAuctions from "./Pages/Admin/Auctions";
 import SellerConfirmShipping from "./Pages/User/SellerConfirmShipping";
+import UserTrackShipping from "./Pages/User/UserTrackShipping";
 
 function App() {
   return (
@@ -82,6 +83,10 @@ function App() {
         />
         {/* User */}
         <PrivateRoute
+          path="/akun/pembelian/lihat-pengiriman/:invoiceId"
+          component={UserTrackShipping}
+        />
+        <PrivateRoute
           path="/akun/pembayaran/:invoiceId"
           component={UserPayment}
         />
@@ -106,7 +111,7 @@ function App() {
         <Route path="/lelang-terbaru" component={ListLatestAuctionPage} />
         <Route path="/lelang" component={ListAuction} />
         <Route path="/item/:itemId" component={DetailsAuction} />
-        {/* Admin */}
+
         {/* <AdminP */}
         <AdminPublicRoute
           path="/administrator/login"

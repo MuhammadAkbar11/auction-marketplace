@@ -16,6 +16,9 @@ import {
   USER_POST_PAYMENT_REQ,
   USER_POST_PAYMENT_SUCCESS,
   USER_POST_PAYMENT_FAIL,
+  USER_TRACK_SHIPPING_REQ,
+  USER_TRACK_SHIPPING_SUCCESS,
+  USER_TRACK_SHIPPING_FAIL,
 } from "../constants/user.contanst";
 
 export const userWinningAuctionReducer = (
@@ -122,6 +125,22 @@ export const userPostPaymentReducer = (
       return { ...action.payload };
     case USER_POST_PAYMENT_FAIL:
       return { loading: false, invoice: null, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const userTrackShippingReducer = (
+  state = { loading: false, details: null },
+  action
+) => {
+  switch (action.type) {
+    case USER_TRACK_SHIPPING_REQ:
+      return { loading: true, details: null };
+    case USER_TRACK_SHIPPING_SUCCESS:
+      return { ...action.payload };
+    case USER_TRACK_SHIPPING_FAIL:
+      return { loading: false, details: null, error: action.payload };
     default:
       return state;
   }
