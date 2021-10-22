@@ -135,7 +135,7 @@ const ConfirmShippingContent = ({ data }) => {
                   <ListGroup className="pl-0  ">
                     <ListGroup.Item className="pl-0 border-0 pt-0 pb-1   ">
                       <div className="d-flex flex-column flex-md-column flex-lg-row justify-content-between ">
-                        <div className=" text-gray-600">Harga</div>
+                        <div className=" text-gray-600">Sub Total</div>
                         <div className=" text-primary ">
                           Rp.{" "}
                           {convertRupiah(+data?.total_harga - +data?.ongkir)}
