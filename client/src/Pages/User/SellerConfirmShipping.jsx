@@ -5,15 +5,11 @@ import { Alert, Col, Container, Row } from "react-bootstrap";
 import Layout from "../../Components/Layouts/Layout";
 import BreadcrumbsContainer from "../../Components/Layouts/BreadcrumbsContainer";
 import Loader from "../../Components/UI/Loader";
-import convertRupiah from "../../utils/convertRupiah";
 import UserSidebarMenu from "../../Components/UserMenuLayout/UserSidebarMenu";
 import useIsValidData from "../../hooks/useIsValidData";
 import ModalInvalidData from "../../Components/ModalInvalidData";
-import {
-  getCustomerPaymentDetailsAction,
-  getShippingDetailsAction,
-} from "../../actions/user.actions";
-import ConfirmShippingContent from "../../Components/UserShipping/ConfirmShippingContent";
+import { getShippingDetailsAction } from "../../actions/user.actions";
+import SellerConfirmShippingContent from "../../Components/UserShipping/SellerConfirmShippingContent";
 
 const SellerConfirmShipping = props => {
   const { match, history } = props;
@@ -76,7 +72,7 @@ const SellerConfirmShipping = props => {
                   <Alert variant="danger">Tidak dapat mengambil data!</Alert>
                 </>
               ) : shipping?.jenis_pengiriman === "COURIER_SERVICE" ? (
-                <ConfirmShippingContent data={shipping} />
+                <SellerConfirmShippingContent data={shipping} />
               ) : (
                 <Redirect to="/akun/lelang?tab=sold" />
               )
