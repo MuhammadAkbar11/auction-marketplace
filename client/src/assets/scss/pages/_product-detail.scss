@@ -20,13 +20,28 @@
     @include media-breakpoint-up(md) {
       height: 500px;
     }
+    .pro-small-img-slide {
+      height: 100%;
+      width: auto;
 
+      .card {
+        width: max-content;
+        height: auto;
+      }
+      img {
+        cursor: pointer;
+        // height: 100%;
+        width: auto;
+        // object-fit: contain;
+      }
+    }
     .swiper-slide {
       display: flex;
       justify-content: center;
       align-items: center;
-
+      position: relative;
       overflow: hidden;
+
       img {
         cursor: pointer;
         height: 100%;
@@ -48,6 +63,7 @@
       .pro-small-img-slide {
         opacity: 0.4;
         .card {
+          width: auto;
           height: 100%;
         }
       }

@@ -103,9 +103,12 @@ const ProductDetailImage = ({ images, loading }) => {
           {images.map(img => {
             return (
               <div key={img.id} className="pro-small-img-slide  ">
-                <Card className="h-100">
+                <Card
+                  className="h-100 border-0 mx-auto
+                "
+                >
                   <Card.Img
-                    className={`h-100 pointer-event `}
+                    className={`h-100 pointer-event w-auto `}
                     variant="top"
                     src={img.url}
                     style={{
