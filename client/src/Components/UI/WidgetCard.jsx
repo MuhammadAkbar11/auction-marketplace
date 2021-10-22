@@ -1,10 +1,18 @@
 import React from "react";
 import { Card } from "react-bootstrap";
 
-const WidgetCard = ({ icon, variant, color, caption, value, footer }) => {
+const WidgetCard = ({
+  icon,
+  variant,
+  color,
+  caption,
+  value,
+  footer,
+  bordered,
+}) => {
   return (
     <>
-      <Card className=" bg-white border-0 shadow-sm pb-2  ">
+      <Card className={` bg-white ${!bordered && "shadow-sm border-0"} pb-2`}>
         <Card.Body className="widget-card px-3 ">
           <div
             className={`widget-card-icon  text-white bg-${variant} text-${color}`}
@@ -25,6 +33,7 @@ const WidgetCard = ({ icon, variant, color, caption, value, footer }) => {
 };
 
 WidgetCard.defaultProps = {
+  bordered: false,
   footer: null,
   variant: "success",
   color: "text-white",

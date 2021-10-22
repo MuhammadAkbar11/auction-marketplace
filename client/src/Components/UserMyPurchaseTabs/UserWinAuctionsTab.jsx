@@ -34,7 +34,7 @@ const UserWinAuctionsTab = ({ isActive }) => {
         <Card.Header className="bg-transparent pt-4 text-dark text-uppercase font-weight-bold">
           <Card.Title>Lelang yang dimenangkan</Card.Title>
         </Card.Header>
-        <Card.Body className=" ">
+        <Card.Body>
           {winningAuctionState?.loading ? (
             <div
               style={{
@@ -129,10 +129,26 @@ const UserWinAuctionsTab = ({ isActive }) => {
               }
 
               return (
-                <Card className=" mb15" key={item.id_transaksi}>
+                <Card className="mb15" key={item.id_transaksi}>
                   <Card.Header className=" bg-transparent d-flex justify-content-between ">
                     <p>Berakhir pada : {item?.lelang?.tgl_selesai}</p>
-                    <Link to="/track-order">Lihat pengiriman</Link>{" "}
+                    {/* {item.jenis_pengiriman === "PICKUP" ? (
+                      <Link
+                        to={`/akun/pembelian/lihat-jemputan/${item.id_transaksi}`}
+                      >
+                        Lihat penjemputan
+                      </Link>
+                    ) : ( */}
+                    {status === 4 && (
+                      <Link
+                        className="text-blue"
+                        to={`/akun/pembelian/lihat-pengiriman/${item.id_transaksi}`}
+                      >
+                        <small> Lihat pengiriman / penjemputan</small>
+                      </Link>
+                    )}
+
+                    {/* )} */}
                   </Card.Header>
                   <Card.Body>
                     <Row>
