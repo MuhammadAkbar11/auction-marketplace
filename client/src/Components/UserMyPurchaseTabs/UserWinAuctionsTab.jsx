@@ -128,6 +128,14 @@ const UserWinAuctionsTab = ({ isActive }) => {
                 }
               }
 
+              if (status === 5) {
+                statusContent = (
+                  <Button size="sm" variant="success" className=" shadow-none ">
+                    Selesai
+                  </Button>
+                );
+              }
+
               return (
                 <Card className="mb15" key={item.id_transaksi}>
                   <Card.Header className=" bg-transparent d-flex justify-content-between ">
