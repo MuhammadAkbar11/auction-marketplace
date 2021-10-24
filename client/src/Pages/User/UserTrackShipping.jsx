@@ -43,8 +43,6 @@ const UserTrackOrder = ({ match }) => {
     breadcrumbText = "Lihat Penjemputan";
   }
 
-  console.log(shippingData);
-
   return (
     <Layout>
       <BreadcrumbsContainer

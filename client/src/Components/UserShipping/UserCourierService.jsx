@@ -1,16 +1,73 @@
 import React from "react";
-import { Card, Col, Row, ListGroup } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import {
+  Card,
+  Col,
+  Row,
+  ListGroup,
+  Modal,
+  Button,
+  Alert,
+} from "react-bootstrap";
+import Loader from "../UI/Loader";
 import { Link } from "react-router-dom";
 import convertRupiah from "../../utils/convertRupiah";
+import {
+  getUserTrackShippingAction,
+  putConfirmReceivedAction,
+} from "../../actions/user.purchase.actions";
 
 const UserCourierService = props => {
   const { data } = props;
 
+  const [modalConfirm, setModalConfirm] = React.useState(false);
+  const [loadingConfirm, setloadingConfirm] = React.useState(false);
+  const [alert, setAlert] = React.useState(null);
+
+  const dispatch = useDispatch();
   const destination = JSON.parse(data?.alamat_tujuan);
+
+  const confirmReceived = () => {
+    // setModalConfirm(true);
+
+    setloadingConfirm(true);
+
+    dispatch(putConfirmReceivedAction(data.id_transaksi))
+      .then(() => {
+        setloadingConfirm(false);
+        setModalConfirm(false);
+        setAlert({
+          variant: "success",
+          message: "Berhasil mengkonfirmasi penerimaan barang",
+        });
+        dispatch(getUserTrackShippingAction(data.id_transaksi));
+      })
+      .catch(err => {
+        setAlert({
+          variant: "danger",
+          message: "Konfirmasi gagal! Silahkan coba lagi",
+        });
+        setModalConfirm(false);
+        setloadingConfirm(false);
+      });
+  };
+
+  React.useEffect(() => {
+    if (alert) {
+      setTimeout(() => {
+        setAlert(null);
+      }, 7000);
+    }
+  }, [alert]);
 
   return (
     <>
-      <div>
+      {alert && (
+        <Alert variant={alert?.variant} className="my-3">
+          {alert?.message}
+        </Alert>
+      )}
+      <div className="">
         <h6 className="mb-1 text-dark">Id Transaksi</h6>
         <h2 className="mt-0 mb-4 text-primary ">{data?.id_transaksi}</h2>
       </div>
@@ -19,7 +76,15 @@ const UserCourierService = props => {
         <Card.Header className="border-0 bg-transparent pt-4">
           <p className="mb-1">Layanan Kurir</p>
           <h2 className="text-spacing-1 text-capitalize ">
-            Barang Anda Sedang dikirim
+            {+data?.pengiriman !== null ? (
+              +data?.pengiriman?.status === 1 ? (
+                <span className="text-success">Barang telah sampai tujuan</span>
+              ) : (
+                "Barang anda telah dikirim"
+              )
+            ) : (
+              <span className="text-dark">Sedang proses pengiriman</span>
+            )}
           </h2>
         </Card.Header>
         <Card.Body className="pt-2">
@@ -59,7 +124,7 @@ const UserCourierService = props => {
           <div className="mb-5 mt-3">
             <h6 className="mb-2">No Resi</h6>
             <h1 className="text-primary font-weight-bold">
-              {data?.pengiriman?.no_resi}
+              {data?.pengiriman?.no_resi || "-"}
             </h1>
           </div>
 
@@ -92,11 +157,22 @@ const UserCourierService = props => {
       </Card>
       <Row className="mt-5">
         <Col>
-          <div>
+          <div className="d-flex">
             {" "}
             <Link to="/akun/pembelian" className="btn btn-outline-primary">
               Kembali
             </Link>
+            {+data?.pengiriman?.status === 0 && (
+              <Button
+                variant="primary"
+                onClick={() =>
+                  +data?.pengiriman?.status === 0 ? setModalConfirm(true) : null
+                }
+                className="ml-2"
+              >
+                Telah diterima?
+              </Button>
+            )}
           </div>
         </Col>
         <Col className="ml-auto" sm={4}>
@@ -128,6 +204,37 @@ const UserCourierService = props => {
           </ListGroup>
         </Col>
       </Row>
+      <Modal centered show={modalConfirm} onHide={() => setModalConfirm(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Konfirmasi penerimaan barang?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {!loadingConfirm ? (
+            <>
+              Apakah barang yang dikirim telah diterima? <br /> Klik{" "}
+              <span className="font-weight-bold">Iya</span> jika telah diterima
+            </>
+          ) : (
+            <Loader size={45} />
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            disabled={loadingConfirm}
+            variant="outline-primary"
+            onClick={() => setModalConfirm(false)}
+          >
+            Batalkan
+          </Button>
+          <Button
+            variant="primary"
+            onClick={confirmReceived}
+            disabled={loadingConfirm}
+          >
+            Iya, telah diterima
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

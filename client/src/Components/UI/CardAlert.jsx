@@ -1,12 +1,18 @@
 import React from "react";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { WarningCircle } from "phosphor-react";
-const CardAlert = ({ variant, title, children, action, linkAction }) => {
+const CardAlert = ({
+  variant,
+  headerCaption,
+  title,
+  children,
+  action,
+  linkAction,
+}) => {
   return (
-    <Card>
+    <Card className={`bg-${variant}`}>
       <Card.Header className="bg-transparent py-3 text-uppercase ">
-        Informasi
+        {headerCaption}
       </Card.Header>
       <Card.Body className="py-3 px-4">
         <Card.Title>{title}</Card.Title>
