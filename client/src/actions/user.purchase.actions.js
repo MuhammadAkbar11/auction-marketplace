@@ -444,3 +444,34 @@ export const getUserTrackShippingAction =
       });
     }
   };
+
+export const putConfirmReceivedAction =
+  invoiceId => async (dispatch, getState) => {
+    const {
+      authUser: { userInfo },
+    } = getState();
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        "/api/user/confirm-courier-pickup/" + invoiceId,
+        {},
+        config
+      );
+
+      console.log(data);
+      // console.log(de)
+
+      return data;
+    } catch (error) {
+      let errData = transformErrorResponse(error);
+
+      throw errData;
+    }
+  };
