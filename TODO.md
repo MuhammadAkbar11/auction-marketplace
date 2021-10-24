@@ -6,22 +6,20 @@
 - [ ] Halaman Syarat & Kententuan
 - [ ] Ruangan Diskusi
   - [ ] Fitur Delete & Edit pesan
-- [ ]
 
 ### User Dashboard
 
-- [ ] Tambahkan Tgl
-- [ ] List Tagihan
-- [ ] Ganti Style Widget
-- [ ] Buat ava member
-- [ ] Tambahan beberapa Widgets
-  - [ ] Total Penjualan
-  - [ ] Total Pembelian
+- [x] Tambahkan Tgl
+- [x] List Tagihan
+- [x] Ganti Style Widget
+- [x] Buat ava member
+- [x] Tambahan beberapa Widgets
+  - [x] Total Penjualan
 
 ### Admin
 
 - [ ] Halaman Dashboard
-  - [ ] Load data total lelang , member, transaksi
+  - [ ] Load data total lelang, member, transaksi
   - [ ] Load list lelang yang aktif
   - [ ] Tambahkan Tgl
 - [ ] Halaman Anggota
