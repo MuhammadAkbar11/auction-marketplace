@@ -24,6 +24,7 @@ const UserAuction = props => {
 
   const tabKey = new URLSearchParams(location.search).get("tab");
   const dispatch = useDispatch();
+  const { details } = useSelector(state => state.userDetails);
   const { message } = useSelector(state => state.userAuction);
   const userAuctionState = useSelector(state => state.userAuction);
   const planAuctions = userAuctionState?.planning;
@@ -118,6 +119,12 @@ const UserAuction = props => {
                   {/* </Nav.Item> */}
                 </Nav>
               </Card>
+              {details?.akun_bank?.length === 0 && (
+                <Alert className="my-4" variant="warning">
+                  Silahkan tambahkan akun rekening anda di halaman info akun,
+                  agar dapat melakukan konfirmasi pemenang
+                </Alert>
+              )}
               {message && (
                 <div className="mt-4">
                   <Alert variant={message.type}>{message.text}</Alert>

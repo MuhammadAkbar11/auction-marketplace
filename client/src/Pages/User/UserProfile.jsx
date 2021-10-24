@@ -54,7 +54,11 @@ const apiUrl = "https://dev.farizdotid.com/api/daerahindonesia";
 
 // }
 
-const Profile = ({ history }) => {
+const Profile = props => {
+  const { history, location } = props;
+
+  const bankAccountsRef = React.useRef(null);
+
   const { userInfo } = useSelector(state => state.authUser);
   const userDetailsState = useSelector(state => state.userDetails);
   const userDetails = userDetailsState.details;
@@ -187,6 +191,13 @@ const Profile = ({ history }) => {
   const handleLoadProfile = () => {
     dispatch(getUserDetailsAction());
   };
+
+  if (!userDetailsLoading && location?.hash) {
+    if (bankAccountsRef?.current?.id === location.hash.replace("#", "")) {
+      console.log("hmmm", bankAccountsRef.current.offsetTop);
+      window.scrollTo(0, bankAccountsRef.current.offsetTop + 300);
+    }
+  }
 
   return (
     <Layout>
@@ -524,7 +535,7 @@ const Profile = ({ history }) => {
                 )}
               </Card.Body>
             </Card>
-            <section className="mt-5" id="bank-accounts">
+            <section ref={bankAccountsRef} className="mt-5" id="bank-accounts">
               <UserBankAccount
                 accounts={userDetails?.akun_bank}
                 onLoadProfile={handleLoadProfile}
