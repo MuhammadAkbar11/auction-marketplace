@@ -728,7 +728,6 @@ export const postUserStartAuction = asyncHandler(async (req, res) => {
 
 export const getIsValidData = asyncHandler(async (req, res) => {
   const valid = req.user.isValidData;
-
   res.status(200).json({
     status: true,
     isValidData: valid,
@@ -821,6 +820,7 @@ export const postCloseAuction = asyncHandler(async (req, res) => {
 
 export const postConfirmBid = asyncHandler(async (req, res) => {
   const bidId = req.body.id_tawaran;
+  let invoice = null;
   // const shippingType = req.body.jenis_pengiriman;
 
   try {
@@ -850,14 +850,25 @@ export const postConfirmBid = asyncHandler(async (req, res) => {
         }
       );
 
-      const invoice = await ModelTransaksi.create({
-        status_bayar: 0,
-        id_tawaran: getBid.id_tawaran,
-        status_transaksi: 0,
-        // jenis_pengiriman: JSON.stringify(shippingType),
+      const invoiceByBidId = await ModelTransaksi.findOne({
+        where: {
+          id_tawaran: getBid.id_tawaran,
+        },
       });
 
-      // console.log(getBid);
+      if (invoiceByBidId) {
+        // if(inv)
+        invoiceByBidId.status_bayar = 0;
+        invoiceByBidId.id_tawaran = getBid.id_tawaran;
+        invoiceByBidId.status_transaksi = 0;
+        invoice = await invoiceByBidId.save();
+      } else {
+        invoice = await ModelTransaksi.create({
+          status_bayar: 0,
+          id_tawaran: getBid.id_tawaran,
+          status_transaksi: 0,
+        });
+      }
 
       res.status(201).json({
         invoice,

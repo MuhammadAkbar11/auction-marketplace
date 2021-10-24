@@ -319,7 +319,6 @@ export const postUserWinConfirmAuction = asyncHandler(async (req, res) => {
       status_transaksi = 2;
       paymentLimit = dayjs().add(1, "day").format("YYYY-MM-DD HH:mm:ss");
       message = "Konfirmasi berhasil silahkan lakukan pembayaran";
-      console.log(bidValueToNum, +biaya_packing);
     }
 
     await ModelTransaksi.update(
@@ -518,8 +517,6 @@ export const getTrackShipping = asyncHandler(async (req, res) => {
       },
     });
 
-    console.log(invoice);
-
     // const shipping  =
     const highestBid = await ModelPenawaran.findOne({
       where: {
@@ -577,6 +574,64 @@ export const getTrackShipping = asyncHandler(async (req, res) => {
       status: true,
       shipping: invoice,
     });
+  } catch (error) {
+    console.log(error);
+    throw new ResponseError(error.statusCode, error.message, error.errors);
+  }
+});
+
+export const putFinishShipping = asyncHandler(async (req, res) => {
+  const invoiceId = req.params.id;
+  try {
+    if (!invoiceId) {
+      res.status(400);
+      throw new ResponseError(400, "Id transkasi tidak ditemukan");
+    }
+
+    const invoice = await ModelTransaksi.findOne({
+      where: {
+        id_transaksi: invoiceId,
+      },
+      attributes: {
+        exclude: ["ModelPenawaranIdTawaran"],
+      },
+    });
+
+    if (invoice) {
+      const invoiceDetails = await ModelDetailTransaksi.findOne({
+        where: {
+          id_transaksi: invoiceId,
+        },
+      });
+
+      if (invoice.jenis_pengiriman === "COURIER_SERVICE") {
+        await ModelPengiriman.update(
+          {
+            status: 1,
+          },
+          {
+            where: {
+              id_transaksi: invoiceId,
+            },
+          }
+        );
+      }
+
+      invoice.status_transaksi = 5;
+      invoiceDetails.status = 2;
+      invoiceDetails.waktu_update = dayjs().format("YYYY-MM-DD HH:mm:ss");
+
+      await invoice.save();
+      await invoiceDetails.save();
+
+      return res.status(200).json({
+        status: true,
+        message: "Berhasil mengubah",
+      });
+    }
+
+    res.status(400);
+    throw new ResponseError(400, "Transaksi tidak ditemukan");
   } catch (error) {
     console.log(error);
     throw new ResponseError(error.statusCode, error.message, error.errors);

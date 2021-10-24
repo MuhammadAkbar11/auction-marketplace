@@ -31,6 +31,7 @@ import {
   getUserWinAuction,
   postUserPayment,
   postUserWinConfirmAuction,
+  putFinishShipping,
 } from "../controller/user.purchase.controller.js";
 import { protect } from "../middleware/auth.middlerware.js";
 import { uploadMemberPhotoMiddleware } from "../middleware/uploadMemberPhoto.js";
@@ -86,5 +87,6 @@ router.post("/winning-confirm", protect, postUserWinConfirmAuction);
 router.get("/payment/:invoiceId", protect, getUserPaymentDetails);
 router.post("/payment", protect, uploadPaymentProofMiddleware, postUserPayment);
 router.get("/track-shipping/:id", protect, getTrackShipping);
+router.put("/confirm-courier-pickup/:id", protect, putFinishShipping);
 
 export default router;
