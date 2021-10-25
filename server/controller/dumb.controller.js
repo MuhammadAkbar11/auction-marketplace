@@ -6,7 +6,6 @@ import ModelGaleri from "../models/m_galeri_lelang.js";
 import ModelKategori from "../models/m_kategori.js";
 import ModelLelang from "../models/m_lelang.js";
 import ModelMember from "../models/m_member.js";
-import getAutoNumber from "../utils/getAutoNumber.js";
 import ResponseError from "../utils/responseError.js";
 import onlyNumbers from "../utils/onlyNumber.js";
 
