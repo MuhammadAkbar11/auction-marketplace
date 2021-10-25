@@ -51,6 +51,10 @@ import {
   userWinningConfirmReducer,
 } from "./reducers/user.purchase.reducer";
 import { userDashboardReducer } from "./reducers/user.dashboard.reducer";
+import {
+  adminDetailsInvoiceReducer,
+  adminInvoicesReducer,
+} from "./reducers/admin/adminInvoices.reducer";
 
 const reducer = combineReducers({
   adminLogin: adminLoginReducer,
@@ -60,6 +64,8 @@ const reducer = combineReducers({
   adminListMember: adminMembersReducer,
   adminListAuction: adminListAuctionReducer,
   adminMembersAlert: adminMembersPageAlertReducer,
+  adminInvoices: adminInvoicesReducer,
+  adminDetailsInvoices: adminDetailsInvoiceReducer,
   productList: productListReducer,
   auctionDetails: AuctionDetailsReducer,
   auctionsLatest: auctionsLatestReducer,
