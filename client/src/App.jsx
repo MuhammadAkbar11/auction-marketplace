@@ -39,6 +39,7 @@ import Contacts from "./Pages/Contact";
 import AdminAuctions from "./Pages/Admin/Auctions";
 import SellerConfirmShipping from "./Pages/User/SellerConfirmShipping";
 import UserTrackShipping from "./Pages/User/UserTrackShipping";
+import SellerConfirmPickUp from "./Pages/User/SellerConfirmPickUp";
 
 function App() {
   return (
@@ -67,6 +68,10 @@ function App() {
         <PrivateRoute
           path="/akun/konfirmasi-pembayaran/:invoiceId"
           component={SellerConfirmPayment}
+        />
+        <PrivateRoute
+          path="/akun/konfirmasi-penjemputan/:invoiceId"
+          component={SellerConfirmPickUp}
         />
         <PrivateRoute
           path="/akun/konfirmasi-pengiriman/:invoiceId"

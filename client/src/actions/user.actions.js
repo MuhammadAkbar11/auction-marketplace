@@ -1471,3 +1471,39 @@ export const postConfirmShippingAction =
       throw errors;
     }
   };
+
+export const sellerConfirmPickupAction =
+  invoiceId => async (dispatch, getState) => {
+    const {
+      authUser: { userInfo },
+    } = getState();
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        "/api/user/confirm-courier-pickup/" + invoiceId,
+        {},
+        config
+      );
+
+      dispatch({
+        type: USER_AUCTION_MESSAGE,
+        payload: {
+          type: "success",
+          text: "Berhasil konfirmasi penjemputan barang!",
+        },
+      });
+
+      return data;
+    } catch (error) {
+      let errData = transformErrorResponse(error);
+
+      throw errData;
+    }
+  };
