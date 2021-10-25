@@ -7,11 +7,37 @@ import {
   ADMIN_AUCTIONS_REQ,
   ADMIN_AUCTIONS_SUCCESS,
   ADMIN_AUCTIONS_FAIL,
+  ADMIN_DASHBOARD_GET,
+  ADMIN_DASHBOARD_SUCCESS,
+  ADMIN_DASHBOARD_FAIL,
 } from "../../constants/admin/admin.constants";
 
 const membersInitState = {
   members: [],
   loading: false,
+};
+
+export const adminDashboardDataReducer = (
+  state = {
+    loading: false,
+  },
+  action
+) => {
+  switch (action.type) {
+    case ADMIN_DASHBOARD_GET:
+      return {};
+    case ADMIN_DASHBOARD_SUCCESS:
+      return {
+        ...action.payload,
+      };
+    case ADMIN_DASHBOARD_FAIL:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    default:
+      return state;
+  }
 };
 
 export const adminMembersReducer = (state = membersInitState, action) => {
