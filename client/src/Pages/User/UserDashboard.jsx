@@ -38,6 +38,9 @@ const UserDashboard = () => {
   const indoMonths = month;
   const { details } = useSelector(state => state.userDetails);
   const { auctions } = useSelector(state => state.userDashboard);
+  const revenue = auctions?.sold_out?.rows?.reduce((sum, i) => {
+    return sum + +i.total_harga;
+  }, 0);
 
   const winningAuctionState = useSelector(state => state.userWinsAuction);
   const winsAuction = winningAuctionState?.auctions;
@@ -45,7 +48,6 @@ const UserDashboard = () => {
   const userMyBidsState = useSelector(state => state.userMyBids);
   const followAuctions = userMyBidsState?.data;
   const followAuctionsLoading = userMyBidsState?.loading;
-  console.log(userMyBidsState);
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -139,7 +141,7 @@ const UserDashboard = () => {
                     <CurrencyCircleDollar size={60} className="text-primary" />
                   }
                   valueTag="h4"
-                  value={`Rp. 100.000`}
+                  value={revenue ? convertRupiah(+revenue) : 0}
                 />
               </Col>
             </Row>
@@ -165,7 +167,7 @@ const UserDashboard = () => {
                           <>
                             {winsAuction.map(item => {
                               let statusContent = (
-                                <Badge variant="warning">
+                                <Badge variant="warning" className=" rounded-0">
                                   Menunggu pembayaran
                                 </Badge>
                               );
@@ -183,13 +185,18 @@ const UserDashboard = () => {
                                         }
                                       >
                                         <span className="d-inline-block">
-                                          <Badge>Telat dibayar</Badge>
+                                          <Badge className=" rounded-0">
+                                            Telat dibayar
+                                          </Badge>
                                         </span>
                                       </OverlayTrigger>
                                     </>
                                   )
                                 ) : (
-                                  <Badge variant="warning">
+                                  <Badge
+                                    variant="warning"
+                                    className=" rounded-0"
+                                  >
                                     Menunggu pembayaran
                                   </Badge>
                                 );
@@ -197,7 +204,7 @@ const UserDashboard = () => {
 
                               if (status === 3) {
                                 statusContent = (
-                                  <Badge variant="info">
+                                  <Badge variant="info" className=" rounded-0">
                                     Menunggu konfirmasi pembayaran
                                   </Badge>
                                 );
@@ -205,7 +212,12 @@ const UserDashboard = () => {
 
                               if (status >= 4) {
                                 statusContent = (
-                                  <Badge variant="info">Terbayar</Badge>
+                                  <Badge
+                                    variant="success"
+                                    className=" rounded-0"
+                                  >
+                                    Terbayar
+                                  </Badge>
                                 );
                               }
                               return (
