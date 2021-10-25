@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 
 const PageNotFound = () => {
+  document.title = "Baebid - 404";
   return (
     <main className="page-404-main">
       <Container fluid className="h-100 ">

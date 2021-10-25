@@ -4,6 +4,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import Header from "../Components/Layouts/Header/HeaderMiddle";
 
 const ComingSoon = () => {
+  document.title = "Baebid - Coming Soon";
   return (
     <main className="coming-soon-wrapper">
       <Header />

@@ -5,6 +5,7 @@ import Layout from "../Components/Layouts/Layout";
 import BreadcrumbsContainer from "../Components/Layouts/BreadcrumbsContainer.jsx";
 
 const Contacts = () => {
+  document.title = "Baebid - Kontak Kami";
   return (
     <Layout>
       <BreadcrumbsContainer

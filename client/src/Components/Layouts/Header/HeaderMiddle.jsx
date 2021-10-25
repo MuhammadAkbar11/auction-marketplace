@@ -1,18 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
-import {
-  Badge,
-  Col,
-  Container,
-  Nav,
-  Row,
-  Dropdown,
-  NavLink,
-} from "react-bootstrap";
-import { User, Heart, UserCircle, SignOut, UserGear } from "phosphor-react";
+import { Badge, Col, Container, Nav, Row, Dropdown } from "react-bootstrap";
+import { User, UserCircle, SignOut, UserGear } from "phosphor-react";
 import { useDispatch, useSelector } from "react-redux";
 import { authLogoutAuction } from "../../../actions/auth.actions";
+import logo from "../../../assets/images/logo.png";
 
 const HeaderMiddle = () => {
   const { userInfo } = useSelector(state => state.authUser);
@@ -24,7 +17,8 @@ const HeaderMiddle = () => {
         <Row>
           <Col xl={3} lg={2} className="d-flex align-items-center">
             <Link to="/" className=" display-5 mt-n2 r ">
-              <h5 className="my-0 text-primary font-weight-bold">BaeBid</h5>
+              <img height={50} src={logo} alt="Baebid Logo" />
+              {/* <h5 className="my-0 text-primary font-weight-bold">BaeBid</h5> */}
             </Link>
           </Col>
           <Col xl={6} lg={6}>

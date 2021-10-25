@@ -26,6 +26,8 @@ const loginSchema = Yup.object().shape({
 });
 
 const LoginPage = () => {
+  document.title = "Baebid - Login";
+
   const dispatch = useDispatch();
 
   const { loading, error } = useSelector(state => state.authLogin);

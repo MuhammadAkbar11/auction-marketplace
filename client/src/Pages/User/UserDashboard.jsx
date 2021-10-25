@@ -35,6 +35,8 @@ import convertRupiah from "../../utils/convertRupiah";
 import { Link } from "react-router-dom";
 
 const UserDashboard = () => {
+  document.title = "Baebid - Dashboard";
+
   const date = new Date();
   const indoMonths = month;
   const { details } = useSelector(state => state.userDetails);

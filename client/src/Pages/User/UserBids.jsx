@@ -11,6 +11,8 @@ import UserMyBidsTab from "../../Components/UserMyPurchaseTabs/UserMyBidsTab";
 import UserWinAuctionsTab from "../../Components/UserMyPurchaseTabs/UserWinAuctionsTab";
 
 const MyBid = props => {
+  document.title = "Baebid - Pembelian Saya";
+
   const { match, location } = props;
 
   const tabKey = new URLSearchParams(location.search).get("tab");

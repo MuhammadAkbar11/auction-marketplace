@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Col, Container, Row, Form, Button } from "react-bootstrap";
+import { Col, Container, Row, Button } from "react-bootstrap";
 import ProductCard from "../Components/ProductCard";
 import Layout from "../Components/Layouts/Layout";
 import BreadcrumbsContainer from "../Components/Layouts/BreadcrumbsContainer";
@@ -59,9 +59,7 @@ const ListAuctionByCategory = props => {
     loadAuctions(variables);
     // dispatch(getListAuctionAction(true, variables));
   };
-
-  console.log(auctions);
-
+  document.title = "Baebid - " + category?.kategori || "Loading...";
   return (
     <Layout>
       <BreadcrumbsContainer

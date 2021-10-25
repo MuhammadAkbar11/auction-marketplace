@@ -48,6 +48,7 @@ const ListAuction = () => {
   };
 
   React.useEffect(() => {
+    document.title = "Baebid - Lelang";
     loadAuctions({ isLoadMore: false });
   }, []);
 

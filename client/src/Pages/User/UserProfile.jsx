@@ -55,6 +55,8 @@ const apiUrl = "https://dev.farizdotid.com/api/daerahindonesia";
 // }
 
 const Profile = props => {
+  document.title = "Baebid - Profile";
+
   const { history, location } = props;
 
   const bankAccountsRef = React.useRef(null);

@@ -20,6 +20,8 @@ import {
 import UserCompleteListAuctionTab from "../../Components/UserAuctionTabs/UserCompleteListAuctionTab";
 
 const UserAuction = props => {
+  document.title = "Baebid - Lelang Saya";
+
   const { match, location } = props;
 
   const tabKey = new URLSearchParams(location.search).get("tab");

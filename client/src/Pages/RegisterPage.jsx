@@ -42,6 +42,8 @@ const registerSchema = Yup.object().shape({
 });
 
 const RegisterPage = () => {
+  document.title = "Baebid - Registrasi";
+
   let disableButton = false;
 
   const [agreeTermCond, setAgreeTermCond] = React.useState(false);

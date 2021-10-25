@@ -45,6 +45,7 @@ const ListLatestAuctionPage = props => {
 
   React.useEffect(() => {
     loadAuctions({ isLoadMore: false });
+    document.title = "Baebid - Lelang Terbaru";
   }, []);
 
   const onLoadMore = () => {

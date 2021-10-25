@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Col, Row, Form, Button } from "react-bootstrap";
+import { Container, Col, Row } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { getAuctionDetailsAction } from "../actions/auctions.actions";
@@ -27,6 +27,12 @@ const DetailsAuction = props => {
   const [listBid, setListBid] = React.useState([]);
   const [loadingBid, setLoadingBid] = React.useState(false);
   const [bidErr, setBidErr] = React.useState(null);
+
+  React.useEffect(() => {
+    if (!loading) {
+      document.title = "Baebid - " + auction?.judul;
+    }
+  }, [auction]);
 
   React.useEffect(() => {
     socket = io(SERVER_ENDPOINT);
