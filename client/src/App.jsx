@@ -22,7 +22,7 @@ import AdminKategori from "./Pages/Admin/Kategori";
 import Users from "./Pages/Admin/Users";
 // import AdminComingSoon from "./Pages/Admin/AdminComingSoon";
 import UserBids from "./Pages/User/UserBids";
-import TransactionRepot from "./Pages/Admin/TransactionRepot";
+import AdminInvoiceList from "./Pages/Admin/AdminInvoiceList";
 import UserConfirmWinning from "./Pages/User/UserConfirmWinning";
 import SellerConfirmAuctionBill from "./Pages/User/SellerConfirmAuctionBill";
 import UserPayment from "./Pages/User/UserPayment";
@@ -138,7 +138,7 @@ function App() {
         />
         <AdminPrivateRoute
           path="/administrator/laporan-transaksi"
-          component={TransactionRepot}
+          component={AdminInvoiceList}
         />
         <Route component={PageNotFound} />
       </Switch>

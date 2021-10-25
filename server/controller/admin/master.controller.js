@@ -200,7 +200,7 @@ export const adminGetInvoices = asyncHandler(async (req, res) => {
         },
       });
 
-      const bids = await ModelPenawaran.findAll({
+      const bids = await ModelPenawaran.findOne({
         where: {
           id_tawaran: transaction.id_tawaran,
         },
@@ -217,7 +217,7 @@ export const adminGetInvoices = asyncHandler(async (req, res) => {
 
       const auction = await ModelLelang.findOne({
         where: {
-          id_lelang: bids[0].id_lelang,
+          id_lelang: bids.id_lelang,
         },
         include: {
           model: ModelMember,
@@ -237,7 +237,11 @@ export const adminGetInvoices = asyncHandler(async (req, res) => {
           exclude: ["ModelLelangIdLelang"],
         },
       });
+      invoice.waktu_update = dayjs(invoice?.waktu_update).format(
+        "DD/MM/YYYY - HH:mm"
+      );
 
+      // invoice.setDataValue("waktu_update", updatedFormat);
       invoice.setDataValue("transaksi", transaction);
       invoice.setDataValue("tawaran", bids);
       invoice.setDataValue("lelang", auction);
@@ -275,7 +279,7 @@ export const adminGetInvoices = asyncHandler(async (req, res) => {
               },
             });
 
-            const bids = await ModelPenawaran.findAll({
+            const bids = await ModelPenawaran.findOne({
               where: {
                 id_tawaran: transaction.id_tawaran,
               },
@@ -292,7 +296,7 @@ export const adminGetInvoices = asyncHandler(async (req, res) => {
 
             const auction = await ModelLelang.findOne({
               where: {
-                id_lelang: bids[0].id_lelang,
+                id_lelang: bids.id_lelang,
               },
               include: {
                 model: ModelMember,
@@ -309,6 +313,8 @@ export const adminGetInvoices = asyncHandler(async (req, res) => {
               transaksi: transaction,
               tawaran: bids,
               lelang: auction,
+              tgl_dibuat: dayjs(invData.tgl_dibuat).format("DD/MM/YYYY"),
+              waktu_update: dayjs(invData.waktu_update).format("DD/MM/YYYY"),
             };
           }
 

@@ -32,9 +32,7 @@ export const adminInvoicesReducer = (state = initState, action) => {
     case ADMIN_INVOICES_SUCCESS:
       return {
         ...state,
-        loading: false,
-        invoices: action.payload,
-        error: null,
+        ...action.payload,
       };
 
     case ADMIN_INVOICES_FAIL:

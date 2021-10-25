@@ -18,14 +18,14 @@
 
 ### Admin
 
-- [ ] Halaman Dashboard
-  - [ ] Load data total lelang, member, transaksi
-  - [ ] Load list lelang yang aktif
-  - [ ] Tambahkan Tgl
+- [x] Halaman Dashboard
+  - [x] Load data total lelang, member, transaksi
+  - [x] Load list lelang yang aktif
+  - [x] Tambahkan Tgl
 - [ ] Halaman Anggota
   - [ ] Details Member
   - [ ] Hapus Member
 - [ ] Halaman Laporan Transkasi
-  - [ ] Fetch data laporan transaksi
+  - [x] Fetch data laporan transaksi
   - [ ] Invoice transaksi
   - [ ] Hapus transaksi

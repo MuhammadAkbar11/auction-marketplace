@@ -9,50 +9,49 @@ import {
 import { transformErrorResponse } from "../../utils/errors";
 import { authAdminLogoutAuction } from "./auth.actions";
 
-export const adminGetCategoriesAction =
-  values => async (dispatch, getState) => {
+export const adminGetCategoriesAction = () => async (dispatch, getState) => {
+  dispatch({
+    type: ADMIN_CATEGORY_REQ,
+    payload: {
+      loading: true,
+    },
+  });
+
+  const {
+    adminAuth: { adminInfo },
+  } = getState();
+
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${adminInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/admin/kategori`, config);
+
     dispatch({
-      type: ADMIN_CATEGORY_REQ,
+      type: ADMIN_CATEGORY_SUCCESS,
+      payload: data.categories,
+    });
+  } catch (err) {
+    const errRespon = transformErrorResponse(err);
+
+    dispatch({
+      type: ADMIN_CATEGORY_FAIL,
       payload: {
-        loading: true,
+        loading: false,
+        error: errRespon,
       },
     });
 
-    const {
-      adminAuth: { adminInfo },
-    } = getState();
-
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${adminInfo.token}`,
-        },
-      };
-
-      const { data } = await axios.get(`/api/admin/kategori`, config);
-
-      dispatch({
-        type: ADMIN_CATEGORY_SUCCESS,
-        payload: data.categories,
-      });
-    } catch (err) {
-      const errRespon = transformErrorResponse(err);
-
-      dispatch({
-        type: ADMIN_CATEGORY_FAIL,
-        payload: {
-          loading: false,
-          error: errRespon,
-        },
-      });
-
-      const notAuth = errRespon?.notAuth;
-      if (notAuth) {
-        dispatch(authAdminLogoutAuction());
-      }
+    const notAuth = errRespon?.notAuth;
+    if (notAuth) {
+      dispatch(authAdminLogoutAuction());
     }
-  };
+  }
+};
 
 export const adminPostCategoryAction =
   (values, isEdit = false) =>
