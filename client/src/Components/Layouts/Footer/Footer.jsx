@@ -20,12 +20,12 @@ const Footer = () => {
   ];
 
   const dispatch = useDispatch();
-  const { categories, loading } = useSelector(state => state.categories);
+  const { categories } = useSelector(state => state.categories);
 
   React.useEffect(() => {
     dispatch(getCategoriesAction());
     return;
-  }, []);
+  }, [dispatch]);
 
   const transformCategories = categories
     ? categories.length !== 0

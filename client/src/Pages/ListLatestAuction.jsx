@@ -1,23 +1,20 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Col, Container, Row, Form, Button } from "react-bootstrap";
+import { Col, Container, Row, Button } from "react-bootstrap";
 import ProductCard from "../Components/ProductCard";
 import Layout from "../Components/Layouts/Layout";
 import BreadcrumbsContainer from "../Components/Layouts/BreadcrumbsContainer";
 import Loader from "../Components/UI/Loader";
 import SectionTitle from "../Components/SectionTitle";
-import {
-  getLatestAuctionAction,
-  getListAuctionByCategoryAction,
-} from "../actions/auctions.actions";
+import { getLatestAuctionAction } from "../actions/auctions.actions";
 
 const ListLatestAuctionPage = props => {
-  const { match, history } = props;
-  const slugQuery = match.params.slug;
+  // const { match, history } = props;
+  // const slugQuery = match.params.slug;
 
   const dispatch = useDispatch();
   const {
-    category,
+    // category,
     loading,
     loadingMore,
     auctions,
@@ -29,8 +26,8 @@ const ListLatestAuctionPage = props => {
 
   const loadAuctions = ({
     isLoadMore = false,
-    orderBy = "ASC",
-    sortBy = "_id",
+    // orderBy = "ASC",
+    // sortBy = "_id",
     skipBy = 0,
     resultBy = 12,
   }) => {

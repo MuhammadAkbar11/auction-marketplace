@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserDetailsAction } from "../actions/user.actions";
 import useIsValidData from "../hooks/useIsValidData";
 import ModalInvalidData from "./ModalInvalidData";
-import Loader from "./UI/Loader";
 
 const UserWrapperIsValidData = ({ children }) => {
   const [modal, setModal] = React.useState({
@@ -25,7 +24,7 @@ title: "Akses ditolak!",
 
   React.useEffect(() => {
     dispatch(getUserDetailsAction());
-  }, []);
+  }, [dispatch]);
 
   React.useEffect(() => {
     const userBankAccounts = userDetailsState?.details.akun_bank;

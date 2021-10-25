@@ -1,17 +1,7 @@
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  Col,
-  Container,
-  Row,
-  Card,
-  Form,
-  Button,
-  ListGroup,
-  Alert,
-  Image,
-} from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { Col, Container, Row, Card, ListGroup } from "react-bootstrap";
 import { XCircle, CheckCircle } from "phosphor-react";
 import Layout from "../../Components/Layouts/Layout";
 import BreadcrumbsContainer from "../../Components/Layouts/BreadcrumbsContainer";

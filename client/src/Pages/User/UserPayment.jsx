@@ -17,13 +17,7 @@ import Layout from "../../Components/Layouts/Layout";
 import UserSidebarMenu from "../../Components/UserMenuLayout/UserSidebarMenu";
 import Loader from "../../Components/UI/Loader";
 import convertRupiah from "../../utils/convertRupiah";
-import {
-  getUserSoldItemDetailsAction,
-  postSellerConfirmBillAction,
-} from "../../actions/user.actions";
-import { onlyNumbers } from "../../utils/replace";
 import * as yup from "yup";
-import { useFormik } from "formik";
 import { Link, Redirect } from "react-router-dom";
 import {
   getUserPaymentDetailsAction,
@@ -57,24 +51,23 @@ const UserPayment = props => {
 
   React.useEffect(() => {
     dispatch(getUserPaymentDetailsAction(invoiceId));
-  }, []);
+  }, [dispatch, invoiceId]);
 
   React.useEffect(() => {
     if (invoice?.id_transaksi) {
       if (+invoice.status_transaksi !== 2) {
         history.push("/akun/pembelian");
-        console.log("redirect");
       }
     }
-  }, [invoice]);
+  }, [invoice, history]);
 
   const loadingConfirm = postPaymentState.loading;
 
-  const bid = invoice?.tawaran;
-  const member = bid?.member;
+  // const bid = invoice?.tawaran;
+  // const member = bid?.member;
   const seller = invoice?.lelang?.penjual;
   const sellerBank = seller?.akun_bank;
-  const auction = invoice?.lelang;
+  // const auction = invoice?.lelang;
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -86,7 +79,7 @@ const UserPayment = props => {
       })
       .then(values => {
         dispatch(postPaymentAction({ id_transaksi: invoiceId, ...values }))
-          .then(result => {
+          .then(() => {
             history.push("/akun/result-pembayaran");
           })
           .catch(err => {

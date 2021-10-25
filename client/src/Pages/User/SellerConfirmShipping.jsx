@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Alert, Col, Container, Row } from "react-bootstrap";
 import Layout from "../../Components/Layouts/Layout";
@@ -12,12 +12,9 @@ import { getShippingDetailsAction } from "../../actions/user.actions";
 import SellerConfirmShippingContent from "../../Components/UserShipping/SellerConfirmShippingContent";
 
 const SellerConfirmShipping = props => {
-  const { match, history } = props;
+  const { match } = props;
 
   const { invoiceId } = match?.params;
-
-  // const [loading, setLoading] = React.useState(false);
-  const [showModalInfo, setShowModalInfo] = React.useState(false);
 
   const [isValidData, loadingValidData] = useIsValidData();
   const dispatch = useDispatch();
@@ -26,25 +23,13 @@ const SellerConfirmShipping = props => {
     state => state.customerShippingDetails
   );
 
-  console.log(shippingDetailsState);
-
   const shipping = shippingDetailsState?.shippingDetails;
   const loading = shippingDetailsState.loading;
   const error = shippingDetailsState.error;
 
   React.useEffect(() => {
-    if (!isValidData) {
-      setShowModalInfo(true);
-    }
-
-    return () => {
-      setShowModalInfo(false);
-    };
-  }, [isValidData]);
-
-  React.useEffect(() => {
     dispatch(getShippingDetailsAction(invoiceId));
-  }, []);
+  }, [dispatch, invoiceId]);
 
   return (
     <Layout>

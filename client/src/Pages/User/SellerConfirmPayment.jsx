@@ -63,7 +63,7 @@ const SellerConfirmPayment = props => {
 
   React.useEffect(() => {
     dispatch(getCustomerPaymentDetailsAction(invoiceId));
-  }, []);
+  }, [invoiceId, dispatch]);
 
   const handleSubmit = async () => {
     setLoadingConfirm(true);

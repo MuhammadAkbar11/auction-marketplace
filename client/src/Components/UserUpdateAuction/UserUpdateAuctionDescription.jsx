@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   Col,
   Row,
@@ -14,12 +14,9 @@ import ImageUploader from "../UI/ImageUploader";
 import { CaretDown } from "phosphor-react";
 import Loader from "../UI/Loader";
 import ReactQuill from "react-quill"; // ES6
-import { getCategoriesAction } from "../../actions/categories.actions";
 
 const UserUpdateAuctionDescription = props => {
   const { formik, handleUpload, oldImages } = props;
-
-  const dispatch = useDispatch();
 
   const { categories, loading } = useSelector(state => state.categories);
 
@@ -209,6 +206,7 @@ const UserUpdateAuctionDescription = props => {
                       if (find) {
                         return cat;
                       }
+                      return null;
                     })
                     .map(cat => {
                       return (

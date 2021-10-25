@@ -24,7 +24,7 @@ const UserWinAuctionsTab = ({ isActive }) => {
     if (isActive) {
       dispatch(getUserWinningAuctionAction());
     }
-  }, [isActive]);
+  }, [isActive, dispatch]);
 
   const winsAuction = winningAuctionState?.auctions;
 

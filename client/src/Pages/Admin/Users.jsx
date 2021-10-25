@@ -8,25 +8,20 @@ import {
   Col,
   Breadcrumb,
   Table,
-  Button,
   Dropdown,
 } from "react-bootstrap";
 import { Trash, Info, SquaresFour } from "phosphor-react";
-// import { useDispatch, useSelector } from "react-redux";
 import AdminLayout from "../../Components/AdmnLayouts/AdminLayout";
 import { adminGetMembersAction } from "../../actions/admin/member.actions";
-// import { getCategoriesAction } from "../../actions/categories.actions";
 
 const Users = () => {
   const dispatch = useDispatch();
 
-  const { members, loading, errors } = useSelector(
-    state => state.adminListMember
-  );
+  const { members, loading } = useSelector(state => state.adminListMember);
 
   React.useEffect(() => {
     dispatch(adminGetMembersAction());
-  }, []);
+  }, [dispatch]);
 
   let no = 1;
 

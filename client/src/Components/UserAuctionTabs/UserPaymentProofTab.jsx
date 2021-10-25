@@ -1,8 +1,7 @@
 import React from "react";
-import { Alert, Button, Card, Table, Dropdown } from "react-bootstrap";
-import { Info, PencilLine, Trash, SquaresFour } from "phosphor-react";
+import { Alert, Card, Table, Dropdown } from "react-bootstrap";
+import { Info, Trash, SquaresFour } from "phosphor-react";
 import Loader from "../UI/Loader";
-import { Link } from "react-router-dom";
 
 const UserPaymentProofTab = ({
   auctions,

@@ -23,7 +23,6 @@ import {
   userResetUpdateProfile,
 } from "../../actions/user.actions";
 import Loader from "../../Components/UI/Loader";
-import { setResetAction } from "../../actions/app.actions";
 import Layout from "../../Components/Layouts/Layout";
 import UserBankAccount from "../../Components/UserBankAccount/UserBankAccount";
 import UserProfilePicture from "../../Components/UserProfilePicture";
@@ -84,7 +83,7 @@ const Profile = props => {
     } else {
       dispatch(getUserDetailsAction());
     }
-  }, [userInfo]);
+  }, [userInfo, dispatch, history]);
 
   const updateProfileFormik = useFormik({
     validationSchema: updateProfileSchema,

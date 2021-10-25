@@ -41,7 +41,7 @@ const UserAuction = props => {
     }
 
     dispatch(getUserAuctionAction());
-  }, [tabKey]);
+  }, [tabKey, dispatch]);
 
   // if
   React.useEffect(() => {
@@ -55,7 +55,7 @@ const UserAuction = props => {
         dispatch(userAuctionResetMessageAction());
       }, 7000);
     }
-  }, [message, tabKey]);
+  }, [message, tabKey, dispatch]);
 
   const handleDelete = id => {
     // console.log(object);
@@ -65,8 +65,6 @@ const UserAuction = props => {
   const handleClose = id => {
     dispatch(userAuctionCloseAction(id));
   };
-
-  const soldOut = [];
 
   return (
     <Layout>

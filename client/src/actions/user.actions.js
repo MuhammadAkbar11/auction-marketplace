@@ -1109,7 +1109,7 @@ export const userAuctionCloseAction = id => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get("/api/user/auction/close/" + id, config);
+    await axios.get("/api/user/auction/close/" + id, config);
 
     // setTimeout(() => {
     dispatch({

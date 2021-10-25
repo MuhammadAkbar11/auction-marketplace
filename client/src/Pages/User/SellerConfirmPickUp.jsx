@@ -1,13 +1,11 @@
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Alert, Button, Col, Container, Modal, Row } from "react-bootstrap";
 import Layout from "../../Components/Layouts/Layout";
 import BreadcrumbsContainer from "../../Components/Layouts/BreadcrumbsContainer";
 import Loader from "../../Components/UI/Loader";
 import UserSidebarMenu from "../../Components/UserMenuLayout/UserSidebarMenu";
-import useIsValidData from "../../hooks/useIsValidData";
-import ModalInvalidData from "../../Components/ModalInvalidData";
 import {
   getShippingDetailsAction,
   sellerConfirmPickupAction,
@@ -36,7 +34,7 @@ const SellerConfirmPickUp = props => {
 
   React.useEffect(() => {
     dispatch(getShippingDetailsAction(invoiceId));
-  }, [invoiceId]);
+  }, [invoiceId, dispatch]);
 
   const handleShowModalConfirm = () => setModalConfirm(true);
 

@@ -33,13 +33,13 @@ const UserConfirmAuctionBill = props => {
   const dispatch = useDispatch();
 
   const [loadingConfirm, setLoadingConfirm] = React.useState(false);
-  const [errors, setErrors] = React.useState(null);
+  const [setErrors] = React.useState(null);
 
   const soldItemDetailsState = useSelector(state => state.userSoldItemDetails);
 
   React.useEffect(() => {
     dispatch(getUserSoldItemDetailsAction(invoiceId));
-  }, []);
+  }, [invoiceId, dispatch]);
 
   const { loading, details, error } = soldItemDetailsState;
   const bid = details?.tawaran;

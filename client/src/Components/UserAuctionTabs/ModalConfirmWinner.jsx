@@ -5,22 +5,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const ModalConfirmWinner = ({ show, handleClose, handleSubmit, data }) => {
-  const [courierService, setCourierService] = React.useState(false);
-  const [pickUp, setPickUp] = React.useState(false);
-
   const { details } = useSelector(state => state.userDetails);
-
-  const onSubmit = e => {
-    e.preventDefault();
-    const postData = {
-      id_tawaran: data?.bidId,
-      jenis_pengiriman: {
-        pickUp: pickUp,
-        courier: courierService,
-      },
-    };
-    handleSubmit(postData);
-  };
 
   const onConfirm = e => {
     handleSubmit({ id_tawaran: data?.bidId });

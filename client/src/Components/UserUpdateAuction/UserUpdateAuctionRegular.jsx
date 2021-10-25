@@ -1,18 +1,10 @@
 import React from "react";
-import {
-  Col,
-  Container,
-  Form,
-  Row,
-  Card,
-  Button,
-  InputGroup,
-} from "react-bootstrap";
+import { Col, Form, Row, Card, InputGroup } from "react-bootstrap";
 import { _dateFormat, _dateFormatInput } from "../../utils/date-format";
 import convertRupiah from "../../utils/convertRupiah";
 
 const UserUpdateAuctionRegular = props => {
-  const { formik, status } = props;
+  const { formik } = props;
 
   const dateStart =
     formik.values.dateStart !== ""
@@ -52,11 +44,6 @@ const UserUpdateAuctionRegular = props => {
                   // isInvalid={formik.errors.dateStart}
                   readOnly={true}
                 />
-                {/* {formik.errors.dateStart && (
-                  <Form.Control.Feedback type="invalid">
-                    {formik.errors.dateStart}
-                  </Form.Control.Feedback>
-                )} */}
               </Form.Group>
             </Col>
             <Col sm={6}>
@@ -65,9 +52,7 @@ const UserUpdateAuctionRegular = props => {
                 <Form.Control
                   type="time"
                   className="  border "
-                  // onChange={formik.handleChange}
                   value={formik.values.timeStart}
-                  // isInvalid={formik.errors.timeStart}
                   readOnly={true}
                 />
                 {/* {formik.errors.timeStart && (
@@ -118,7 +103,6 @@ const UserUpdateAuctionRegular = props => {
                   name: "1 Minggu",
                 },
               ].map((kondisi, idx) => {
-                const key = idx;
                 return (
                   <option key={idx} value={kondisi.value}>
                     {kondisi.name}

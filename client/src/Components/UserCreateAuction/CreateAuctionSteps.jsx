@@ -32,7 +32,6 @@ const CreateAuctionSteps = ({ step1, step2, step3, step4, currentStep }) => {
         to="/akun/buat-lelang?tab=kategori"
       />
       <CreateAuctionStepItem
-        active={step2}
         isPrev={step1 && step2 && step3}
         active={currentStep === "step2"}
         text="Deskripsi Produk"

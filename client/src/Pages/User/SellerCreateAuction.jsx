@@ -6,7 +6,7 @@ import DescProductTab from "../../Components/UserCreateAuction/DescProductTab";
 import PriceAndTimeTab from "../../Components/UserCreateAuction/PriceAndTimeTab";
 import { useSelector } from "react-redux";
 import useIsValidData from "../../hooks/useIsValidData";
-import { Card, Col, Container, Row, Modal, Button } from "react-bootstrap";
+import { Col, Container, Row, Modal } from "react-bootstrap";
 import Layout from "../../Components/Layouts/Layout";
 import Loader from "../../Components/UI/Loader";
 import DeliveryTab from "../../Components/UserCreateAuction/DeliveryTab";
@@ -16,7 +16,6 @@ const CreateAuction = props => {
   const { userInfo } = useSelector(state => state.authUser);
   const [activeTab, setActiveTab] = React.useState("default");
 
-  const [loading, setLoading] = React.useState(true);
   const [showModalInfo, setShowModalInfo] = React.useState(false);
 
   const [isValidData, loadingValidData] = useIsValidData();
@@ -26,8 +25,7 @@ const CreateAuction = props => {
       history.push("/akun/masuk");
       return;
     }
-    setLoading(false);
-  }, [userInfo]);
+  }, [userInfo, history]);
 
   let tabContent = null;
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Download, Trash } from "phosphor-react";
-import { Button, Card, Col, Row } from "react-bootstrap";
+import { Card, Col, Row } from "react-bootstrap";
 const ImageUploader = ({
   images,
   handleFile,
@@ -47,6 +47,7 @@ const ImageUploader = ({
                       style={{
                         height: "100%",
                       }}
+                      alt="Upload Auction"
                     />
                   </Col>
                   <Col xs={10} className="px-3  ">

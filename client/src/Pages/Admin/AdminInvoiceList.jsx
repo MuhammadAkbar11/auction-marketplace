@@ -9,7 +9,6 @@ import {
   Table,
   Button,
   Dropdown,
-  Form,
   Alert,
   Badge,
   Modal,
@@ -32,7 +31,7 @@ const AdminInvoiceList = () => {
 
   React.useEffect(() => {
     dispatch(adminGetInvoicesAction());
-  }, []);
+  }, [dispatch]);
   let no = 1;
 
   return (
@@ -112,90 +111,81 @@ const AdminInvoiceList = () => {
                             );
                           }
 
-                          if (status)
-                            return (
-                              <tr key={inv?.id_detail_transaksi}>
-                                <td>{no++}</td>
-                                <td>{statusContent}</td>
-                                <td>{inv?.id_detail_transaksi}</td>
-                                <td>{inv?.tgl_dibuat}</td>
-                                <td>
-                                  <div>
-                                    <div className="text-capitalize ">
-                                      <h6 className="text-dark font-weight-bold text-nowrap">
-                                        Seller :
-                                      </h6>
-                                      <small>{inv?.lelang?.seller?.nama}</small>{" "}
-                                      <br />
-                                      <small>
-                                        {inv?.lelang?.seller?.email}
-                                      </small>
-                                    </div>
-                                    <div className="text-capitalize mt-2 ">
-                                      <h6 className="text-dark font-weight-bold">
-                                        Bidder :
-                                      </h6>{" "}
-                                      <small>
-                                        {inv?.tawaran?.member?.nama}
-                                      </small>{" "}
-                                      <br />
-                                      <small>
-                                        {inv?.tawaran?.member?.email}
-                                      </small>
-                                    </div>
+                          return (
+                            <tr key={inv?.id_detail_transaksi}>
+                              <td>{no++}</td>
+                              <td>{statusContent}</td>
+                              <td>{inv?.id_detail_transaksi}</td>
+                              <td>{inv?.tgl_dibuat}</td>
+                              <td>
+                                <div>
+                                  <div className="text-capitalize ">
+                                    <h6 className="text-dark font-weight-bold text-nowrap">
+                                      Seller :
+                                    </h6>
+                                    <small>{inv?.lelang?.seller?.nama}</small>{" "}
+                                    <br />
+                                    <small>{inv?.lelang?.seller?.email}</small>
                                   </div>
-                                </td>
+                                  <div className="text-capitalize mt-2 ">
+                                    <h6 className="text-dark font-weight-bold">
+                                      Bidder :
+                                    </h6>{" "}
+                                    <small>{inv?.tawaran?.member?.nama}</small>{" "}
+                                    <br />
+                                    <small>{inv?.tawaran?.member?.email}</small>
+                                  </div>
+                                </div>
+                              </td>
 
-                                <td>
-                                  <Link to={`/item/${inv?.lelang?.id_lelang}`}>
-                                    {inv?.lelang?.judul}
-                                  </Link>
-                                  <br />
-                                  <small className="text-success">
-                                    Rp{" "}
-                                    {convertRupiah(
-                                      +inv?.tawaran?.nilai_tawaran
-                                    )}
-                                  </small>
-                                </td>
+                              <td>
+                                <Link to={`/item/${inv?.lelang?.id_lelang}`}>
+                                  {inv?.lelang?.judul}
+                                </Link>
+                                <br />
+                                <small className="text-success">
+                                  Rp{" "}
+                                  {convertRupiah(+inv?.tawaran?.nilai_tawaran)}
+                                </small>
+                              </td>
 
-                                <td>
-                                  Rp.{" "}
-                                  {convertRupiah(+inv?.transaksi?.total_harga)}
-                                </td>
-                                <td>
-                                  <Dropdown>
-                                    <Dropdown.Toggle
-                                      size="sm"
-                                      variant="primary"
-                                      id="users-actions"
-                                      className="toggle-caret-0"
+                              <td>
+                                Rp.{" "}
+                                {convertRupiah(+inv?.transaksi?.total_harga)}
+                              </td>
+                              <td>
+                                <Dropdown>
+                                  <Dropdown.Toggle
+                                    size="sm"
+                                    variant="primary"
+                                    id="users-actions"
+                                    className="toggle-caret-0"
+                                  >
+                                    <SquaresFour size={20} />
+                                  </Dropdown.Toggle>
+
+                                  <Dropdown.Menu className="py-0 border-0 shadow-sm">
+                                    <Dropdown.Item
+                                      as="button"
+                                      className=" py-2 text-capitalize"
+                                      onClick={e => setModal(true)}
                                     >
-                                      <SquaresFour size={20} />
-                                    </Dropdown.Toggle>
-
-                                    <Dropdown.Menu className="py-0 border-0 shadow-sm">
-                                      <Dropdown.Item
-                                        as="button"
-                                        className=" py-2 text-capitalize"
-                                        onClick={e => setModal(true)}
-                                      >
-                                        <Trash weight="fill" size={20} />
-                                        <span className="ml-2">Hapus</span>
-                                      </Dropdown.Item>
-                                      <Dropdown.Item
-                                        as="button"
-                                        className=" py-2 text-capitalize"
-                                        onClick={e => setModal(true)}
-                                      >
-                                        <Info weight="fill" size={20} />
-                                        <span className="ml-2">Detail</span>
-                                      </Dropdown.Item>
-                                    </Dropdown.Menu>
-                                  </Dropdown>
-                                </td>
-                              </tr>
-                            );
+                                      <Trash weight="fill" size={20} />
+                                      <span className="ml-2">Hapus</span>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                      as="button"
+                                      className=" py-2 text-capitalize"
+                                      onClick={e => setModal(true)}
+                                    >
+                                      <Info weight="fill" size={20} />
+                                      <span className="ml-2">Detail</span>
+                                    </Dropdown.Item>
+                                  </Dropdown.Menu>
+                                </Dropdown>
+                              </td>
+                            </tr>
+                          );
                         })
                       ) : (
                         <tr>

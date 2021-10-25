@@ -3,8 +3,8 @@ import {
   ADMIN_MEMBERS_REQ,
   ADMIN_MEMBERS_SUCCESS,
   ADMIN_MEMBERS_FAIL,
-  ADMIN_MEMBERS_ALERT,
-  ADMIN_MEMBERS_CLEAR_ALERT,
+  // ADMIN_MEMBERS_ALERT,
+  // ADMIN_MEMBERS_CLEAR_ALERT,
 } from "../../constants/admin/admin.constants";
 import { transformErrorResponse } from "../../utils/errors";
 import { authAdminLogoutAuction } from "./auth.actions";

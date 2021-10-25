@@ -33,7 +33,7 @@ const AdminLoginPage = ({ history }) => {
     if (adminInfo) {
       history.push("/administrator/dashboard");
     }
-  }, [adminInfo]);
+  }, [adminInfo, history]);
 
   const loginFormik = useFormik({
     validationSchema: loginSchema,

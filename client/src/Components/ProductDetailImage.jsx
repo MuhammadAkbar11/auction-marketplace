@@ -1,9 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Thumbs } from "swiper/core";
 import { Card } from "react-bootstrap";
-import dumbImages from "../data/dumbImg";
 import { CaretLeftIcon, CaretRightIcon } from "./UI/Icons/Index";
 
 SwiperCore.use([Navigation, Thumbs]);

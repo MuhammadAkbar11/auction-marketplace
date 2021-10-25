@@ -198,7 +198,11 @@ export const getUserWinAuction = asyncHandler(async (req, res) => {
           }
         }
 
-        const seller = await auction.getModelMember();
+        const seller = await ModelMember.findOne({
+          where: {
+            id_member: auction.id_member,
+          },
+        });
         const images = await ModelGaleri.findAll({
           where: { id_lelang: auction.id_lelang },
           attributes: ["id_lelang", "id_galeri", "url"],

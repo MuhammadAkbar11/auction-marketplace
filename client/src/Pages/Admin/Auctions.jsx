@@ -8,8 +8,6 @@ import {
   Col,
   Breadcrumb,
   Table,
-  Button,
-  Dropdown,
   Alert,
   Badge,
 } from "react-bootstrap";
@@ -24,13 +22,11 @@ const AdminAuctions = () => {
   const fullStore = useSelector(state => state);
 
   console.log(fullStore);
-  const { auctions, loading, errors } = useSelector(
-    state => state.adminListAuction
-  );
+  const { auctions, loading } = useSelector(state => state.adminListAuction);
 
   React.useEffect(() => {
     dispatch(adminGetListAuctionsAction());
-  }, []);
+  }, [dispatch]);
 
   return (
     <AdminLayout>

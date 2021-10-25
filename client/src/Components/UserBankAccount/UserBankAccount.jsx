@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { X } from "phosphor-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Card, Row, Col, Button, Badge } from "react-bootstrap";
+import { Card, Row, Col, Button } from "react-bootstrap";
 import CreateBankAccountModal from "./CreateBankAccountModal";
 import {
   createUserAccountBankAction,

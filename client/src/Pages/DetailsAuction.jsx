@@ -32,7 +32,7 @@ const DetailsAuction = props => {
     if (!loading) {
       document.title = "Baebid - " + auction?.judul;
     }
-  }, [auction]);
+  }, [auction, loading]);
 
   React.useEffect(() => {
     socket = io(SERVER_ENDPOINT);
@@ -56,13 +56,13 @@ const DetailsAuction = props => {
       socket.on("disconnect");
       socket.off();
     };
-  }, [SERVER_ENDPOINT, match.params]);
+  }, [match, dispatch]);
 
   React.useEffect(() => {
     socket.emit("get-countdown-item", { id: match.params?.itemId });
 
     return () => {};
-  }, []);
+  }, [match.params?.itemId]);
 
   React.useEffect(() => {
     socket.on("current-bid", current => {

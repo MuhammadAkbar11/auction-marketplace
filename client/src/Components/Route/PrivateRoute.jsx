@@ -11,7 +11,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     if (!userInfo) {
       history.push("/akun/masuk");
     }
-  }, []);
+  }, [userInfo, history]);
 
   return (
     <Route

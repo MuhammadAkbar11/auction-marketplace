@@ -19,7 +19,7 @@ const Home = () => {
       socket.on("disconnect");
       socket.off();
     };
-  }, [SERVER_ENDPOINT]);
+  }, []);
 
   React.useEffect(() => {
     socket.on("auction:new", data => {

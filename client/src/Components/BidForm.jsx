@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { Button, Form, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { onlyNumbers } from "../utils/replace";
-import convertRupiah from "../utils/convertRupiah";
 import useKeepDigits from "../hooks/useKeepDigits";
 
 const BidForm = ({
@@ -31,7 +30,7 @@ const BidForm = ({
     if (errorBidding) {
       setBidValue(onlyNumbers(defaultValue));
     }
-  }, [errorBidding]);
+  }, [errorBidding, defaultValue]);
 
   const [defValueNum] = useKeepDigits(defaultValue);
 

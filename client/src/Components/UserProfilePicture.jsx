@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  OverlayTrigger,
-  Overlay,
-  Popover,
-  ListGroup,
-  Modal,
-  Button,
-} from "react-bootstrap";
+import { Overlay, Popover, ListGroup, Modal, Button } from "react-bootstrap";
 import { Camera, Upload } from "phosphor-react";
 import useSingleImageUploader from "../hooks/useSingleImageUploader";
 import { useDispatch } from "react-redux";

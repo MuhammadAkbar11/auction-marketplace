@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
-import { Badge, Col, Container, Nav, Row, Dropdown } from "react-bootstrap";
+import { Col, Container, Nav, Row, Dropdown } from "react-bootstrap";
 import { User, UserCircle, SignOut, UserGear } from "phosphor-react";
 import { useDispatch, useSelector } from "react-redux";
 import { authLogoutAuction } from "../../../actions/auth.actions";

@@ -1,7 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { MagnifyingGlassIcon } from "../Components/UI/Icons/Index";
-import { Button, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 
 const ListAuctionSidebar = ({ categories, onSortByCategory }) => {
   const handleSortByCategory = id => {

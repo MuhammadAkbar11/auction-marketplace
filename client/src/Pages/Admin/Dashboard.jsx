@@ -25,7 +25,7 @@ const Dashboard = () => {
 
   React.useEffect(() => {
     dispatch(adminGetDashboardDataAction());
-  }, []);
+  }, [dispatch]);
 
   console.log(members);
   let no = 1;

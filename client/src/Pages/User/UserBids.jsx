@@ -2,7 +2,6 @@ import React from "react";
 import { Col, Container, Row, Nav, Card, Tab, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
-import { Link } from "react-router-dom";
 import { userResetPurchaseMessage } from "../../actions/user.purchase.actions";
 import BreadcrumbsContainer from "../../Components/Layouts/BreadcrumbsContainer";
 import Layout from "../../Components/Layouts/Layout";

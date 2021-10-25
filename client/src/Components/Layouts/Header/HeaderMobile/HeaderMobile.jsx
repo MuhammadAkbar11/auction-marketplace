@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Badge, Col, Container, Row, Dropdown } from "react-bootstrap";
-import { User, Heart, UserCircle, SignOut, UserGear } from "phosphor-react";
-import { ListIcon, WishListIcon } from "../../../UI/Icons/Index";
+import { Col, Container, Row, Dropdown } from "react-bootstrap";
+import { User, UserCircle, SignOut, UserGear } from "phosphor-react";
+import { ListIcon } from "../../../UI/Icons/Index";
 import { authLogoutAuction } from "../../../../actions/auth.actions";
 
 const HeaderMobile = ({ toggle }) => {

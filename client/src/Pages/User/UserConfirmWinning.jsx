@@ -44,11 +44,11 @@ const UserConfirmWinning = props => {
     };
 
     loadAuction(invoiceId);
-  }, [invoiceId]);
+  }, [invoiceId, dispatch]);
 
   React.useEffect(() => {
     dispatch(getUserDetailsAction());
-  }, []);
+  }, [dispatch]);
 
   React.useEffect(() => {
     if (!isValidData) {

@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { Route, Redirect, useHistory } from "react-router-dom";
 import { isAdminLogin } from "../../utils/auth";
 

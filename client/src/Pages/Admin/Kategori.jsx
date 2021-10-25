@@ -14,7 +14,6 @@ import {
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import AdminLayout from "../../Components/AdmnLayouts/AdminLayout";
-import { getCategoriesAction } from "../../actions/categories.actions";
 import {
   adminCategoryResetAlertAction,
   adminDeleteCategoryAction,
@@ -49,7 +48,7 @@ const AdminKategori = () => {
         dispatch(adminCategoryResetAlertAction());
       }
     };
-  }, [alert]);
+  }, [alert, dispatch]);
 
   const handleSubmit = async e => {
     e.preventDefault();

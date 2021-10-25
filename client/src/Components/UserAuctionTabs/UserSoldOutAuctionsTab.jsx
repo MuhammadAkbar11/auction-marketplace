@@ -18,7 +18,7 @@ const UserSoldOutAuctionsTab = ({ isActive }) => {
     if (isActive) {
       dispatch(getUserSoldItemsAction());
     }
-  }, [isActive]);
+  }, [isActive, dispatch]);
 
   let no = 1;
 

@@ -1,10 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Col, Container, Row, Nav, Card, Tab, Alert } from "react-bootstrap";
+import { Col, Container, Row, Alert } from "react-bootstrap";
 import Layout from "../../Components/Layouts/Layout";
 import BreadcrumbsContainer from "../../Components/Layouts/BreadcrumbsContainer";
 import UserSidebarMenu from "../../Components/UserMenuLayout/UserSidebarMenu";
-import useIsValidData from "../../hooks/useIsValidData";
 import { getUserTrackShippingAction } from "../../actions/user.purchase.actions";
 import UserWrapperIsValidData from "../../Components/UserWrapperIsValidData";
 import Loader from "../../Components/UI/Loader";
@@ -14,26 +13,13 @@ import UserPickupService from "../../Components/UserShipping/UserPickupService";
 const UserTrackOrder = ({ match }) => {
   const { invoiceId } = match.params;
 
-  const [modalInValidData, setModalInValidData] = React.useState(false);
-
   const dispatch = useDispatch();
-  const [isValidData, loadingValidData] = useIsValidData();
   const trackShippingState = useSelector(state => state.userTrackShipping);
   const shippingData = trackShippingState.details;
 
   React.useEffect(() => {
-    if (!isValidData) {
-      setModalInValidData(true);
-    }
-
-    return () => {
-      setModalInValidData(false);
-    };
-  }, [isValidData]);
-
-  React.useEffect(() => {
     dispatch(getUserTrackShippingAction(invoiceId));
-  }, []);
+  }, [dispatch, invoiceId]);
 
   let content = <UserCourierService data={shippingData} />;
   let breadcrumbText = "Lihat Pengiriman";

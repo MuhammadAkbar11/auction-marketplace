@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Container, Row, Tab, Tabs, Nav, Table } from "react-bootstrap";
+import { Col, Container, Row, Tab, Nav, Table } from "react-bootstrap";
 import convertRupiah from "../utils/convertRupiah";
 import DiscussionRoom from "./DiscussionRoom/DiscussionRoom";
 

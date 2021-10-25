@@ -7,7 +7,7 @@ import {
   getUserAuctionDetailsAction,
   postUserUpdateAuctionAction,
 } from "../../actions/user.actions";
-import { Container, Row, Col, Card, Button, Form } from "react-bootstrap";
+import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import useImagesUploader from "../../hooks/useImagesUploader";
 import UserUpdateAuctionDescription from "../../Components/UserUpdateAuction/UserUpdateAuctionDescription";
 import UserUpdateAuctionRegular from "../../Components/UserUpdateAuction/UserUpdateAuctionRegular";
@@ -15,11 +15,8 @@ import UserUpdateAuctionDelivery from "../../Components/UserUpdateAuction/UserUp
 import { Redirect } from "react-router";
 import Loader from "../../Components/UI/Loader";
 import Layout from "../../Components/Layouts/Layout";
-// import {} from './../'
 
-const yesterday = new Date(Date.now() - 86400000);
-
-const formikSchema = status => {
+const formikSchema = () => {
   return Yup.object().shape({
     category: Yup.string().required("Kategori belum di pilih"),
     title: Yup.string().required("Judul produk belum terisi"),
@@ -33,15 +30,13 @@ const formikSchema = status => {
 };
 
 const UpdateAuction = props => {
-  const { history, match, location } = props;
+  const { history, match } = props;
   const auctionId = match.params?.idAuction;
 
   const { userInfo } = useSelector(state => state.authUser);
   const updateState = useSelector(state => state.userUpdateAuction);
   const { auction, loading } = useSelector(state => state.userAuctionDetails);
   const dispatch = useDispatch();
-
-  const tabKey = new URLSearchParams(location.search).get("tab");
 
   React.useEffect(() => {
     if (!userInfo) {
@@ -50,7 +45,7 @@ const UpdateAuction = props => {
     } else {
       dispatch(getUserAuctionDetailsAction(auctionId));
     }
-  }, [userInfo, auctionId]);
+  }, [userInfo, auctionId, history, dispatch]);
 
   const imagesUploader = useImagesUploader();
 
@@ -68,7 +63,6 @@ const UpdateAuction = props => {
       auctionId,
       category: auction?.id_kategori || "",
       title: auction?.judul || "",
-      status: auction?.status_brg,
       description: auction?.deskripsi || "",
       images: imagesUploader.images,
       openBid: auction?.hrg_awal.replace(/^[0-9]*$/, "") || "",

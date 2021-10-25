@@ -48,7 +48,7 @@ const ListAuctionByCategory = props => {
     } else {
       loadAuctions({ isLoadMore: false });
     }
-  }, [slugQuery]);
+  }, [slugQuery, history]);
 
   const onLoadMore = () => {
     const variables = {

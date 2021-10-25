@@ -25,7 +25,6 @@ import {
 } from "../../actions/user.purchase.actions";
 import BreadcrumbsContainer from "../../Components/Layouts/BreadcrumbsContainer";
 import Layout from "../../Components/Layouts/Layout";
-import SimpleWidgetCard from "../../Components/UI/Cards/SimpleWidgetCard";
 import { AuctionIcon } from "../../Components/UI/Icons/Index";
 import Loader from "../../Components/UI/Loader";
 import Widget from "../../Components/UI/Widget";
@@ -58,7 +57,7 @@ const UserDashboard = () => {
     dispatch(getUserDetailsAction());
     dispatch(getUserWinningAuctionAction());
     dispatch(getUserBidsAction());
-  }, []);
+  }, [dispatch]);
 
   const user = { ...details };
 
@@ -165,7 +164,12 @@ const UserDashboard = () => {
                       </thead>
                       <tbody>
                         {winningAuctionState.loading ? (
-                          <Loader />
+                          <tr>
+                            <td colSpan={5} className="text-center">
+                              {" "}
+                              <Loader />
+                            </td>
+                          </tr>
                         ) : billings.length !== 0 ? (
                           <>
                             {winsAuction.map(item => {
@@ -224,7 +228,7 @@ const UserDashboard = () => {
                                 );
                               }
                               return (
-                                <tr>
+                                <tr key={item?.id_transaksi}>
                                   <td>{billingNo++}</td>
                                   <td className="text-nowrap">
                                     {" "}
@@ -275,7 +279,7 @@ const UserDashboard = () => {
                   <div className="pt-1 mb-2">
                     {followAuctionsLoading ? (
                       <Loader />
-                    ) : followAuctions?.length != 0 ? (
+                    ) : followAuctions?.length !== 0 ? (
                       followAuctions?.map(ac => {
                         return (
                           <Card className="border-0">

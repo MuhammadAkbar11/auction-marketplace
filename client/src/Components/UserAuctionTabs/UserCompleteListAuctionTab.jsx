@@ -34,11 +34,7 @@ const UserCompleteListAuctionTab = ({ isActive }) => {
     if (isActive) {
       dispatch(getUserAuctionsCompleteAction());
     }
-  }, [isActive]);
-
-  const confirmBidHandler = idBid => {
-    dispatch(postUserConfirmBid(idBid));
-  };
+  }, [isActive, dispatch]);
 
   const handleSubmitConfirm = values => {
     dispatch(postUserConfirmBid(values));

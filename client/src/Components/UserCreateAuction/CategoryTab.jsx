@@ -90,6 +90,8 @@ const CategoryTab = () => {
                         if (find) {
                           return cat;
                         }
+
+                        return null;
                       })
                       .map(cat => {
                         return (

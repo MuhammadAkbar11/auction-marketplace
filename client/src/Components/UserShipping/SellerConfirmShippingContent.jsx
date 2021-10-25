@@ -10,7 +10,6 @@ import {
   Row,
 } from "react-bootstrap";
 import convertRupiah from "../../utils/convertRupiah";
-import { convertYupErrorsToObject } from "../../utils/checkObj";
 import { useDispatch } from "react-redux";
 import { postConfirmShippingAction } from "../../actions/user.actions";
 import { Link, useHistory } from "react-router-dom";

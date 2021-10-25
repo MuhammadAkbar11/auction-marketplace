@@ -196,9 +196,6 @@ const PriceAndTimeTab = () => {
                           name: "1 Minggu",
                         },
                       ].map((kondisi, idx) => {
-                        {
-                          /* const key = idx; */
-                        }
                         return (
                           <option key={idx} value={kondisi.value}>
                             {kondisi.name}
