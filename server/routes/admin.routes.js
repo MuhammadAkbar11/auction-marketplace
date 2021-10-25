@@ -7,6 +7,7 @@ import {
   getMembers,
   getMemberDetails,
   adminGetAuctions,
+  adminGetInvoices,
 } from "../controller/admin/master.controller.js";
 import {
   getCategories,
@@ -25,5 +26,7 @@ router.delete("/kategori/:categoryId", adminProtect, deleteCategory);
 router.get("/members", adminProtect, getMembers);
 router.get("/members/:memberId", adminProtect, getMemberDetails);
 router.get("/auctions", adminProtect, adminGetAuctions);
+router.get("/invoices", adminProtect, adminGetInvoices);
+router.get("/invoices/:id", adminProtect, adminGetInvoices);
 
 export default router;

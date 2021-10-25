@@ -94,14 +94,17 @@ app.use(errorHandler);
 
 ModelAdmin.sync();
 
-ModelMember.hasMany(ModelLelang);
-ModelLelang.belongsTo(ModelMember, { foreignKey: foreignKeysData.idMember });
+ModelMember.hasMany(ModelLelang, { as: "seller" });
+ModelLelang.belongsTo(ModelMember, {
+  foreignKey: foreignKeysData.idMember,
+  as: "seller",
+});
 
 // relasi tabel lelang & kategori
+ModelKategori.hasMany(ModelLelang);
 ModelLelang.belongsTo(ModelKategori, {
   foreignKey: foreignKeysData.idKategori,
 });
-ModelKategori.hasMany(ModelLelang);
 
 ModelLelang.hasMany(ModelGaleri);
 ModelGaleri.belongsTo(ModelLelang, { foreignKey: foreignKeysData.idLelang });

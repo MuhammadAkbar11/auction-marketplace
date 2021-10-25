@@ -5,6 +5,10 @@ import ResponseError from "../../utils/responseError.js";
 import ModelMember from "../../models/m_member.js";
 import ModelLelang from "../../models/m_lelang.js";
 import ModelPenawaran from "../../models/m_penawaran.js";
+import ModelDetailTransaksi from "../../models/m_detail_transaksi.js";
+import ModelTransaksi from "../../models/m_transaksi.js";
+import ModelGaleri from "../../models/m_galeri_lelang.js";
+import ModelKategori from "../../models/m_kategori.js";
 
 const Op = Sequelize.Op;
 
@@ -39,11 +43,11 @@ export const getMembers = asyncHandler(async (req, res) => {
         };
       })
     );
-    console.log(members);
 
     return res.status(200).json({
       status: true,
       members,
+      count: members.length,
     });
   } catch (error) {
     throw new ResponseError(error.statusCode, error.message, error.errors);
@@ -70,14 +74,33 @@ export const getMemberDetails = asyncHandler(async (req, res) => {
 });
 
 export const adminGetAuctions = asyncHandler(async (req, res) => {
-  try {
-    let auctions = [];
+  const { filter } = req.query;
 
+  let auctions = [];
+  let whereQuery = {
+    tgl_mulai: {
+      [Op.lte]: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+    },
+  };
+
+  switch (filter) {
+    case "active":
+      whereQuery.status_lelang = {
+        // status_lelang: {
+        [Op.in]: [1],
+        // },
+      };
+      break;
+
+    default:
+      whereQuery = {};
+      break;
+  }
+
+  try {
     const getAuctions = await ModelLelang.findAll({
-      where: {},
-      tgl_mulai: {
-        [Op.lte]: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-      },
+      where: whereQuery,
+
       attributes: {
         exclude: ["ModelMemberIdMember", "ModelKategoriIdKategori"],
       },
@@ -122,6 +145,12 @@ export const adminGetAuctions = asyncHandler(async (req, res) => {
                 })
               : tawaran;
 
+          const category = await ModelKategori.findOne({
+            where: {
+              id_kategori: auctionData.id_kategori,
+            },
+          });
+
           return {
             ...auctionData,
             penjual: seller,
@@ -131,6 +160,7 @@ export const adminGetAuctions = asyncHandler(async (req, res) => {
             tgl_selesai: dayjs(auctionData.tgl_selesai).format(
               "DD/MM/YYYY - HH:mm"
             ),
+            kategori: category,
             tawaran: bidArr,
           };
         })
@@ -138,7 +168,163 @@ export const adminGetAuctions = asyncHandler(async (req, res) => {
     }
     res.status(200).json({
       status: true,
+      filter,
+      count: auctions.length,
       auctions: auctions,
+    });
+  } catch (error) {
+    throw new ResponseError(error.statusCode, error.message, error.errors);
+  }
+});
+
+export const adminGetInvoices = asyncHandler(async (req, res) => {
+  const invoiceId = req.params.id;
+
+  try {
+    if (invoiceId) {
+      const invoice = await ModelDetailTransaksi.findOne({
+        where: {
+          id_detail_transaksi: invoiceId,
+        },
+        attributes: {
+          exclude: ["ModelTransaksiIdTransaksi"],
+        },
+      });
+
+      const transaction = await ModelTransaksi.findOne({
+        where: {
+          id_transaksi: invoice.id_transaksi,
+        },
+        attributes: {
+          exclude: ["ModelPenawaranIdTawaran"],
+        },
+      });
+
+      const bids = await ModelPenawaran.findAll({
+        where: {
+          id_tawaran: transaction.id_tawaran,
+        },
+        order: [["tgl_tawaran", "DESC"]],
+        include: {
+          model: ModelMember,
+          as: "member",
+          attributes: ["id_member", "nama", "username", "email"],
+        },
+        attributes: {
+          exclude: ["ModelMemberIdMember", "ModelLelangIdLelang"],
+        },
+      });
+
+      const auction = await ModelLelang.findOne({
+        where: {
+          id_lelang: bids[0].id_lelang,
+        },
+        include: {
+          model: ModelMember,
+          as: "seller",
+          attributes: ["id_member", "nama", "username", "email"],
+        },
+        attributes: {
+          exclude: ["ModelMemberIdMember", "ModelKategoriIdKategori"],
+        },
+      });
+
+      const auctionImages = await ModelGaleri.findAll({
+        where: {
+          id_lelang: auction.id_lelang,
+        },
+        attributes: {
+          exclude: ["ModelLelangIdLelang"],
+        },
+      });
+
+      invoice.setDataValue("transaksi", transaction);
+      invoice.setDataValue("tawaran", bids);
+      invoice.setDataValue("lelang", auction);
+      invoice.setDataValue("images", auctionImages);
+
+      return res.status(200).json({
+        status: true,
+        ...req.params,
+        invoice,
+      });
+    }
+
+    let invoices = [];
+
+    const getInvoices = await ModelDetailTransaksi.findAll({
+      where: {},
+      attributes: {
+        exclude: ["ModelTransaksiIdTransaksi"],
+      },
+    });
+
+    if (getInvoices.length !== 0) {
+      invoices = await Promise.all(
+        getInvoices.map(async inv => {
+          const invData = inv.dataValues;
+          const transactionId = invData?.id_transaksi;
+
+          if (transactionId) {
+            const transaction = await ModelTransaksi.findOne({
+              where: {
+                id_transaksi: invData.id_transaksi,
+              },
+              attributes: {
+                exclude: ["ModelPenawaranIdTawaran"],
+              },
+            });
+
+            const bids = await ModelPenawaran.findAll({
+              where: {
+                id_tawaran: transaction.id_tawaran,
+              },
+              order: [["tgl_tawaran", "DESC"]],
+              include: {
+                model: ModelMember,
+                as: "member",
+                attributes: ["id_member", "nama", "username", "email"],
+              },
+              attributes: {
+                exclude: ["ModelMemberIdMember", "ModelLelangIdLelang"],
+              },
+            });
+
+            const auction = await ModelLelang.findOne({
+              where: {
+                id_lelang: bids[0].id_lelang,
+              },
+              include: {
+                model: ModelMember,
+                as: "seller",
+                attributes: ["id_member", "nama", "username", "email"],
+              },
+              attributes: {
+                exclude: ["ModelMemberIdMember", "ModelKategoriIdKategori"],
+              },
+            });
+
+            return {
+              ...invData,
+              transaksi: transaction,
+              tawaran: bids,
+              lelang: auction,
+            };
+          }
+
+          return null;
+        })
+      );
+    }
+
+    const invoiceFiltered =
+      invoices.length !== 0 ? invoices.filter(item => item !== null) : [];
+
+    res.status(200).json({
+      status: true,
+      ...req.params,
+      count: invoiceFiltered.length,
+      invoices: invoiceFiltered,
     });
   } catch (error) {
     throw new ResponseError(error.statusCode, error.message, error.errors);
