@@ -13,7 +13,7 @@ const WidgetCard = ({
   return (
     <>
       <Card className={` bg-white ${!bordered && "shadow-sm border-0"} pb-2`}>
-        <Card.Body className="widget-card px-3 ">
+        <Card.Body className="widget-card flex-wrap px-3 ">
           <div
             className={`widget-card-icon  text-white bg-${variant} text-${color}`}
           >
