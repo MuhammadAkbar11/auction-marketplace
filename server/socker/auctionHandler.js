@@ -56,7 +56,7 @@ export default io => {
     if (getDateEnd.length !== 0) {
       await ModelLelang.update(
         { status_lelang: 2 },
-        { where: { id_lelang: [...idCloseAuctions] } }
+        { where: { id_lelang: [...idCloseAuctions], status_lelang: 1 } }
       );
     }
 

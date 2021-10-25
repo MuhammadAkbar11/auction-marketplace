@@ -148,7 +148,10 @@ const UserSoldOutAuctionsTab = ({ isActive }) => {
                           if (+ac.status_transaksi === 4) {
                             if (ac.jenis_pengiriman === "PICKUP") {
                               return (
-                                <Link className=" btn btn-sm btn-danger text-nowrap text-spacing-0  ">
+                                <Link
+                                  to={`/akun/konfirmasi-penjemputan/${ac.id_transaksi}`}
+                                  className=" btn btn-sm btn-danger text-nowrap text-spacing-0  "
+                                >
                                   Menunggu penjemputan
                                 </Link>
                               );

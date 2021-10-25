@@ -499,14 +499,12 @@ export const postUserPayment = asyncHandler(async (req, res) => {
 
 export const getTrackShipping = asyncHandler(async (req, res) => {
   const invoiceId = req.params.id;
-  console.log(req.params);
+
   try {
     if (!invoiceId) {
       res.status(400);
       throw new ResponseError(400, "Id transkasi tidak ditemukan");
     }
-
-    console.log(invoiceId);
 
     const invoice = await ModelTransaksi.findOne({
       where: {

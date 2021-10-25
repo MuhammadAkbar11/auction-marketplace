@@ -1070,6 +1070,32 @@ export const getCustomerShippingDetails = asyncHandler(async (req, res) => {
       },
     });
 
+    const highestBid = await ModelPenawaran.findOne({
+      where: {
+        id_tawaran: invoice.id_tawaran,
+      },
+      attributes: {
+        exclude: ["ModelLelangIdLelang", "ModelMemberIdMember"],
+      },
+    });
+
+    const auction = await ModelLelang.findOne({
+      where: {
+        id_lelang: highestBid.id_lelang,
+      },
+      attributes: {
+        exclude: ["ModelMemberIdMember", "ModelKategoriIdKategori"],
+      },
+    });
+
+    const auctionImages = await ModelGaleri.findAll({
+      where: {
+        id_lelang: auction.id_lelang,
+      },
+    });
+
+    auction.setDataValue("gambar", auctionImages);
+
     const shipping = await ModelPengiriman.findOne({
       where: {
         id_transaksi: invoiceId,
@@ -1091,7 +1117,8 @@ export const getCustomerShippingDetails = asyncHandler(async (req, res) => {
           : ""
       );
     }
-
+    invoice.setDataValue("tawaran", highestBid);
+    invoice.setDataValue("lelang", auction);
     invoice.setDataValue("pengiriman", shipping);
 
     return res.status(200).json({

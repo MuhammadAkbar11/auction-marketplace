@@ -1,77 +1,41 @@
 import React from "react";
-import * as yup from "yup";
-import {
-  Alert,
-  Button,
-  Card,
-  Col,
-  Form,
-  ListGroup,
-  Row,
-} from "react-bootstrap";
+import { Alert, Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 import convertRupiah from "../../utils/convertRupiah";
 
-import { useDispatch } from "react-redux";
-import { postConfirmShippingAction } from "../../actions/user.actions";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
+import useIndonesianArea from "../../hooks/useIndonesianArea";
 
-const schema = yup.object().shape({
-  no_resi: yup
-    .number()
-    .typeError("Nomor resi harus berupa angka")
-    .required("Nomor resi belum terisi"),
-});
-
-const SellerConfirmPickupContent = ({ data }) => {
-  const [loading, setLoading] = React.useState(false);
-  const [errors, setErrors] = React.useState(false);
-  const [resiInput, setResiInput] = React.useState(
-    data?.pengiriman?.no_resi || ""
-  );
-  const [resiInputErr, setResiInputErr] = React.useState(null);
-
-  const history = useHistory();
-  const dispatch = useDispatch();
-
-  const destination = JSON.parse(data?.alamat_tujuan);
-
-  const handleSubmit = async e => {
-    e.preventDefault();
-    setLoading(true);
-    setErrors(false);
-    setResiInputErr(null);
-    // return;
-    try {
-      const values = await schema.validateSync({
-        no_resi: resiInput,
-      });
-
-      await dispatch(
-        postConfirmShippingAction({
-          id_transaksi: data.id_transaksi,
-          ...values,
-        })
-      );
-      setLoading(false);
-      history.push("/akun/lelang?tab=sold");
-    } catch (err) {
-      // console.log(errs.errors);
-      // const errMsg = convertYupErrorsToObject(errs.errors);
-      setLoading(false);
-      if (err.name === "ValidationError") {
-        setResiInputErr(err.errors[0]);
-      } else {
-        setErrors(true);
-      }
-    }
+const SellerConfirmPickupContent = ({
+  data,
+  loading,
+  errors,
+  onCloseErrors,
+  onShowModal,
+}) => {
+  const { id_provinsi, id_kota, id_kecamatan, id_kelurahan, alamat, kode_pos } =
+    JSON.parse(data?.lelang?.alamat_barang);
+  const indonesianArea = useIndonesianArea(id_provinsi, id_kota, id_kecamatan);
+  const { provinsi, kota, kecamatan, kelurahan } = indonesianArea;
+  const destination = {
+    alamat,
+    kode_pos,
+    provinsi: provinsi.filter(prv => prv.id === +id_provinsi)[0],
+    kota: kota.filter(kota => kota.id === +id_kota)[0],
+    kecamatan: kecamatan.filter(kecamatan => kecamatan.id === +id_kecamatan)[0],
+    kelurahan: kelurahan.filter(kelurahan => kelurahan.id === +id_kelurahan)[0],
   };
 
-  console.log(data);
+  const auction = data?.lelang;
+
   return (
     <main>
       <section className="my-3">
         {errors && (
-          <Alert variant="danger" onClose={() => setErrors(false)} dismissible>
+          <Alert
+            variant="danger"
+            onClose={() => onCloseErrors(false)}
+            dismissible
+          >
             <p>Konfirmasi gagal! silahkan coba lagi</p>
           </Alert>
         )}
@@ -79,105 +43,104 @@ const SellerConfirmPickupContent = ({ data }) => {
       <section>
         <h4>Konfirmasi pengiriman</h4>
         <p>ID {data?.id_transaksi}</p>
-        <Form onSubmit={handleSubmit}>
-          <Row>
-            <Col lg={6}>
-              <Card className="border-0 pl-0">
-                <Card.Body className="pl-0">
-                  <div className="mb-3">
-                    <h6 className="mb-2">Alamat Tujuan</h6>
-                    <div>{destination.alamat}</div>
-                    <div>
-                      {destination.kelurahan}, {destination.kecamatan},{" "}
-                      {destination.kota}, <br />
-                      {destination.provinsi},
-                    </div>
+        {/* <Form onSubmit={handleSubmit}> */}
+        <Row>
+          <Col lg={6}>
+            <Card className="border-0 pl-0">
+              <Card.Body className="pl-0">
+                <div className="mb-3">
+                  <h6 className="mb-2">Alamat Jemputan</h6>
+                  <div>{destination.alamat}</div>
+                  <div className="mt-1">
+                    {destination.kelurahan?.nama}, {destination.kecamatan?.nama}
+                    , {destination.kota?.nama}, <br />
+                    {destination.provinsi?.nama}, {destination?.kode_pos}
                   </div>
+                </div>
 
-                  <div className="mt-3 mb-3">
-                    <h6 className="mb-2">Penerima</h6>
-                    <div>
-                      {data.nama_penerima} <br />
-                      {data.nohp_penerima}
+                <div className="mt-3 mb-3">
+                  <h6 className="mb-2">Penjemput</h6>
+                  <div>
+                    {data.nama_penerima} <br />
+                    {data.nohp_penerima}
+                  </div>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col lg={6}>
+            <Card>
+              <Card.Header className=" d-flex justify-content-between border-bottom-0  bg-transparent pb-0">
+                <Card.Title className="mb-0">Ringkasan</Card.Title>
+              </Card.Header>
+              <Card.Body>
+                <p>
+                  Silahkan masukan no resi untuk mengkonfirmasi pengiriman
+                  barang
+                </p>
+                <ListGroup className="pl-0  ">
+                  <ListGroup.Item className="pl-0 border-0 pt-0 pb-1   ">
+                    <div className="d-flex flex-row justify-content-between ">
+                      <div className=" d-flex flex-column flex-md-row text-gray-600">
+                        <img
+                          style={{
+                            width: 80,
+                          }}
+                          src={`${auction?.gambar[0].url}`}
+                          alt=""
+                          className="pr-2"
+                        />
+                        <p className="text-spacing-1 text-gray-600 mt-1  text-capitalize">
+                          {auction?.judul}
+                        </p>
+                      </div>
+                      <div className=" text-primary ">
+                        Rp. {convertRupiah(+data?.total_harga - +data?.ongkir)}
+                      </div>
                     </div>
-                  </div>
-                  <div className="mt-3 mb-3">
-                    <h6 className="mb-2">Nomor Resi</h6>
+                  </ListGroup.Item>
 
-                    <Form.Group controlId="no_resi">
-                      <Form.Control
-                        type="text"
-                        placeholder="Nomor Resi"
-                        name="no_resi"
-                        value={resiInput}
-                        className="bg-transparent border"
-                        onChange={e => setResiInput(e.target.value)}
-                        isInvalid={!!resiInputErr}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {resiInputErr}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col lg={6}>
-              <Card>
-                <Card.Header className=" d-flex justify-content-between border-bottom-0  bg-transparent pb-0">
-                  <Card.Title className="mb-0">Ringkasan</Card.Title>
-                </Card.Header>
-                <Card.Body>
-                  <p>
-                    Silahkan masukan no resi untuk mengkonfirmasi pengiriman
-                    barang
-                  </p>
-                  <ListGroup className="pl-0  ">
-                    <ListGroup.Item className="pl-0 border-0 pt-0 pb-1   ">
-                      <div className="d-flex flex-column flex-md-column flex-lg-row justify-content-between ">
-                        <div className=" text-gray-600">Sub Total</div>
-                        <div className=" text-primary ">
-                          Rp.{" "}
-                          {convertRupiah(+data?.total_harga - +data?.ongkir)}
-                        </div>
+                  <ListGroup.Item className="pl-0 border-top-0 border-left-0 border-right-0 pt-1 pb-2   ">
+                    <div className="d-flex flex-row justify-content-between ">
+                      <div className=" text-gray-600    ">Ongkir</div>
+                      <div className=" text-primary ">
+                        Rp. {convertRupiah(+data?.ongkir)}
                       </div>
-                    </ListGroup.Item>
-                    <ListGroup.Item className="pl-0 border-top-0 border-left-0 border-right-0 pt-1 pb-2   ">
-                      <div className="d-flex flex-column flex-md-column flex-lg-row justify-content-between ">
-                        <div className=" text-gray-600    ">Ongkir</div>
-                        <div className=" text-primary ">
-                          Rp. {convertRupiah(+data?.ongkir)}
-                        </div>
+                    </div>
+                  </ListGroup.Item>
+                  <ListGroup.Item className="pl-0 border-0 pt-2 pb-1   ">
+                    <div className="d-flex flex-row justify-content-between ">
+                      <div className=" text-primary font-weight-bold">
+                        Total Harga
                       </div>
-                    </ListGroup.Item>
-                    <ListGroup.Item className="pl-0 border-0 pt-2 pb-1   ">
-                      <div className="d-flex flex-column flex-md-column flex-lg-row justify-content-between ">
-                        <div className=" text-primary font-weight-bold">
-                          Total
-                        </div>
-                        <div className=" text-primary font-weight-bold">
-                          Rp. {convertRupiah(+data?.total_harga)}
-                        </div>
+                      <div className=" text-primary font-weight-bold">
+                        Rp. {convertRupiah(+data?.total_harga)}
                       </div>
-                    </ListGroup.Item>
-                  </ListGroup>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col xs={12} className="d-flex ">
-              <Link
-                to="/akun/lelang?tab=sold"
-                className="btn btn-outline-primary mr-2"
-              >
-                {" "}
-                Kembali{" "}
-              </Link>
-              <Button variant="primary" disabled={loading} type="submit">
-                Konfirmasi
-              </Button>
-            </Col>
-          </Row>
-        </Form>
+                    </div>
+                  </ListGroup.Item>
+                </ListGroup>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col xs={12} className="d-flex mt-3">
+            <Link
+              to="/akun/lelang?tab=sold"
+              className="btn btn-outline-primary mr-2"
+            >
+              {" "}
+              Kembali{" "}
+            </Link>
+            <Button
+              variant="primary"
+              disabled={loading}
+              onClick={onShowModal}
+              type="submit"
+            >
+              Konfirmasi Jemputan
+            </Button>
+          </Col>
+        </Row>
+        {/* </Form> */}
       </section>
     </main>
   );
