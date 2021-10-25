@@ -14,7 +14,7 @@ import {
   Badge,
 } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { Info } from "phosphor-react";
+import { Info, Timer } from "phosphor-react";
 import { Link } from "react-router-dom";
 import { adminGetListAuctionsAction } from "../../actions/admin/auctions.actions";
 
@@ -60,8 +60,7 @@ const AdminAuctions = () => {
                     <tr>
                       <th>Judul Lelang</th>
                       <th>Penjual</th>
-                      <th>Dimulai</th>
-                      <th>Berakhir</th>
+                      <th>Waktu</th>
                       <th>Total Bids</th>
                       <th>Penawaran tertinggi</th>
                       <th>Status</th>
@@ -84,10 +83,24 @@ const AdminAuctions = () => {
                       </tr>
                     ) : (
                       auctions.map(ac => {
-                        let status = <Badge variant="primary">Aktif</Badge>;
+                        let status = (
+                          <Badge
+                            variant="primary"
+                            className=" font-weight-light px-3 py-1 "
+                          >
+                            Aktif
+                          </Badge>
+                        );
 
                         if (ac.status_lelang >= 2) {
-                          status = <Badge variant="danger">Berakhir</Badge>;
+                          status = (
+                            <Badge
+                              variant="danger"
+                              className=" font-weight-light px-3 py-1 "
+                            >
+                              Berakhir
+                            </Badge>
+                          );
                         }
 
                         return (
@@ -100,9 +113,28 @@ const AdminAuctions = () => {
                             <td className="text-nowrap">
                               {ac.penjual?.username}
                             </td>
-                            <td className="text-nowrap">{ac.tgl_mulai}</td>
-                            <td className="text-nowrap">{ac.tgl_selesai}</td>
-                            <td className="text-success">
+                            <td>
+                              {" "}
+                              <div className="d-flex flex-nowrap flex-column">
+                                <div className="text-nowrap">
+                                  <Timer
+                                    weight="duotone"
+                                    size={23}
+                                    className="text-success"
+                                  />{" "}
+                                  {ac?.tgl_mulai}
+                                </div>
+                                <div className="text-nowrap mt-2">
+                                  <Timer
+                                    weight="duotone"
+                                    size={23}
+                                    className="text-danger"
+                                  />{" "}
+                                  {ac?.tgl_selesai}
+                                </div>
+                              </div>
+                            </td>
+                            <td className="text-success text-nowrap">
                               {ac?.tawaran.length} Tawaran
                             </td>
                             <td className="  font-weight-normal text-black-50 ">
