@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.5deb2
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Waktu pembuatan: 22 Sep 2021 pada 11.37
--- Versi server: 8.0.26-0ubuntu0.20.04.2
--- Versi PHP: 7.4.3
+-- Waktu pembuatan: 26 Okt 2021 pada 10.45
+-- Versi server: 10.6.4-MariaDB
+-- Versi PHP: 8.0.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -29,26 +28,26 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `tbl_admin` (
-  `id_admin` varchar(20) NOT NULL,
-  `nama_admin` varchar(50) DEFAULT NULL,
-  `username` varchar(20) DEFAULT NULL,
-  `email` varchar(20) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `alamat` text,
-  `no_hp` varchar(20) DEFAULT NULL,
-  `no_ktp` varchar(16) DEFAULT NULL,
+  `id_admin` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nama_admin` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `username` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `alamat` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `no_hp` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `no_ktp` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tgl_lahir` date DEFAULT NULL,
-  `foto` varchar(255) DEFAULT NULL,
+  `foto` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tgl_dibuat` datetime NOT NULL,
   `tgl_diubah` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data untuk tabel `tbl_admin`
 --
 
 INSERT INTO `tbl_admin` (`id_admin`, `nama_admin`, `username`, `email`, `password`, `alamat`, `no_hp`, `no_ktp`, `tgl_lahir`, `foto`, `tgl_dibuat`, `tgl_diubah`) VALUES
-('ADM001', 'Admin', 'Admin', 'admin@gmail.com', '$2a$12$U0h1AV58H.i7F8jNfBYWh.DQSI1.fwP5ok3rMzRGZgZ40BQOfFchG', NULL, '081310750003', NULL, NULL, NULL, '2021-08-22 16:31:02', '2021-08-22 16:31:02');
+('ADM001', 'admin', 'admin', 'admin@yahoo.com', '$2a$12$CggmH7YsTgQ/xezeBLr4COra69PulVEiZHuBZON5Buu5X.E/hbfmW', 'Jakarta', NULL, '0000000000000', NULL, NULL, '2021-10-24 11:58:10', '2021-10-24 11:58:10');
 
 -- --------------------------------------------------------
 
@@ -57,13 +56,13 @@ INSERT INTO `tbl_admin` (`id_admin`, `nama_admin`, `username`, `email`, `passwor
 --
 
 CREATE TABLE `tbl_akun_bank` (
-  `id_akun` int NOT NULL,
-  `no_rek` varchar(25) DEFAULT NULL,
-  `nama_rek` varchar(50) DEFAULT NULL,
-  `nama_bank` varchar(25) DEFAULT NULL,
-  `ModelMemberIdMember` varchar(10) DEFAULT NULL,
-  `id_member` varchar(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id_akun` int(11) NOT NULL,
+  `no_rek` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nama_rek` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nama_bank` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ModelMemberIdMember` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_member` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -72,22 +71,15 @@ CREATE TABLE `tbl_akun_bank` (
 --
 
 CREATE TABLE `tbl_detail_transaksi` (
-  `_id` int DEFAULT NULL,
-  `id_detail_transaksi` varchar(12) NOT NULL,
-  `status` varchar(20) DEFAULT NULL,
+  `_id` int(11) DEFAULT NULL,
+  `id_detail_transaksi` varchar(12) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `waktu_update` datetime DEFAULT NULL,
   `tgl_dibuat` datetime NOT NULL,
   `tgl_diubah` datetime NOT NULL,
-  `ModelTransaksiIdTransaksi` varchar(11) DEFAULT NULL,
-  `id_transaksi` varchar(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data untuk tabel `tbl_detail_transaksi`
---
-
-INSERT INTO `tbl_detail_transaksi` (`_id`, `id_detail_transaksi`, `status`, `waktu_update`, `tgl_dibuat`, `tgl_diubah`, `ModelTransaksiIdTransaksi`, `id_transaksi`) VALUES
-(1, 'INV230821001', '0', NULL, '2021-08-23 22:13:12', '2021-08-23 22:28:46', NULL, '2308210002');
+  `ModelTransaksiIdTransaksi` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_transaksi` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -96,11 +88,11 @@ INSERT INTO `tbl_detail_transaksi` (`_id`, `id_detail_transaksi`, `status`, `wak
 --
 
 CREATE TABLE `tbl_galeri_lelang` (
-  `id_galeri` int NOT NULL,
-  `url` varchar(128) DEFAULT NULL,
-  `ModelLelangIdLelang` varchar(11) DEFAULT NULL,
-  `id_lelang` varchar(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id_galeri` int(11) NOT NULL,
+  `url` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ModelLelangIdLelang` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_lelang` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -109,10 +101,10 @@ CREATE TABLE `tbl_galeri_lelang` (
 --
 
 CREATE TABLE `tbl_kategori` (
-  `id_kategori` int NOT NULL,
-  `slug` varchar(128) DEFAULT NULL,
-  `kategori` varchar(128) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id_kategori` int(11) NOT NULL,
+  `slug` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `kategori` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data untuk tabel `tbl_kategori`
@@ -123,7 +115,7 @@ INSERT INTO `tbl_kategori` (`id_kategori`, `slug`, `kategori`) VALUES
 (2, 'komputer', 'Komputer'),
 (3, 'handphone-&-tablet', 'Handphone & Tablet'),
 (4, 'perlengkapan-rumah', 'Perlengkapan Rumah'),
-(5, 'dumb', 'Dumb'),
+(5, 'dumbb', 'Dumb'),
 (6, 'elektronik', 'Elektronik'),
 (7, 'mainan', 'Mainan'),
 (8, 'otomotif', 'Otomotif'),
@@ -143,28 +135,28 @@ INSERT INTO `tbl_kategori` (`id_kategori`, `slug`, `kategori`) VALUES
 --
 
 CREATE TABLE `tbl_lelang` (
-  `_id` int DEFAULT NULL,
-  `id_lelang` varchar(11) NOT NULL,
-  `judul` varchar(50) DEFAULT NULL,
-  `status_brg` varchar(30) DEFAULT NULL,
-  `hrg_awal` varchar(30) DEFAULT NULL,
-  `kelipatan_hrg` varchar(20) DEFAULT NULL,
-  `batas_tawaran` int DEFAULT NULL,
-  `deskripsi` text,
+  `_id` int(11) DEFAULT NULL,
+  `id_lelang` varchar(11) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `judul` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status_brg` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `hrg_awal` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `kelipatan_hrg` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `batas_tawaran` int(11) DEFAULT NULL,
+  `deskripsi` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tgl_mulai` datetime DEFAULT NULL,
   `tgl_selesai` datetime DEFAULT NULL,
-  `status_lelang` int DEFAULT '0',
-  `alamat_barang` varchar(255) DEFAULT NULL,
-  `jenis_pengiriman` varchar(128) DEFAULT NULL,
-  `dimensi_brg` varchar(128) DEFAULT NULL,
-  `biaya_packing` varchar(30) DEFAULT NULL,
+  `status_lelang` int(11) DEFAULT 0,
+  `alamat_barang` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `jenis_pengiriman` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `dimensi_brg` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `biaya_packing` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tgl_dibuat` datetime NOT NULL,
   `tgl_diubah` datetime NOT NULL,
-  `ModelMemberIdMember` varchar(10) DEFAULT NULL,
-  `id_member` varchar(11) DEFAULT NULL,
-  `id_kategori` int DEFAULT NULL,
-  `ModelKategoriIdKategori` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `ModelMemberIdMember` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_member` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_kategori` int(11) DEFAULT NULL,
+  `ModelKategoriIdKategori` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -173,24 +165,24 @@ CREATE TABLE `tbl_lelang` (
 --
 
 CREATE TABLE `tbl_member` (
-  `id_member` varchar(10) NOT NULL,
-  `nama` varchar(50) DEFAULT NULL,
-  `username` varchar(20) DEFAULT NULL,
-  `email` varchar(20) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `alamat` text,
-  `kode_pos` varchar(10) DEFAULT NULL,
-  `no_hp` varchar(15) DEFAULT NULL,
-  `no_ktp` varchar(16) DEFAULT NULL,
-  `id_provinsi` varchar(11) DEFAULT NULL,
-  `id_kota` varchar(11) DEFAULT NULL,
-  `id_kecamatan` varchar(15) DEFAULT NULL,
-  `id_kelurahan` varchar(20) DEFAULT NULL,
+  `id_member` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nama` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `username` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `alamat` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `kode_pos` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `no_hp` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `no_ktp` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_provinsi` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_kota` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_kecamatan` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_kelurahan` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tgl_lahir` date DEFAULT NULL,
-  `foto` varchar(255) DEFAULT NULL,
+  `foto` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tgl_dibuat` datetime NOT NULL,
   `tgl_diubah` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -199,16 +191,16 @@ CREATE TABLE `tbl_member` (
 --
 
 CREATE TABLE `tbl_pengiriman` (
-  `id_pengiriman` int NOT NULL,
-  `status` varchar(25) DEFAULT NULL,
+  `id_pengiriman` int(11) NOT NULL,
+  `status` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tgl_dikirim` datetime DEFAULT NULL,
   `tgl_diterima` datetime DEFAULT NULL,
-  `no_resi` varchar(128) DEFAULT NULL,
+  `no_resi` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tgl_dibuat` datetime NOT NULL,
   `tgl_diubah` datetime NOT NULL,
-  `ModelTransaksiIdTransaksi` varchar(11) DEFAULT NULL,
-  `id_transaksi` varchar(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `ModelTransaksiIdTransaksi` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_transaksi` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -218,15 +210,15 @@ CREATE TABLE `tbl_pengiriman` (
 
 CREATE TABLE `tbl_pesan_diskusi` (
   `id_pesan` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `isi_pesan` text,
+  `isi_pesan` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `id_parent` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `tgl_dibuat` datetime NOT NULL,
   `tgl_diubah` datetime NOT NULL,
-  `ModelMemberIdMember` varchar(10) DEFAULT NULL,
-  `id_member` varchar(11) DEFAULT NULL,
+  `ModelMemberIdMember` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_member` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ModelRuangDiskusiIdRuang` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `id_ruang` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -236,24 +228,9 @@ CREATE TABLE `tbl_pesan_diskusi` (
 
 CREATE TABLE `tbl_ruang_diskusi` (
   `id_ruang` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `ModelLelangIdLelang` varchar(11) DEFAULT NULL,
-  `id_lelang` varchar(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data untuk tabel `tbl_ruang_diskusi`
---
-
-INSERT INTO `tbl_ruang_diskusi` (`id_ruang`, `ModelLelangIdLelang`, `id_lelang`) VALUES
-('0519c09c-4e84-467f-b646-06bbe3c91819', NULL, NULL),
-('4fb5e79d-ded9-4550-957f-ce8b786dad41', NULL, NULL),
-('83da97fa-90ef-4bef-bdc1-3dfb9e0cb6ad', NULL, NULL),
-('914ff8f8-643a-474e-83ba-58ea28377d49', NULL, NULL),
-('9ae7efee-8def-492c-9c64-219922b621a4', NULL, NULL),
-('add877b8-29e1-4a45-a72c-a89cc1641767', NULL, NULL),
-('af8e4b33-6c88-4824-b1d0-6328874232c5', NULL, NULL),
-('c7866192-54e3-4759-985b-376b9445aaf1', NULL, NULL),
-('ff2c568f-0612-4670-a97c-e57a5827149d', NULL, NULL);
+  `ModelLelangIdLelang` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_lelang` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -262,25 +239,15 @@ INSERT INTO `tbl_ruang_diskusi` (`id_ruang`, `ModelLelangIdLelang`, `id_lelang`)
 --
 
 CREATE TABLE `tbl_tawaran` (
-  `id_tawaran` varchar(7) NOT NULL,
-  `status_tawaran` int DEFAULT NULL,
-  `nilai_tawaran` varchar(255) DEFAULT NULL,
+  `id_tawaran` varchar(7) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status_tawaran` int(11) DEFAULT NULL,
+  `nilai_tawaran` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tgl_tawaran` datetime NOT NULL,
-  `ModelLelangIdLelang` varchar(11) DEFAULT NULL,
-  `id_lelang` varchar(11) DEFAULT NULL,
-  `ModelMemberIdMember` varchar(10) DEFAULT NULL,
-  `id_member` varchar(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data untuk tabel `tbl_tawaran`
---
-
-INSERT INTO `tbl_tawaran` (`id_tawaran`, `status_tawaran`, `nilai_tawaran`, `tgl_tawaran`, `ModelLelangIdLelang`, `id_lelang`, `ModelMemberIdMember`, `id_member`) VALUES
-('BID0001', 0, '190.000', '2021-08-22 16:51:13', NULL, NULL, NULL, NULL),
-('BID0002', 0, '210.000', '2021-08-22 16:51:17', NULL, NULL, NULL, NULL),
-('BID0003', 1, '140.000', '2021-08-23 22:06:46', NULL, NULL, NULL, NULL),
-('BID0004', 1, '200.000', '2021-08-23 22:09:05', NULL, NULL, NULL, NULL);
+  `ModelLelangIdLelang` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_lelang` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ModelMemberIdMember` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_member` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -289,32 +256,24 @@ INSERT INTO `tbl_tawaran` (`id_tawaran`, `status_tawaran`, `nilai_tawaran`, `tgl
 --
 
 CREATE TABLE `tbl_transaksi` (
-  `_id` int DEFAULT NULL,
-  `id_transaksi` varchar(11) NOT NULL,
-  `nama_penerima` varchar(50) DEFAULT NULL,
-  `nohp_penerima` varchar(20) DEFAULT NULL,
-  `alamat_tujuan` text,
-  `total_harga` varchar(20) DEFAULT NULL,
-  `status_bayar` int DEFAULT NULL,
+  `_id` int(11) DEFAULT NULL,
+  `id_transaksi` varchar(11) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nama_penerima` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nohp_penerima` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `alamat_tujuan` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `total_harga` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status_bayar` int(11) DEFAULT NULL,
   `tgl_bayar` datetime DEFAULT NULL,
-  `bukti_transfer` varchar(225) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `bukti_transfer` varchar(225) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `batas_waktu_bayar` datetime DEFAULT NULL,
-  `jenis_pengiriman` varchar(30) DEFAULT NULL,
-  `ongkir` varchar(20) DEFAULT NULL,
-  `status_transaksi` varchar(11) DEFAULT NULL,
+  `jenis_pengiriman` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ongkir` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status_transaksi` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tgl_dibuat` datetime NOT NULL,
   `tgl_diubah` datetime NOT NULL,
-  `ModelPenawaranIdTawaran` varchar(7) DEFAULT NULL,
-  `id_tawaran` varchar(7) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data untuk tabel `tbl_transaksi`
---
-
-INSERT INTO `tbl_transaksi` (`_id`, `id_transaksi`, `nama_penerima`, `nohp_penerima`, `alamat_tujuan`, `total_harga`, `status_bayar`, `tgl_bayar`, `bukti_transfer`, `batas_waktu_bayar`, `jenis_pengiriman`, `ongkir`, `status_transaksi`, `tgl_dibuat`, `tgl_diubah`, `ModelPenawaranIdTawaran`, `id_tawaran`) VALUES
-(1, '2308210001', NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, '0', '2021-08-23 22:07:43', '2021-08-23 22:07:43', NULL, 'BID0003'),
-(2, '2308210002', 'unit', '085433336666', '{\"provinsi\":\"Jawa Barat\",\"kota\":\"Kota Bekasi\",\"kecamatan\":\"Pondokgede\",\"kelurahan\":\"Jatimakmur\",\"alamat\":\"user address\",\"kode_pos\":\"123456\"}', '260000', 0, '2021-08-23 22:28:46', '{\"bank_tujuan\":{\"id_akun\":1,\"no_rek\":\"48659430003\",\"nama_rek\":\"Momo\",\"nama_bank\":\"Mandiri\",\"id_member\":\"MBR005\"},\"bukti\":\"/uploads/payments/BaeBid-2308210002_2021-08-23.jfif\"}', '2021-08-24 22:11:56', 'COURIER_SERVICE', '40000', '2', '2021-08-23 22:10:42', '2021-08-23 22:28:46', NULL, 'BID0004');
+  `ModelPenawaranIdTawaran` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_tawaran` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Indexes for dumped tables
@@ -432,25 +391,25 @@ ALTER TABLE `tbl_transaksi`
 -- AUTO_INCREMENT untuk tabel `tbl_akun_bank`
 --
 ALTER TABLE `tbl_akun_bank`
-  MODIFY `id_akun` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_akun` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT untuk tabel `tbl_galeri_lelang`
 --
 ALTER TABLE `tbl_galeri_lelang`
-  MODIFY `id_galeri` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+  MODIFY `id_galeri` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- AUTO_INCREMENT untuk tabel `tbl_kategori`
 --
 ALTER TABLE `tbl_kategori`
-  MODIFY `id_kategori` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT untuk tabel `tbl_pengiriman`
 --
 ALTER TABLE `tbl_pengiriman`
-  MODIFY `id_pengiriman` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pengiriman` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
