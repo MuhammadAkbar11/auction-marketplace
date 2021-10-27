@@ -1,7 +1,15 @@
 import React from "react";
 import AdminLayout from "../../Components/AdmnLayouts/AdminLayout";
 import { Users, Hand, Handshake, Calendar, Timer } from "phosphor-react";
-import { Container, Row, Col, Card, Table, Button } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Table,
+  Button,
+  Alert,
+} from "react-bootstrap";
 import { IdentificationCard } from "phosphor-react";
 import { useDispatch, useSelector } from "react-redux";
 import WidgetCard from "../../Components/UI/WidgetCard";
@@ -146,8 +154,11 @@ const Dashboard = () => {
                       })
                     ) : (
                       <tr>
-                        {" "}
-                        <td colSpan={6}>Null</td>
+                        <td colSpan={6}>
+                          <Alert variant="info" className="text-center">
+                            Belum ada tagihan
+                          </Alert>
+                        </td>
                       </tr>
                     )}
                   </tbody>
@@ -174,7 +185,6 @@ const Dashboard = () => {
                     {loading ? (
                       <tr>
                         <td colSpan={6}>
-                          {" "}
                           <Loader size={20} />{" "}
                         </td>
                       </tr>
@@ -200,8 +210,11 @@ const Dashboard = () => {
                             })
                         ) : (
                           <tr>
-                            {" "}
-                            <td colSpan={6}>Null</td>
+                            <td colSpan={8}>
+                              <Alert variant="info" className="text-center">
+                                Belum ada member
+                              </Alert>
+                            </td>
                           </tr>
                         )}
                       </>

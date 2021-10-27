@@ -189,8 +189,7 @@ const AdminInvoiceList = () => {
                         })
                       ) : (
                         <tr>
-                          {" "}
-                          <td colSpan={6}>
+                          <td colSpan={8}>
                             <Alert variant="info" className="text-center">
                               Belum ada laporan{" "}
                             </Alert>

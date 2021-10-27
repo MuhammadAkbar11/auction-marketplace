@@ -9,10 +9,12 @@ import {
   Breadcrumb,
   Table,
   Dropdown,
+  Alert,
 } from "react-bootstrap";
 import { Trash, Info, SquaresFour } from "phosphor-react";
 import AdminLayout from "../../Components/AdmnLayouts/AdminLayout";
 import { adminGetMembersAction } from "../../actions/admin/member.actions";
+import Loader from "../../Components/UI/Loader";
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -54,8 +56,8 @@ const Users = () => {
                   <tbody>
                     {loading ? (
                       <tr>
-                        <td colSpan={6} className="text-center">
-                          Tunggu sebentar..
+                        <td colSpan={7} className="text-center">
+                          <Loader size={20} />
                         </td>
                       </tr>
                     ) : members?.length !== 0 ? (
@@ -101,9 +103,11 @@ const Users = () => {
                         );
                       })
                     ) : (
-                      <tr>
-                        <td colSpan={6}>Null</td>
-                      </tr>
+                      <td colSpan={8}>
+                        <Alert variant="info" className="text-center">
+                          Belum ada member yang terdaftar
+                        </Alert>
+                      </td>
                     )}
                   </tbody>
                 </Table>

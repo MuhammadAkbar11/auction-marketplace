@@ -15,6 +15,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Info, Timer } from "phosphor-react";
 import { Link } from "react-router-dom";
 import { adminGetListAuctionsAction } from "../../actions/admin/auctions.actions";
+import Loader from "../../Components/UI/Loader";
 
 const AdminAuctions = () => {
   const dispatch = useDispatch();
@@ -65,8 +66,8 @@ const AdminAuctions = () => {
                   <tbody>
                     {loading ? (
                       <tr>
-                        <td colSpan={7} className="text-center">
-                          <p>Tunggu sebentar</p>
+                        <td colSpan={6} className="text-center">
+                          <Loader size={20} />
                         </td>
                       </tr>
                     ) : auctions?.length === 0 ? (
