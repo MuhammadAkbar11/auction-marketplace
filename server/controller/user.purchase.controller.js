@@ -394,7 +394,7 @@ export const getUserPaymentDetails = asyncHandler(async (req, res) => {
         ],
       });
 
-      const seller = await auction.getModelMember();
+      const seller = await auction.getSeller();
       const sellerBankAccounts = await ModelAkunBank.findAll({
         where: {
           id_member: seller.id_member,

@@ -55,8 +55,9 @@ const UserPayment = props => {
 
   React.useEffect(() => {
     if (invoice?.id_transaksi) {
-      if (+invoice.status_transaksi !== 2) {
-        history.push("/akun/pembelian");
+      if (+invoice?.status_transaksi !== 2) {
+        // history.push("/akun/pembelian");
+        console.log("okk");
       }
     }
   }, [invoice, history]);
