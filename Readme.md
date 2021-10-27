@@ -48,13 +48,17 @@ JWT_SECRET = baebid2001
 
 ### Instalasi
 
-install yarn
+### Import Database
+
+Silahkan import database ke dalam local Mysql anda, letak file database di dalam folder database/lelang-online.sql
+
+#### install yarn
 
 ```
 > npm install -g yarn
 ```
 
-Install Dependencies untuk server & client
+#### Install Dependencies untuk server & client
 
 ```
 > yarn install
@@ -62,7 +66,7 @@ Install Dependencies untuk server & client
 > yarn install
 ```
 
-Menjalankan mode pengembangan
+#### Menjalankan mode pengembangan
 
 ```
 > cd ..
@@ -88,11 +92,22 @@ Menjalankan mode produksi
 
 <br/>
 
-### Contoh Login Untuk Admi
+### Contoh Login Untuk Admin dan Member
 
 ```
+# Admin
 ID : ADM001
 pw : admin
+
+
+# Member
+email : unit@gmail.com
+pw : 123456
+
+email: unit97@gmail.com
+pw: 123456
 ```
 
-Untuk Pengguna silahkan registrasi dan login.
+<br>
+
+> Terima kasih
