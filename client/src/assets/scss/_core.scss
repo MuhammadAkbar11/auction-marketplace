@@ -16,3 +16,11 @@
 .cursor-default {
   cursor: default !important;
 }
+
+a.underline {
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: underline !important;
+  }
+}
