@@ -22,7 +22,6 @@ const AdminAuctions = () => {
 
   const fullStore = useSelector(state => state);
 
-  console.log(fullStore);
   const { auctions, loading } = useSelector(state => state.adminListAuction);
 
   React.useEffect(() => {
@@ -55,12 +54,12 @@ const AdminAuctions = () => {
                 >
                   <thead>
                     <tr>
-                      <th>Judul Lelang</th>
-                      <th>Penjual</th>
-                      <th>Waktu</th>
-                      <th>Total Bids</th>
-                      <th>Penawaran tertinggi</th>
-                      <th>Status</th>
+                      <th className="text-nowrap">Judul Lelang</th>
+                      <th className="text-nowrap">Penjual</th>
+                      <th className="text-nowrap">Waktu</th>
+                      <th className="text-nowrap">Total Bids</th>
+                      <th className="text-nowrap">Penawaran tertinggi</th>
+                      <th className="text-nowrap">Status</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -111,7 +110,6 @@ const AdminAuctions = () => {
                               {ac.penjual?.username}
                             </td>
                             <td>
-                              {" "}
                               <div className="d-flex flex-nowrap flex-column">
                                 <div className="text-nowrap">
                                   <Timer
