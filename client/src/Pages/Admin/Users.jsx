@@ -103,11 +103,13 @@ const Users = () => {
                         );
                       })
                     ) : (
-                      <td colSpan={8}>
-                        <Alert variant="info" className="text-center">
-                          Belum ada member yang terdaftar
-                        </Alert>
-                      </td>
+                      <tr>
+                        <td colSpan={8}>
+                          <Alert variant="info" className="text-center">
+                            <Info size={24} /> Belum ada member yang terdaftar
+                          </Alert>
+                        </td>
+                      </tr>
                     )}
                   </tbody>
                 </Table>
