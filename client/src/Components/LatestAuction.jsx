@@ -2,13 +2,14 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation } from "swiper/core";
 import { Link } from "react-router-dom";
-import { Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { CaretLeftIcon, CaretRightIcon } from "./UI/Icons/Index";
 import SectionTitle from "./SectionTitle";
 import { useDispatch } from "react-redux";
 import { getSliderLatestAuctionAction } from "../actions/auctions.actions";
 import Loader from "./UI/Loader";
+import { Triangle } from "phosphor-react";
 
 SwiperCore.use([Navigation]);
 const singleProductWrapVariants = {
@@ -34,6 +35,9 @@ const productImgVariants = {
 const LatestAuction = () => {
   const navigationNextRef = React.useRef(null);
   const navigationPrevRef = React.useRef(null);
+
+  const navigationMobileNextRef = React.useRef(null);
+  const navigationMobilePrevRef = React.useRef(null);
 
   const dispatch = useDispatch();
   const [loading, setLoading] = React.useState(false);
@@ -171,14 +175,17 @@ const LatestAuction = () => {
                 slidesPerGroup={1}
                 loop={true}
                 breakpoints={{
+                  200: {
+                    slidesPerView: 1,
+                  },
                   360: {
-                    slidesPerView: 2,
+                    slidesPerView: 1,
                   },
                   575: {
                     slidesPerView: 2,
                   },
                   767: {
-                    slidesPerView: 4,
+                    slidesPerView: 3,
                   },
                   991: {
                     slidesPerView: 5,
@@ -193,13 +200,17 @@ const LatestAuction = () => {
                 }}
                 slidesPerView={6}
                 onSwiper={swiper => {
-                  // setTimeout(() => {
-                  swiper.params.navigation.prevEl = navigationPrevRef.current;
-                  swiper.params.navigation.nextEl = navigationNextRef.current;
-                  swiper.navigation.destroy();
-                  swiper.navigation.init();
-                  swiper.navigation.update();
-                  // });
+                  setTimeout(() => {
+                    swiper.params.navigation.prevEl = navigationPrevRef.current;
+                    swiper.params.navigation.nextEl = navigationNextRef.current;
+                    swiper.params.navigation.prevEl =
+                      navigationMobilePrevRef.current;
+                    swiper.params.navigation.nextEl =
+                      navigationMobileNextRef.current;
+                    swiper.navigation.destroy();
+                    swiper.navigation.init();
+                    swiper.navigation.update();
+                  });
                 }}
                 className="latest-product-slider"
               >
@@ -295,28 +306,97 @@ const LatestAuction = () => {
                     </SwiperSlide>
                   );
                 })}
+                <div
+                  style={{
+                    gap: 8,
+                  }}
+                  className="d-flex justify-content-end mt-4  "
+                >
+                  <Button
+                    size="sm"
+                    variant="outline-primary"
+                    ref={navigationMobilePrevRef}
+                  >
+                    <Triangle
+                      style={{
+                        transform: "rotate(-90deg)",
+                      }}
+                      weight="fill"
+                      size={14}
+                    />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline-primary"
+                    ref={navigationMobileNextRef}
+                  >
+                    <Triangle
+                      style={{
+                        transform: "rotate(90deg)",
+                      }}
+                      weight="fill"
+                      size={14}
+                    />
+                  </Button>
+                </div>
               </Swiper>
             )}
           </>
         )}
         {/* {} */}
       </Container>
-      {latestAuction.length > 5 && (
-        <div className="w-auto">
+
+      {/* {latestAuction.length > 5 && (
+        <>
           <div
-            ref={navigationPrevRef}
-            className=" sliderNavigation navigationPrev"
+            style={{
+              gap: 8,
+            }}
+            className="d-flex  mx-4 mt-4  "
           >
-            <CaretLeftIcon size="100%" />
+            <Button
+              size="sm"
+              variant="outline-primary"
+              ref={navigationMobilePrevRef}
+            >
+              <Triangle
+                style={{
+                  transform: "rotate(-90deg)",
+                }}
+                weight="fill"
+                size={16}
+              />
+            </Button>
+            <Button
+              size="sm"
+              variant="outline-primary"
+              ref={navigationMobileNextRef}
+            >
+              <Triangle
+                style={{
+                  transform: "rotate(90deg)",
+                }}
+                weight="fill"
+                size={16}
+              />
+            </Button>
           </div>
-          <div
-            ref={navigationNextRef}
-            className=" sliderNavigation navigatioNext"
-          >
-            <CaretRightIcon size="100%" />
+          <div className="w-auto d-md-flex d-none">
+            <div
+              ref={navigationPrevRef}
+              className=" sliderNavigation navigationPrev"
+            >
+              <CaretLeftIcon size="100%" />
+            </div>
+            <div
+              ref={navigationNextRef}
+              className=" sliderNavigation navigatioNext"
+            >
+              <CaretRightIcon size="100%" />
+            </div>
           </div>
-        </div>
-      )}
+        </>
+      )} */}
     </>
   );
 };
