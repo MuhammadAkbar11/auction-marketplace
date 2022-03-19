@@ -14,6 +14,7 @@ import onlyNumbers from "../utils/onlyNumber.js";
 import dayjs from "dayjs";
 import ModelDetailTransaksi from "../models/m_detail_transaksi.js";
 import ModelPengiriman from "../models/m_pengiriman.js";
+import ModelRuangDiskusi from "../models/m_ruang_diskusi.js";
 
 const Op = Sequelize.Op;
 
@@ -287,6 +288,8 @@ export const postUserCreateAuction = asyncHandler(async (req, res, next) => {
         id_lelang: id_lelang,
       };
     });
+
+    await ModelRuangDiskusi.create({ id_lelang });
 
     await ModelGaleri.bulkCreate(auctionGaleri);
     res.status(200).json({
