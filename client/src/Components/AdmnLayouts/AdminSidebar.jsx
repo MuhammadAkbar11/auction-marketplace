@@ -32,9 +32,14 @@ const AdminSidebar = ({ show, handleClose }) => {
               <span>Lelang</span>
             </Nav.Link>
           </LinkContainer>
-          <LinkContainer to="/administrator/laporan-transaksi">
+          <LinkContainer to="/administrator/transaksi">
             <Nav.Link>
-              <span>Laporan Transaksi</span>
+              <span>Transaksi</span>
+            </Nav.Link>
+          </LinkContainer>
+          <LinkContainer to="/administrator/invoice">
+            <Nav.Link>
+              <span>Invoice</span>
             </Nav.Link>
           </LinkContainer>
         </Nav>

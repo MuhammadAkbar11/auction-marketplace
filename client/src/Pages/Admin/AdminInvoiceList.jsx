@@ -38,12 +38,12 @@ const AdminInvoiceList = () => {
     <>
       <AdminLayout>
         <Container fluid className=" ">
-          <h3 className="text-dark  font-weight-normal ">Laporan Transaksi</h3>
+          <h3 className="text-dark  font-weight-normal ">Invoice</h3>
           <Breadcrumb className="bg-white admin-breadcrumb shadow-sm">
             <LinkContainer to="/administrator/dashboard">
               <Breadcrumb.Item className="bg-white">Dashboard</Breadcrumb.Item>
             </LinkContainer>
-            <Breadcrumb.Item active>Laporan Transaksi </Breadcrumb.Item>
+            <Breadcrumb.Item active>Invoice </Breadcrumb.Item>
           </Breadcrumb>
           <Row noGutters className="pt-4 w-100">
             <Col sm={12} md={12}>

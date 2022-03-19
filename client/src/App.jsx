@@ -40,6 +40,7 @@ import AdminAuctions from "./Pages/Admin/Auctions";
 import SellerConfirmShipping from "./Pages/User/SellerConfirmShipping";
 import UserTrackShipping from "./Pages/User/UserTrackShipping";
 import SellerConfirmPickUp from "./Pages/User/SellerConfirmPickUp";
+import AdminMainPage from "./Pages/Admin";
 
 function App() {
   return (
@@ -118,6 +119,7 @@ function App() {
         <Route path="/item/:itemId" component={DetailsAuction} />
 
         {/* <AdminP */}
+        <Route path="/administrator" exact={true} component={AdminMainPage} />
         <AdminPublicRoute
           path="/administrator/login"
           restricted={true}
@@ -137,7 +139,11 @@ function App() {
           component={AdminAuctions}
         />
         <AdminPrivateRoute
-          path="/administrator/laporan-transaksi"
+          path="/administrator/transaksi"
+          component={ComingSoon}
+        />
+        <AdminPrivateRoute
+          path="/administrator/invoice"
           component={AdminInvoiceList}
         />
         <Route component={PageNotFound} />
