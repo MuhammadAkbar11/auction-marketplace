@@ -16,7 +16,9 @@ export const getMembers = asyncHandler(async (req, res) => {
   let members = [];
 
   try {
-    const getMembers = await ModelMember.findAll({});
+    const getMembers = await ModelMember.findAll({
+      order: [["id_member", "DESC"]],
+    });
 
     members = await Promise.all(
       getMembers.map(async unit => {
@@ -100,7 +102,7 @@ export const adminGetAuctions = asyncHandler(async (req, res) => {
   try {
     const getAuctions = await ModelLelang.findAll({
       where: whereQuery,
-
+      limit: 5,
       attributes: {
         exclude: ["ModelMemberIdMember", "ModelKategoriIdKategori"],
       },
