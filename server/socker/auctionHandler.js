@@ -329,7 +329,6 @@ export default io => {
           "waktu_kirim",
           dayjs(message.tgl_dibuat).fromNow()
         );
-
         io.to("room-" + values.id_ruang).emit("get-room-new-message", message);
         console.log("room-" + values.id_ruang);
         callback && callback({ status: true, message: newMessage }, null);
@@ -340,6 +339,7 @@ export default io => {
         });
       }
     } catch (error) {
+      console.log(error);
       const err = {
         statusCode: error.statusCode,
         message: error.message,
@@ -367,6 +367,9 @@ export default io => {
         const messages = await ModelPesanDiskusi.findAll({
           where: {
             id_ruang: getRoom.id_ruang,
+            id_parent: {
+              [Op.eq]: null,
+            },
           },
           include: {
             model: ModelMember,
@@ -380,6 +383,10 @@ export default io => {
         });
 
         const transforMessages = messages.map(m => {
+          if (!m.member.foto) {
+            m.member.foto = "uploads/members/guest.jpeg";
+            console.log(m.member);
+          }
           return {
             ...m.dataValues,
             waktu_kirim: dayjs(m.tgl_dibuat).fromNow(),
@@ -394,7 +401,10 @@ export default io => {
             },
             null
           );
-
+        io.to("room-" + getRoom.id_ruang).emit("get-room-messages", {
+          messages: transforMessages,
+          id_ruang: getRoom.id_ruang,
+        });
         return;
       } else {
         const result = await ModelRuangDiskusi.create({
