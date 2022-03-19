@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Col, Row } from "react-bootstrap";
+import { Container, Col, Row, Alert } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { getAuctionDetailsAction } from "../actions/auctions.actions";
@@ -13,6 +13,7 @@ import { SERVER_ENDPOINT } from "../constants/socket.constants";
 import { authLoginErrorMessageAction } from "../actions/auth.actions";
 import BidForm from "../Components/BidForm";
 import convertRupiah from "../utils/convertRupiah";
+import { Info } from "phosphor-react";
 let socket;
 
 const DetailsAuction = props => {
@@ -32,6 +33,10 @@ const DetailsAuction = props => {
     if (!loading) {
       document.title = "Baebid - " + auction?.judul;
     }
+
+    window.scrollTo({
+      top: 0,
+    });
   }, [auction, loading]);
 
   React.useEffect(() => {
@@ -150,12 +155,30 @@ const DetailsAuction = props => {
 
         <section className="product-details-area pt-4 pb-115">
           <Container fluid className="px-md-8">
-            <Link to="/lelang" className="btn btn-light">
+            <Link to="/lelang" className="btn btn-light mb-3">
               Kembali
             </Link>
-
+            {!loading && !countdown && (
+              <div className="mb-2">
+                <Alert variant="info" className="text-left ">
+                  <Info size={24} /> Jika timer bermasalah silahkan klik tombol
+                  refresh halaman untuk mengatasinya
+                  <Alert.Link
+                    className="ml-1 underline font-italic "
+                    href="/#"
+                    onClick={event => {
+                      event.preventDefault();
+                      console.log(event);
+                      window.location.reload();
+                    }}
+                  >
+                    refresh
+                  </Alert.Link>
+                </Alert>
+              </div>
+            )}
             {auction ? (
-              <Row className="pt-4">
+              <Row className="">
                 <Col lg={6} md={6}>
                   {loading ? (
                     <div className="mt-4">
@@ -186,11 +209,13 @@ const DetailsAuction = props => {
                               Telah Berakhir
                             </h5>
                           ) : (
-                            <h2 className="text-primary  font-weight-bold my-0 mr-2 ">
-                              {countdown
-                                ? `${countdown?.days} Hari, ${countdown?.hours}:${countdown?.minutes}:${countdown?.seconds}`
-                                : "-"}
-                            </h2>
+                            <>
+                              <h2 className="text-primary  font-weight-bold my-0 mr-2 ">
+                                {countdown &&
+                                  `${countdown?.days} Hari, ${countdown?.hours}:${countdown?.minutes}:${countdown?.seconds}`}
+                              </h2>
+                              {!countdown && <h3>0 Hari, 00:00:00</h3>}
+                            </>
                           )}
                         </div>
 
