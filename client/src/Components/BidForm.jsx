@@ -67,8 +67,6 @@ const BidForm = ({
     setBidValErr(null);
   };
 
-  console.log(errorBidding);
-
   return (
     <>
       {userInfo ? (

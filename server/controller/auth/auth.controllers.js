@@ -26,6 +26,7 @@ export const authRegister = asyncHandler(async (req, res) => {
       no_hp: noHp,
       password: hashPassword,
       id_role: 2,
+      foto: "uploads/members/guest.jpeg",
     };
     const result = await ModelMember.create(newMember);
     res.status(201).json({
