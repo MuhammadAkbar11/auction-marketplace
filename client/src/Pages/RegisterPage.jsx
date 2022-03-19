@@ -23,7 +23,9 @@ import {
 import Layout from "../Components/Layouts/Layout";
 
 const registerSchema = Yup.object().shape({
-  nama: Yup.string().required("Nama belum terisi"),
+  nama: Yup.string()
+    .required("Nama belum terisi")
+    .min(6, "Nama harus lebih dari 6 karakter"),
   username: Yup.string()
     .required("Username belum terisi ")
     .min(6, "Username harus lebih dari 6 karakter"),
@@ -59,7 +61,7 @@ const RegisterPage = () => {
     initialValues: {
       nama: "",
       username: "",
-      email: "@gmail.com",
+      email: "",
       noHp: "",
       password: "",
       password2: "",
@@ -137,7 +139,7 @@ const RegisterPage = () => {
                   <InputGroupRow
                     input1={{
                       controlid: "nama",
-                      placeholder: "",
+                      placeholder: "(min 6 karakter)",
                       value: registerFormik.values.nama,
                       onChange: registerFormik.handleChange,
                       isInvalid: registerFormik.errors.nama ? true : false,
@@ -158,6 +160,7 @@ const RegisterPage = () => {
                     input1={{
                       controlid: "email",
                       type: "email",
+                      placeholder: "ex: example@baebid.com",
                       value: registerFormik.values.email,
                       onChange: registerFormik.handleChange,
                       isInvalid: spesificIsInvalid.email.isInvalid,
@@ -170,7 +173,7 @@ const RegisterPage = () => {
                       onChange: registerFormik.handleChange,
                       isInvalid: registerFormik.errors.noHp ? true : false,
                       errormessage: registerFormik.errors.noHp,
-                      placeholder: "(Hanya angka)",
+                      placeholder: "ex: 082196961996",
                       label: "No Hp*",
                     }}
                   />
