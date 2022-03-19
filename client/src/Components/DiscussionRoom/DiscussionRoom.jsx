@@ -21,6 +21,7 @@ const DiscussionRoom = () => {
   const [roomId, setRoomId] = React.useState("");
   const [text, setText] = React.useState("");
   const [listMessage, setListMessage] = React.useState([]);
+  const [listNewMessage, setListNewMessage] = React.useState([]);
 
   const dispatch = useDispatch();
 
@@ -39,9 +40,6 @@ const DiscussionRoom = () => {
         setListMessage([]);
         return;
       }
-
-      setRoomId(data?.id_ruang || "");
-      setListMessage(data.messages);
     });
 
     return () => {
@@ -51,11 +49,27 @@ const DiscussionRoom = () => {
   }, [auctionId]);
 
   React.useEffect(() => {
+    socket.on("get-room-messages", data => {
+      setRoomId(data?.id_ruang || "");
+      setListMessage(data.messages);
+    });
+  }, []);
+
+  React.useEffect(() => {
     // get-room-newmessage
+
     socket.on("get-room-new-message", message => {
-      setListMessage(prevState => {
-        return [message, ...prevState];
-      });
+      message.isnew = true;
+
+      if (message.id_parent == null) {
+        if (userInfo.id_member === message.member.id_member) {
+          setListMessage(prevS => [message, ...prevS]);
+        } else {
+          const prevNewMessages = listNewMessage;
+          prevNewMessages.push(message);
+          setListNewMessage(prevNewMessages);
+        }
+      }
     });
   }, []);
 
@@ -75,7 +89,6 @@ const DiscussionRoom = () => {
         if (err) {
           console.log(err);
         }
-        console.log(result);
       });
     } else {
       dispatch(authLoginErrorMessageAction("Silahkan login terlebih dahulu"));
@@ -92,6 +105,11 @@ const DiscussionRoom = () => {
   const postReplyHandler = values => {
     handlePostMessage({ id_parent: values.id_parent, message: values.message });
     // socket.emit;
+  };
+
+  const concatNewMessages = () => {
+    setListMessage(prevS => [...prevS, ...listNewMessage]);
+    setListNewMessage([]);
   };
 
   return (
@@ -133,9 +151,10 @@ const DiscussionRoom = () => {
 
             <section className="mt-4">
               {listMessage.map(msg => {
-                const messages = listMessage
-                  .filter(item => item.id_parent === msg.id_pesan)
-                  .reverse();
+                const messages = listMessage.filter(
+                  item => item.id_parent === msg.id_pesan
+                );
+
                 return (
                   msg.member !== null &&
                   msg.id_parent === null && (
@@ -150,6 +169,17 @@ const DiscussionRoom = () => {
                   )
                 );
               })}
+
+              {listNewMessage.length !== 0 && (
+                <Button
+                  size="sm"
+                  block
+                  className="mt-3"
+                  onClick={concatNewMessages}
+                >
+                  {listNewMessage.length} messages
+                </Button>
+              )}
             </section>
           </Card>
         </Col>
