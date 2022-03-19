@@ -142,12 +142,35 @@ export const generateAuction = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const generatePhone = id => {
+  const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+  const head = `08${randomSelect(numbers)}${randomSelect(numbers)}`;
+
+  const body = `${randomSelect(numbers)}${randomSelect(numbers)}${randomSelect(
+    numbers
+  )}${randomSelect(numbers)}`;
+
+  const tail = Number(
+    `${randomSelect(numbers)}${randomSelect(numbers)}${randomSelect(
+      numbers
+    )}${randomSelect(numbers)}`
+  );
+
+  const sumTailWithId = `${tail + +id}`;
+  // console.log();
+  const transformTail =
+    sumTailWithId.length >= 4 ? +sumTailWithId.substring(0, 4) : +sumTailWithId;
+
+  return `${head}${body}${transformTail}`;
+};
+
 export const generateMember = expressAsyncHandler(async (req, res) => {
   const { result } = req.body || 25;
 
   const provinceId = [31, 32];
-  const cityId1 = [3171, 3172, 3173, 3174, 3175];
-  const cityId2 = [3201, 3209, 3214, 3215, 3216, 3217, 3271, 3272, 3275, 3274];
+  // const cityId1 = [3171, 3172, 3173, 3174, 3175];
+  // const cityId2 = [3201, 3209, 3214, 3215, 3216, 3217, 3271, 3272, 3275, 3274];
 
   // const years = [];
   // const moths
@@ -156,19 +179,19 @@ export const generateMember = expressAsyncHandler(async (req, res) => {
     const newUsers = [];
 
     const lastInsert = await ModelMember.findAll({
+      where: {},
+      order: [["id_member", "DESC"]],
       limit: 1,
-      where: {
-        //your where conditions, or without them if you need ANY entry
-      },
-      order: [["tgl_dibuat", "DESC"]],
     });
 
     const lastId = onlyNumbers(lastInsert[0].id_member);
     const startId = +lastId + 1;
     const maxItems = startId + result;
+    console.log(startId, lastId);
     for (let i = startId; i < maxItems; i++) {
       let username = "Unit 00" + i;
       let memberId = "MBR00" + i;
+
       if (i > 9) {
         username = "Unit 0" + i;
         memberId = "MBR0" + i;
@@ -179,15 +202,15 @@ export const generateMember = expressAsyncHandler(async (req, res) => {
       }
 
       const unit = username.split(" ").join("").toLowerCase();
-
+      const phone = generatePhone(i);
       newUsers.push({
         id_member: memberId,
         username: unit,
         nama: username,
         email: unit + "@gmail.com",
-        password: unit,
-        no_hp: "0896969696",
-        foto: "uploads/members/guest.png",
+        password: "baebid-2021",
+        no_hp: phone,
+        foto: "uploads/members/guest.jpeg",
         tgl_dibuat: dayjs().format("YYYY-MM-DD HH:mm:ss"),
         tgl_diubah: dayjs().format("YYYY-MM-DD HH:mm:ss"),
         alamat: "user address",
@@ -196,22 +219,40 @@ export const generateMember = expressAsyncHandler(async (req, res) => {
 
     const members = await Promise.all(
       newUsers.map(async user => {
-        // let userProv = randomSelect(provinceId);
-        // let userCity =
-        //   userProv === 31 ? randomSelect(cityId1) : randomSelect(cityId2);
+        const defaultDomicile = {
+          id_kecamatan: 3275010,
+          id_kelurahan: 3275010008,
+          id_provinsi: 32,
+          id_kota: 3275,
+        };
 
-        // const districts = await axios.get(
-        //   "https://dev.farizdotid.com/api/daerahindonesia/kecamatan?id_kota=" +
-        //     userCity
-        // );
-        // let userDistrict = randomSelect(districts.data.kecamatan);
+        const province = randomSelect(provinceId);
+        const cities = await axios.get(
+          "https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=" +
+            province
+        );
 
-        // const wards = await axios.get(
-        //   "https://dev.farizdotid.com/api/daerahindonesia/kelurahan?id_kecamatan=" +
-        //     userDistrict.id
-        // );
+        const city = randomSelect(cities.data?.kota_kabupaten);
+        const districts = await axios.get(
+          "https://dev.farizdotid.com/api/daerahindonesia/kecamatan?id_kota=" +
+            city.id
+        );
 
-        // const userWard = randomSelect(wards.data.kelurahan);
+        const district = randomSelect(districts.data.kecamatan);
+
+        const wards = await axios.get(
+          "https://dev.farizdotid.com/api/daerahindonesia/kelurahan?id_kecamatan=" +
+            district.id
+        );
+
+        const ward = randomSelect(wards.data.kelurahan);
+
+        const domicile = {
+          id_kecamatan: district.id,
+          id_kelurahan: ward.id,
+          id_provinsi: province,
+          id_kota: city.id,
+        };
 
         return {
           ...user,
@@ -220,13 +261,9 @@ export const generateMember = expressAsyncHandler(async (req, res) => {
           // id_kelurahan: userWard.id,
           // id_provinsi: userProv,
           // id_kota: userCity,
-          id_kecamatan: 3275010,
-          id_kelurahan: 3275010008,
-          id_provinsi: 32,
-          id_kota: 3275,
+          ...domicile,
           password: await bcrypt.hash(user.password, 12),
           no_ktp: "0802020202101022",
-          foto: "uploads/members/guest.png",
           tgl_lahir: "1996-09-29",
           kode_pos: "123456",
         };
@@ -235,7 +272,11 @@ export const generateMember = expressAsyncHandler(async (req, res) => {
 
     await ModelMember.bulkCreate(members);
 
-    res.status(200).json({ status: true, message: "Berhasil ", members });
+    res.status(200).json({
+      status: true,
+      message: "Berhasil ",
+      members,
+    });
   } catch (error) {
     console.log(error);
     throw new ResponseError(error.statusCode, error.message, error.errors);
