@@ -40,7 +40,7 @@ const ProductDetailImage = ({ images, loading }) => {
           >
             {images.map(img => {
               return (
-                <SwiperSlide key={img.id}>
+                <SwiperSlide key={img.id_galeri}>
                   <img src={img.url} alt={`not ${img.id}`} />
                 </SwiperSlide>
               );
@@ -64,7 +64,7 @@ const ProductDetailImage = ({ images, loading }) => {
               {images.map(img => {
                 return (
                   <SwiperSlide
-                    key={img.id}
+                    key={img.id_galeri}
                     className="pro-small-img-slide border "
                   >
                     <Card>
@@ -101,7 +101,7 @@ const ProductDetailImage = ({ images, loading }) => {
         <div className="pro-dec-big-img-slider ">
           {images.map(img => {
             return (
-              <div key={img.id} className="pro-small-img-slide  ">
+              <div key={img.id_galeri} className="pro-small-img-slide  ">
                 <Card
                   className="h-100 border-0 mx-auto
                 "
