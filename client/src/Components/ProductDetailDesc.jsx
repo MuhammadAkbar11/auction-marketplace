@@ -1,36 +1,75 @@
 import React from "react";
 import { Col, Container, Row, Tab, Nav, Table } from "react-bootstrap";
+import { Link, useHistory, useLocation, useRouteMatch } from "react-router-dom";
+
 import convertRupiah from "../utils/convertRupiah";
 import DiscussionRoom from "./DiscussionRoom/DiscussionRoom";
 
 const ProductDetailDesc = ({ auction, listBid }) => {
-  const [key, setKey] = React.useState("home");
+  const [key, setKey] = React.useState("desc-info");
+
   const seen = new Set();
+
+  const location = useLocation();
+
+  React.useEffect(() => {
+    const params = new URLSearchParams(location.search);
+
+    if (params.has("tab")) {
+      setKey(params.get("tab"));
+      setOnSelect(params.get("tab"));
+    } else {
+      setOnSelect("desc-info", true);
+    }
+  }, [location]);
+
+  const setOnSelect = (value, reset = false) => {
+    const name = "tab";
+    setKey(value);
+    const searchParams = new URLSearchParams(location.search);
+    if (reset) {
+      searchParams.delete("tab");
+      window.history.pushState(null, "", location.pathname);
+      return;
+    }
+    searchParams.set(name, value);
+    const newRelativePathQuery =
+      location.pathname + "?" + searchParams.toString();
+    window.history.pushState(null, "", newRelativePathQuery);
+  };
+
   return (
     <section className="description-review-wrapper ">
       <Container fluid className="px-md-8">
         <Row>
           <Col lg={12}>
-            <Tab.Container
-              id="description-tabs"
-              defaultActiveKey="des-details1"
-            >
-              <Nav className="dec-review-topbar   ">
-                <Nav.Link onSelect={k => setKey(k)} eventKey="des-details1">
+            <Tab.Container id="description-tabs" activeKey={key}>
+              <Nav className="dec-review-topbar">
+                <Nav.Link
+                  onSelect={k => setOnSelect(k, true)}
+                  eventKey="desc-info"
+                >
                   Informasi Produk
                 </Nav.Link>
-                <Nav.Link onSelect={k => setKey(k)} eventKey="des-details2">
+                <Nav.Link
+                  onSelect={k => setOnSelect(k)}
+                  eventKey="desc-listbids"
+                >
                   Riwayat Penawaran
                 </Nav.Link>
-                <Nav.Link onSelect={k => setKey(k)} eventKey="des-details3">
+
+                <Nav.Link
+                  onSelect={k => setOnSelect(k)}
+                  eventKey="desc-discuss"
+                >
                   Diskusi produk{" "}
                 </Nav.Link>
-                <Nav.Link onSelect={k => setKey(k)} eventKey="des-details4">
+                <Nav.Link onSelect={k => setOnSelect(k)} eventKey="desc-rules">
                   Aturan Main{" "}
                 </Nav.Link>
               </Nav>
               <Tab.Content className="dec-review-bottom">
-                <Tab.Pane eventKey="des-details1">
+                <Tab.Pane eventKey="desc-info">
                   {/* {}  */}
                   <div
                     dangerouslySetInnerHTML={{
@@ -38,7 +77,7 @@ const ProductDetailDesc = ({ auction, listBid }) => {
                     }}
                   />
                 </Tab.Pane>
-                <Tab.Pane eventKey="des-details2">
+                <Tab.Pane eventKey="desc-listbids">
                   {/* <div className=" font-weight-light ">
 
                   </div> */}
@@ -78,16 +117,16 @@ const ProductDetailDesc = ({ auction, listBid }) => {
                     </tbody>
                   </Table>
                 </Tab.Pane>
-                <Tab.Pane eventKey="des-details3">
-                  {key === "des-details3" && (
+                <Tab.Pane eventKey="desc-discuss">
+                  {key === "desc-discuss" && (
                     <DiscussionRoom
                       auctionId={auction?.id_lelang}
                       auction={auction}
-                      isActive={key === "des-details3"}
+                      isActive={key === "desc-discuss"}
                     />
                   )}
                 </Tab.Pane>
-                <Tab.Pane eventKey="des-details4">
+                <Tab.Pane eventKey="desc-rules">
                   <h5 className=" font-weight-light ">Aturan Main</h5>
                   <div className="pt-3">
                     <ul>
