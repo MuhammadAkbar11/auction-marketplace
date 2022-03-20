@@ -14,6 +14,7 @@ import SingleMessage from "./SingleMessage";
 import { SERVER_ENDPOINT } from "../../constants/socket.constants";
 import { useHistory } from "react-router-dom";
 import { authLoginErrorMessageAction } from "../../actions/auth.actions";
+import { removeDuplicateId } from "../../utils/replace";
 
 let socket;
 
@@ -60,18 +61,33 @@ const DiscussionRoom = () => {
 
     socket.on("get-room-new-message", message => {
       message.isnew = true;
-
+      const prevListMessage = listMessage;
+      const prevListNewMessage = listNewMessage;
       if (message.id_parent == null) {
+        let updatedListMessage = removeDuplicateId(prevListMessage, "id_pesan");
+        let updatedListNewMessage = removeDuplicateId(
+          prevListNewMessage,
+          "id_pesan"
+        );
         if (userInfo.id_member === message.member.id_member) {
-          setListMessage(prevS => [message, ...prevS]);
+          updatedListMessage.unshift(message);
+          setListMessage(updatedListMessage);
         } else {
-          const prevNewMessages = listNewMessage;
-          prevNewMessages.push(message);
-          setListNewMessage(prevNewMessages);
+          updatedListNewMessage =
+            updatedListMessage.length >= 5
+              ? [message, ...updatedListNewMessage]
+              : updatedListNewMessage;
+
+          updatedListMessage =
+            updatedListMessage.length >= 5
+              ? updatedListMessage
+              : [message, ...updatedListMessage];
+          setListNewMessage(updatedListNewMessage);
+          setListMessage(updatedListMessage);
         }
       }
     });
-  }, []);
+  }, [listMessage, listNewMessage]);
 
   const handlePostMessage = values => {
     // const p
@@ -108,9 +124,11 @@ const DiscussionRoom = () => {
   };
 
   const concatNewMessages = () => {
-    setListMessage(prevS => [...prevS, ...listNewMessage]);
+    setListMessage(prevS => [...listNewMessage, ...prevS]);
     setListNewMessage([]);
   };
+
+  const mainMessages = removeDuplicateId(listMessage, "id_pesan");
 
   return (
     <Container>
@@ -150,8 +168,19 @@ const DiscussionRoom = () => {
             )}
 
             <section className="mt-4">
-              {listMessage.map(msg => {
-                const messages = listMessage.filter(
+              {listNewMessage.length !== 0 && (
+                <Button
+                  size="sm"
+                  block
+                  className="mb-3"
+                  onClick={concatNewMessages}
+                >
+                  {listNewMessage.length} messages
+                </Button>
+              )}
+
+              {mainMessages.map(msg => {
+                const messages = mainMessages.filter(
                   item => item.id_parent === msg.id_pesan
                 );
 
@@ -169,17 +198,6 @@ const DiscussionRoom = () => {
                   )
                 );
               })}
-
-              {listNewMessage.length !== 0 && (
-                <Button
-                  size="sm"
-                  block
-                  className="mt-3"
-                  onClick={concatNewMessages}
-                >
-                  {listNewMessage.length} messages
-                </Button>
-              )}
             </section>
           </Card>
         </Col>
