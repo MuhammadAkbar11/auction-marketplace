@@ -330,7 +330,7 @@
 .dec-review-topbar {
   margin-bottom: 50px;
   border-bottom: 1px solid #ebebeb;
-
+  display: flex;
   justify-content: center;
 
   @media #{$sm-layout} {
@@ -338,6 +338,7 @@
   }
   @media #{$xs-layout} {
     padding-left: 1px;
+    flex-wrap: nowrap;
     overflow-x: scroll;
   }
   a {
@@ -356,11 +357,13 @@
       margin: 0 7px 0 0;
     }
     @media #{$xs-layout} {
+      white-space: nowrap;
       padding: 0 10px 10px;
       margin: 0 0px 10px 0;
       font-size: 12px;
     }
     @media #{$sm-layout} {
+      white-space: nowrap;
       padding: 0 7px 10px;
     }
     &:before {
