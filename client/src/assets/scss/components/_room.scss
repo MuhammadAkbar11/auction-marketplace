@@ -1,0 +1,11 @@
+.room-discuss-container {
+  height: 400px;
+  max-height: 400px;
+  overflow-y: scroll;
+
+  .discuss-message {
+    & .message-dropdown .dropdown-toggle::after {
+      display: none !important;
+    }
+  }
+}
