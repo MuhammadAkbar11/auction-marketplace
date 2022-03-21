@@ -90,8 +90,8 @@ const SocketApp = server => {
         });
     });
 
-    socket.on("get-room-messages", ({ id_lelang }, callback) => {
-      return getRoomMessages({ id_lelang }, socket, callback);
+    socket.on("get-room-messages", (data, callback) => {
+      return getRoomMessages(data, socket, callback);
     });
 
     socket.on("post-room-message", postMessage);

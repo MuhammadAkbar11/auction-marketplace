@@ -5,7 +5,6 @@ import dayjsRelativeTime from "dayjs/plugin/relativeTime.js";
 import verifyToken from "../utils/verifyToken.js";
 import ResponseError from "../utils/responseError.js";
 import ModelPenawaran from "../models/m_penawaran.js";
-import convertRupiah from "../utils/convertRupiah.js";
 import ModelMember from "../models/m_member.js";
 import ModelRuangDiskusi from "../models/m_ruang_diskusi.js";
 import ModelPesanDiskusi from "../models/m_pesan_diskusi.js";
@@ -379,13 +378,60 @@ export default io => {
           attributes: {
             exclude: ["ModelMemberIdMember", "ModelRuangDiskusiIdRuang"],
           },
-          order: [["tgl_dibuat", "DESC"]],
+          order: [["tgl_dibuat", "ASC"]],
         });
+
+        const groupingMessageByDate = messages.reduce((groups, msg) => {
+          const date = msg.tgl_dibuat;
+          const now = dayjs();
+          const thanAYear = now.diff(date, "month");
+          const thanADay = now.diff(date, "day");
+
+          let dateFormat = dayjs(date).format("DD MMMM YYYY");
+
+          if (thanADay !== 0) {
+            dateFormat =
+              thanADay === 1 ? "kemarin" : dayjs(date).format("DD MMMM");
+          }
+
+          if (thanADay === 0) {
+            dateFormat = "hari ini";
+          }
+
+          if (thanAYear > 12) {
+            dateFormat = dayjs(date).format("DD MMMM YYYY");
+          }
+
+          if (!groups[dateFormat]) {
+            groups[dateFormat] = [];
+          }
+
+          groups[dateFormat].push(msg);
+          return groups;
+        }, {});
+
+        const groupMessageArrays = Object.keys(groupingMessageByDate).map(
+          date => {
+            const messages = groupingMessageByDate[date]?.map(m => {
+              if (!m.member.foto) {
+                m.member.foto = "uploads/members/guest.jpeg";
+                console.log(m.member);
+              }
+              return {
+                ...m.dataValues,
+                waktu_kirim: dayjs(m.tgl_dibuat).fromNow(),
+              };
+            });
+            return {
+              date,
+              messages,
+            };
+          }
+        );
 
         const transforMessages = messages.map(m => {
           if (!m.member.foto) {
             m.member.foto = "uploads/members/guest.jpeg";
-            console.log(m.member);
           }
           return {
             ...m.dataValues,
@@ -396,7 +442,6 @@ export default io => {
         callback &&
           callback(
             {
-              messages: transforMessages,
               id_ruang: getRoom.id_ruang,
             },
             null
@@ -404,10 +449,10 @@ export default io => {
         io.to("room-" + getRoom.id_ruang).emit("get-room-messages", {
           messages: transforMessages,
           id_ruang: getRoom.id_ruang,
+          room_messages: groupMessageArrays,
         });
-        return;
       } else {
-        const result = await ModelRuangDiskusi.create({
+        const result = await ModelRuangDiskusi.findOrCreate({
           id_lelang,
         });
         callback &&
