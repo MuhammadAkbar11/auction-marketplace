@@ -10,19 +10,22 @@ import {
   Card,
   Alert,
 } from "react-bootstrap";
-import SingleMessage from "./SingleMessage";
+
 import { SERVER_ENDPOINT } from "../../constants/socket.constants";
 import { useHistory } from "react-router-dom";
 import { authLoginErrorMessageAction } from "../../actions/auth.actions";
 import { removeDuplicateId } from "../../utils/replace";
+import DiscussMessage from "./DIscussMessage";
+import { PaperPlaneTilt } from "phosphor-react";
 
 let socket;
 
 const DiscussionRoom = () => {
+  const roomContainerRef = React.useRef(null);
+  const messagesEndRef = React.useRef(null);
   const [roomId, setRoomId] = React.useState("");
   const [text, setText] = React.useState("");
   const [listMessage, setListMessage] = React.useState([]);
-  const [listNewMessage, setListNewMessage] = React.useState([]);
 
   const dispatch = useDispatch();
 
@@ -52,42 +55,46 @@ const DiscussionRoom = () => {
   React.useEffect(() => {
     socket.on("get-room-messages", data => {
       setRoomId(data?.id_ruang || "");
-      setListMessage(data.messages);
+      setListMessage(data?.room_messages);
+      scrollToBottom();
     });
-  }, []);
+  }, [roomContainerRef]);
 
   React.useEffect(() => {
     // get-room-newmessage
 
     socket.on("get-room-new-message", message => {
       message.isnew = true;
-      const prevListMessage = listMessage;
-      const prevListNewMessage = listNewMessage;
-      if (message.id_parent == null) {
-        let updatedListMessage = removeDuplicateId(prevListMessage, "id_pesan");
-        let updatedListNewMessage = removeDuplicateId(
-          prevListNewMessage,
-          "id_pesan"
+      setListMessage(prevState => {
+        const todayMessageIndex = prevState.findIndex(
+          item => item.date === "hari ini"
         );
-        if (userInfo.id_member === message.member.id_member) {
-          updatedListMessage.unshift(message);
-          setListMessage(updatedListMessage);
+        let updatedListMessage = [...prevState];
+        if (prevState.length !== 0) {
+          updatedListMessage[todayMessageIndex]?.messages.push(message);
         } else {
-          updatedListNewMessage =
-            updatedListMessage.length >= 5
-              ? [message, ...updatedListNewMessage]
-              : updatedListNewMessage;
-
-          updatedListMessage =
-            updatedListMessage.length >= 5
-              ? updatedListMessage
-              : [message, ...updatedListMessage];
-          setListNewMessage(updatedListNewMessage);
-          setListMessage(updatedListMessage);
+          updatedListMessage.push({
+            date: "hari ini",
+            messages: [message],
+          });
         }
-      }
+
+        return [...updatedListMessage];
+      });
+      scrollToBottom();
     });
-  }, [listMessage, listNewMessage]);
+  }, [roomContainerRef]);
+
+  const scrollToBottom = () => {
+    console.log(roomContainerRef.current.id);
+    const el = document.querySelector(`#${roomContainerRef.current.id}`);
+
+    roomContainerRef.current?.scrollTo({
+      top: roomContainerRef.current.scrollHeight,
+      left: 0,
+      behavior: "smooth",
+    });
+  };
 
   const handlePostMessage = values => {
     // const p
@@ -118,72 +125,19 @@ const DiscussionRoom = () => {
     setText("");
   };
 
-  const postReplyHandler = values => {
-    handlePostMessage({ id_parent: values.id_parent, message: values.message });
-    // socket.emit;
-  };
-
-  const concatNewMessages = () => {
-    setListMessage(prevS => [...listNewMessage, ...prevS]);
-    setListNewMessage([]);
-  };
-
-  const mainMessages = removeDuplicateId(listMessage, "id_pesan");
-
   return (
     <Container>
       <Row>
         <Col xs={12}>
           <Card body>
             <h5 className="mb-3">Ruang Diskusi Lelang</h5>
-            {userInfo ? (
-              <Form onSubmit={handleSubmitMessage}>
-                <div className="d-flex align-items-stretch align-content-stretch ">
-                  <Form.Group
-                    controlId="text"
-                    className="d-flex align-self-stretch flex-grow-1 "
-                  >
-                    <Form.Control
-                      type="text"
-                      value={text}
-                      onChange={e => setText(e.target.value)}
-                      placeholder="Tanya"
-                    />
-                  </Form.Group>
-                  <div>
-                    <Button
-                      disabled={text.trim() === ""}
-                      type="submit"
-                      className="ml-3 h-auto"
-                    >
-                      Tanya
-                    </Button>
-                  </div>
-                </div>
-              </Form>
-            ) : (
-              <Alert variant="info">
-                Silahkan Login untuk dapat mengikuti diskusi
-              </Alert>
-            )}
 
-            <section className="mt-4">
-              {listNewMessage.length !== 0 && (
-                <Button
-                  size="sm"
-                  block
-                  className="mb-3"
-                  onClick={concatNewMessages}
-                >
-                  {listNewMessage.length} messages
-                </Button>
-              )}
-
-              {mainMessages.map(msg => {
-                const messages = mainMessages.filter(
-                  item => item.id_parent === msg.id_pesan
-                );
-
+            <div
+              id="room-discuss-container"
+              ref={roomContainerRef}
+              className="mt-4 bg-gray-100 px-3 py-4 room-discuss-container"
+            >
+              {/* {mainMessages.map(msg => {
                 return (
                   msg.member !== null &&
                   msg.id_parent === null && (
@@ -193,11 +147,73 @@ const DiscussionRoom = () => {
                       message={msg}
                       user={userInfo}
                       sellerId={auction.id_member}
-                      messages={messages}
+                      isAuthor={msg.member.id_member === userInfo.id_member}
                     />
                   )
                 );
+              })} */}
+              {listMessage.map(item => {
+                return (
+                  <React.Fragment key={item.date}>
+                    <div className="d-flex justify-content-center my-2 ">
+                      <span className="badge bg-gray-200 rounded text-spacing-0 font-weight-light  ">
+                        {item.date}
+                      </span>
+                    </div>
+                    {item.messages.map(msg => {
+                      return (
+                        msg.member !== null &&
+                        msg.id_parent === null && (
+                          <DiscussMessage
+                            key={msg.id_pesan}
+                            message={msg}
+                            user={userInfo}
+                            sellerId={auction.id_member}
+                            isAuthor={
+                              msg.member.id_member === userInfo.id_member
+                            }
+                          />
+                        )
+                      );
+                    })}
+                  </React.Fragment>
+                );
               })}
+              <div ref={messagesEndRef} />
+            </div>
+
+            <section className="mt-3">
+              {" "}
+              {userInfo ? (
+                <Form onSubmit={handleSubmitMessage}>
+                  <div className="d-flex align-items-stretch align-content-stretch ">
+                    <Form.Group
+                      controlId="text"
+                      className="d-flex align-self-stretch flex-grow-1 "
+                    >
+                      <Form.Control
+                        type="text"
+                        value={text}
+                        onChange={e => setText(e.target.value)}
+                        placeholder="pesan anda"
+                      />
+                    </Form.Group>
+                    <div>
+                      <Button
+                        disabled={text.trim() === ""}
+                        type="submit"
+                        className="ml-3 h-auto"
+                      >
+                        <PaperPlaneTilt size={20} />
+                      </Button>
+                    </div>
+                  </div>
+                </Form>
+              ) : (
+                <Alert variant="info">
+                  Silahkan Login untuk dapat mengikuti diskusi
+                </Alert>
+              )}
             </section>
           </Card>
         </Col>
