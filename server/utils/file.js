@@ -10,3 +10,10 @@ export const deleteFile = filePath => {
     }
   });
 };
+
+export const checkIsGuestFoto = file => {
+  const defaultFoto = ["guest.jpg", "guest.png", "guest.jpeg"];
+  const fileToArr = file.split("/");
+  const fileName = fileToArr[fileToArr.length - 1];
+  return defaultFoto.some(f => f === fileName);
+};

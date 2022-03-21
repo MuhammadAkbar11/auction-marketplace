@@ -6,7 +6,7 @@ import ResponseError from "../utils/responseError.js";
 import ModelMember from "../models/m_member.js";
 import ModelLelang from "../models/m_lelang.js";
 import ModelGaleri from "../models/m_galeri_lelang.js";
-import { deleteFile } from "../utils/file.js";
+import { checkIsGuestFoto, deleteFile } from "../utils/file.js";
 import ModelPenawaran from "../models/m_penawaran.js";
 import ModelTransaksi from "../models/m_transaksi.js";
 import ModelAkunBank from "../models/m_akun_bank.js";
@@ -142,14 +142,11 @@ export const postUserUploadPhoto = asyncHandler(async (req, res, next) => {
         exclude: ["ModelMemberIdMember"],
       },
     });
+    const isGuestFoto = checkIsGuestFoto(oldPhoto);
 
     if (req.fileimg?.data) {
       user.foto = newPhoto.path;
-      if (oldPhoto) {
-        if (oldPhoto !== "uploads/members/guest.png") {
-          deleteFile("/" + oldPhoto);
-        }
-      }
+      oldPhoto && !isGuestFoto && deleteFile("/" + oldPhoto);
     }
 
     await user.save();
